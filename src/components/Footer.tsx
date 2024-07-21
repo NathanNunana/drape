@@ -12,7 +12,7 @@ import {
 const Footer: React.FC = () => {
   return (
     <div className="bg-dark text-white py-5 mt-5">
-      <div className="container py-5">
+      <div className="container py-5 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-center md:text-left">
           <div className="space-y-4">
             <h4 className="text-xl mb-4">Address</h4>
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
               />
               <button
                 type="button"
-                className="absolute top-0 right-0 mt-2 px-4 py-2 bg-primary text-white"
+                className="absolute top-0 bottom-0 right-0 mt-2 px-4 py-2 bg-primary text-white"
               >
                 SignUp
               </button>
@@ -89,7 +89,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="container">
+      <hr className="container mx-auto py-3" />
+      <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <div className="mb-3 md:mb-0">
             &copy;{" "}

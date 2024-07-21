@@ -63,7 +63,7 @@ const Carousel: React.FC = () => {
                       {slide.heading}
                     </h1>
                     <button
-                      className="bg-blue-500 text-white items-center mx-auto justify-center py-4 flex text-lg px-8 mt-5 hover:bg-blue-600"
+                      className="bg-blue-500 text-white items-center mx-auto justify-center lg:mx-0  py-4 flex text-lg px-8 mt-5 hover:bg-blue-600"
                     >
                       {slide.buttonLabel}{" "}
                       <i className="ml-2"><FaArrowRight /></i>
