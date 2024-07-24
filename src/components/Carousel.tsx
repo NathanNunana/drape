@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaAngleLeft, FaAngleRight, FaArrowRight } from 'react-icons/fa';
+import { FaAngleLeft, FaAngleRight, FaArrowRight } from "react-icons/fa";
 
 const Carousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -7,6 +7,7 @@ const Carousel: React.FC = () => {
   const slides = [
     {
       image: "/assets/images/carousel-bg-1.jpg",
+      imageIcon: "/assets/images/generator-1.png",
       heading: "Quality Generators",
       text: "Car Servicing",
       buttonLabel: "Learn More",
@@ -16,6 +17,7 @@ const Carousel: React.FC = () => {
     {
       image: "/assets/images/carousel-bg-2.jpg",
       heading: "Qualified Generator Service Center",
+      imageIcon: "/assets/images/generator-2.png",
       text: "Car Servicing",
       buttonLabel: "Learn More",
       buttonLink: "#",
@@ -44,8 +46,9 @@ const Carousel: React.FC = () => {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"
-              }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
           >
             <img
               className="w-full h-full object-cover"
@@ -54,21 +57,23 @@ const Carousel: React.FC = () => {
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="container text-center lg:text-left">
-                <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start">
-                  <div className="col-10 lg:col-7 mb-4 lg:mb-0">
+                <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between">
+                  <div className="col-10 lg:col-7 mb-4 lg:mb-0 lg:mr-20">
                     <h6 className="text-white text-lg uppercase mb-3">
                       {slide.text}
                     </h6>
                     <h1 className="text-white py-2 mb-7 text-5xl lg:text-5xl lg:mb-6 font-extrabold">
                       {slide.heading}
                     </h1>
-                    <button
-                      className="bg-blue-500 text-white items-center mx-auto justify-center lg:mx-0  py-4 flex text-lg px-8 mt-5 hover:bg-blue-600"
-                    >
+                    <button className="bg-blue-500 text-white font-semibold items-center mx-auto justify-center lg:mx-0  py-4 flex text-lg px-8 mt-5 hover:bg-blue-600">
                       {slide.buttonLabel}{" "}
-                      <i className="ml-2"><FaArrowRight /></i>
-
+                      <i className="ml-2">
+                        <FaArrowRight />
+                      </i>
                     </button>
+                  </div>
+                  <div className="h-2/5 w-2/5">
+                    <img src={slide.imageIcon} alt="Icon Image" />
                   </div>
                 </div>
               </div>

@@ -1,5 +1,12 @@
 import "./App.css";
-import { Topbar, Navbar, Carousel, ServiceSection, Footer } from "./components";
+import {
+  Topbar,
+  Navbar,
+  Carousel,
+  ServiceSection,
+  Footer,
+  About,
+} from "./components";
 
 function App() {
   return (
@@ -8,6 +15,7 @@ function App() {
       <Navbar />
       <Carousel />
       <ServiceSection />
+      <About />
       <Footer />
     </>
   );
