@@ -9,7 +9,6 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.is_active = False  # Account is not active until email confirmation
         user.save(using=self._db)
         return user
 
@@ -22,6 +21,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get('is_active') is not True:
+            raise ValueError('Superuser must have is_active=True.')
 
         return self.create_user(email, password, **extra_fields)
 
