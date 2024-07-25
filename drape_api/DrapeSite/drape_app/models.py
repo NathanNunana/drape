@@ -29,7 +29,7 @@ class OpeningHours(models.Model):
 # Company
 class Company(models.Model):
     name = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='company_logos/')
+    logo = models.ImageField(upload_to='media/company_logos/')
 
     def __str__(self):
         return self.name
@@ -48,14 +48,14 @@ class Service(models.Model):
     description = models.TextField()
     operations = models.TextField()
     service_type = models.ForeignKey(ServiceType, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='service_files/', blank=True, null=True)
+    file = models.FileField(upload_to='media/service_files/', blank=True, null=True)
 
     def __str__(self):
         return self.title
 
 # About Us
 class AboutUs(models.Model):
-    file = models.FileField(upload_to='about_us_files/', blank=True, null=True)
+    file = models.FileField(upload_to='media/about_us_files/', blank=True, null=True)
     motor = models.CharField(max_length=255)
     company_description = models.TextField()
 
@@ -65,7 +65,7 @@ class AboutUs(models.Model):
 # Product
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    file = models.FileField(upload_to='product_files/', blank=True, null=True)
+    file = models.FileField(upload_to='media/product_files/', blank=True, null=True)
     base_type = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
     noise_rating = models.DecimalField(max_digits=10, decimal_places=2)
@@ -83,7 +83,7 @@ class Product(models.Model):
 class Analytics(models.Model):
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
-    file = models.FileField(upload_to='analytics_files/', blank=True, null=True)
+    file = models.FileField(upload_to='media/analytics_files/', blank=True, null=True)
 
     def __str__(self):
         return self.name
