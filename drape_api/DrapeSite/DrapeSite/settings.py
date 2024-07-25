@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     #local apps
     'DrapeSite',
     'users',
+    'drape_app',
     
     # 3rd party app
     'rest_framework',
