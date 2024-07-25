@@ -6,6 +6,11 @@ import {
   ServiceSection,
   Footer,
   About,
+  Fact,
+  Service,
+  Booking,
+  Technician,
+  Testimonial,
 } from "./components";
 
 function App() {
@@ -16,6 +21,11 @@ function App() {
       <Carousel />
       <ServiceSection />
       <About />
+      <Fact />
+      <Service />
+      <Booking />
+      <Technician />
+      <Testimonial />
       <Footer />
     </>
   );

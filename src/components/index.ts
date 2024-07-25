@@ -4,3 +4,8 @@ export { default as Carousel } from "./Carousel";
 export { default as ServiceSection } from "./ServiceSection";
 export { default as Footer } from "./Footer";
 export { default as About } from "./About";
+export { default as Fact } from "./Fact";
+export { default as Service } from "./Services";
+export { default as Booking } from "./Booking";
+export { default as Technician } from "./Technician";
+export { default as Testimonial } from "./Testimonial";
