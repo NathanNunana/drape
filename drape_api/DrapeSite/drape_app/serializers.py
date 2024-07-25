@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                              Service, AboutUs, Product, Analytics, ContactUs
-)
+                              Service, AboutUs, Product, Analytics, ContactUs)
 
 
 
