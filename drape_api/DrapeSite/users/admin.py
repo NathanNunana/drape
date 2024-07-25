@@ -1,8 +1,10 @@
 from django.contrib import admin
 from users.models import User
-
 from django.utils.translation import gettext as _
 
+
+admin.site.site_header = _('Drape Site')
+admin.site.index_title = _('Drape Admin Dashboard')
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
