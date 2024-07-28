@@ -34,14 +34,14 @@ const ManageAboutUs: React.FC = () => {
               id="companyDescription"
               value={companyDescription}
               onChange={(e) => setCompanyDescription(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
+              className="w-full p-2 border border-gray-300 rounded mt-1 lg:w-1/2"
               rows={4}
             />
           </div>
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-blue-500 text-white px-4 py-2 w-full lg:w-1/2"
         >
           Save
         </button>
