@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Carousel,
   ServiceSection,
@@ -9,7 +10,7 @@ import {
   Testimonial,
 } from "../../components";
 
-function Home() {
+const Home: React.FC = () => {
   return (
     <>
       <Carousel />
@@ -22,6 +23,6 @@ function Home() {
       <Testimonial />
     </>
   );
-}
+};
 
 export default Home;
