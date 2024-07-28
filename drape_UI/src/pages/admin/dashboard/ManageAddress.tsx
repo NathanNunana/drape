@@ -25,21 +25,21 @@ const ManageAddress: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Manage Address</h1>
-      <div className="mb-4 flex flex-wrap">
-        <div className="w-full md:w-1/2 md:pr-2 mb-4 md:mb-0">
-          <label className="block text-sm font-medium text-gray-700">
-            Street Name
-          </label>
-          <input
-            type="text"
-            value={address.street_name}
-            onChange={(e) =>
-              setAddress({ ...address, street_name: e.target.value })
-            }
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-        <div className="w-full md:w-1/2 md:pl-2">
+      {/* <div className="mb-4 flex flex-co"> */}
+      <div className="w-full md:w-1/2 md:pr-2 mb-4 md:mb-0">
+        <label className="block text-sm font-medium text-gray-700">
+          Street Name
+        </label>
+        <input
+          type="text"
+          value={address.street_name}
+          onChange={(e) =>
+            setAddress({ ...address, street_name: e.target.value })
+          }
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        />
+        {/* </div> */}
+        <div className="w-full md:pr-2 mb-4 md:mb-0">
           <label className="block text-sm font-medium text-gray-700">
             Digital Address
           </label>
@@ -53,19 +53,17 @@ const ManageAddress: React.FC = () => {
           />
         </div>
       </div>
-      <div className="mb-4 flex flex-wrap">
-        <div className="w-full md:w-1/2 md:pr-2 mb-4 md:mb-0">
-          <label className="block text-sm font-medium text-gray-700">
-            City
-          </label>
-          <input
-            type="text"
-            value={address.city}
-            onChange={(e) => setAddress({ ...address, city: e.target.value })}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-          />
-        </div>
-        <div className="w-full md:w-1/2 md:pl-2">
+      {/* <div className="mb-4 flex flex-wrap"> */}
+      <div className="w-full md:w-1/2 md:pr-2 mb-4 md:mb-0">
+        <label className="block text-sm font-medium text-gray-700">City</label>
+        <input
+          type="text"
+          value={address.city}
+          onChange={(e) => setAddress({ ...address, city: e.target.value })}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        />
+        {/* </div> */}
+        <div className="w-full md:pr-2 mb-4 md:mb-0">
           <label className="block text-sm font-medium text-gray-700">
             Country
           </label>
@@ -90,7 +88,7 @@ const ManageAddress: React.FC = () => {
       </div>
       <button
         onClick={handleSave}
-        className="bg-green-500 text-white px-4 py-2 rounded-md"
+        className="bg-green-500 text-white px-4 py-2 w-full lg:w-1/2"
       >
         Save
       </button>

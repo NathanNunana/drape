@@ -86,13 +86,13 @@ const ManageAnalytics: React.FC = () => {
       </div>
       <button
         onClick={handleAddAnalytic}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4"
+        className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
       >
         Add Analytic
       </button>
       <button
         onClick={handleSave}
-        className="bg-green-500 text-white px-4 py-2 rounded-md"
+        className="bg-green-500 text-white px-4 py-2 w-full lg:w-1/2"
       >
         Save
       </button>

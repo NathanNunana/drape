@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
                 isActive ? "text-blue-500" : "text-white"
               }
             >
-              Manage About Us
+              About Us
             </NavLink>
           </li>
           <li className="mx-4">
@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
                 isActive ? "text-blue-500" : "text-white"
               }
             >
-              Manage Address
+              Address
             </NavLink>
           </li>
           <li className="mx-4">
@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
                 isActive ? "text-blue-500" : "text-white"
               }
             >
-              Manage Analytics
+              Analytics
             </NavLink>
           </li>
           <li className="mx-4">
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
                 isActive ? "text-blue-500" : "text-white"
               }
             >
-              Manage Opening Hours
+              Opening Hours
             </NavLink>
           </li>
           <li className="mx-4">
@@ -59,17 +59,7 @@ const Dashboard: React.FC = () => {
                 isActive ? "text-blue-500" : "text-white"
               }
             >
-              Manage Users
-            </NavLink>
-          </li>
-          <li className="mx-4">
-            <NavLink
-              to="/dashboard/settings"
-              className={({ isActive }) =>
-                isActive ? "text-blue-500" : "text-white"
-              }
-            >
-              Settings
+              Users
             </NavLink>
           </li>
         </ul>
@@ -81,7 +71,6 @@ const Dashboard: React.FC = () => {
           <Route path="analytics" element={<ManageAnalytics />} />
           <Route path="opening-hours" element={<ManageOpeningHours />} />
           <Route path="users" element={<Users />} />
-          <Route path="settings" element={<Settings />} />
         </Routes>
       </div>
     </div>
