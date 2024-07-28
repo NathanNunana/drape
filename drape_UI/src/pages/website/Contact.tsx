@@ -1,7 +1,7 @@
 import React from "react";
 
-function ContactUs() {
+const ContactUs: React.FC = () => {
   return <>Working !!</>;
-}
+};
 
 export default ContactUs;

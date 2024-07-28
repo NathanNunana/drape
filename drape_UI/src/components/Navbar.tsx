@@ -1,6 +1,6 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   return (
@@ -15,30 +15,46 @@ const Navbar: React.FC = () => {
         </Link>
         <div className="flex flex-row gap-5">
           <div className="hidden lg:flex items-center justify-between space-x-8">
-            <Link
+            <NavLink
               to="/"
-              className="text-gray-700 hover:text-blue-500 font-medium text-sm"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-500 font-medium text-sm"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+              }
             >
               HOME
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/about"
-              className="text-gray-700 hover:text-blue-500 font-medium text-sm"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-500 font-medium text-sm"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+              }
             >
               ABOUT
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/services"
-              className="text-gray-700 hover:text-blue-500 font-medium text-sm"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-500 font-medium text-sm"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+              }
             >
               SERVICES
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/contact-us"
-              className="text-gray-700 hover:text-blue-500 font-medium text-sm"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-500 font-medium text-sm"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+              }
             >
               CONTACT
-            </Link>
+            </NavLink>
           </div>
           <Link
             to="/quote"
