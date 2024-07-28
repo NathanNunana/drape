@@ -32,7 +32,7 @@ const Login: React.FC = () => {
           navigate("/dashboard");
         }, 3000);
       })
-      .catch((error) => {
+      .catch(() => {
         setToastType("error");
         setToastMessage(authError?.message || "Login failed");
         setShowToast(true);

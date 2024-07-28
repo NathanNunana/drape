@@ -16,7 +16,7 @@ const Register: React.FC = () => {
     "success",
   );
   const [toastMessage, setToastMessage] = useState("");
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [, setErrors] = useState<{ [key: string]: string }>({});
 
   const dispatch = useAppDispatch();
   const authStatus = useAppSelector((state: RootState) => state.auth.status);
@@ -26,7 +26,15 @@ const Register: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-    dispatch(register({ username, firstname, lastname, email, password }))
+    dispatch(
+      register({
+        username,
+        first_name: firstname,
+        last_name: lastname,
+        email,
+        password,
+      }),
+    )
       .unwrap()
       .then(() => {
         setToastType("success");
