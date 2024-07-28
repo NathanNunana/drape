@@ -5,7 +5,6 @@ import ManageAddress from "./ManageAddress";
 import ManageAnalytics from "./ManageAnalytics";
 import ManageOpeningHours from "./ManageOpeningHours";
 import Users from "./Users";
-import Settings from "./Settings";
 
 const Dashboard: React.FC = () => {
   return (
