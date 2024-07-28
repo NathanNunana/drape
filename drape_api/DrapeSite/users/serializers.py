@@ -24,8 +24,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         )
         if user:
             # Send account activation email using the utility function
-            frontend_base_url = self.context['request'].frontend_base_url
-            send_activation_email(user, frontend_base_url)
+            send_activation_email(user, self.context['request'])
         return user
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -54,8 +53,7 @@ class PasswordResetSerializer(serializers.Serializer):
         email = self.validated_data['email']
         user = User.objects.get(email=email)
         if user:
-            frontend_base_url = self.context['request'].frontend_base_url
-            send_password_reset_email(user, frontend_base_url)
+            send_password_reset_email(user, self.context['request'])
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True)
