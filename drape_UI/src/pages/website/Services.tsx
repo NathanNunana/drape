@@ -1,7 +1,28 @@
 import React from "react";
+import {
+  Carousel,
+  ServiceSection,
+  About,
+  Fact,
+  Service,
+  Booking,
+  Technician,
+  Testimonial,
+} from "../../components";
 
-function Services() {
-  return <>Working !!</>;
-}
+const Services: React.FC = () => {
+  return (
+    <>
+      <Carousel />
+      <ServiceSection />
+      <About />
+      <Fact />
+      <Service />
+      <Booking />
+      <Technician />
+      <Testimonial />
+    </>
+  );
+};
 
 export default Services;

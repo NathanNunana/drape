@@ -1,7 +1,7 @@
 import React from "react";
 
-function About() {
+const About: React.FC = () => {
   return <>Working !!</>;
-}
+};
 
 export default About;
