@@ -1,6 +1,6 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from users.serializers import CustomUserSerializer, CustomTokenObtainPairSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer
+from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
@@ -27,7 +27,7 @@ class ActivateAccountView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def get_serializer_class(self):
-        return None  # Since no serializer is needed, we return None
+        return None  # No serializer is needed
 
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
@@ -39,10 +39,9 @@ class ActivateAccountView(generics.GenericAPIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return Response({"detail": "Account activated successfully"}, status=status.HTTP_200_OK)
+            return Response({"detail": "Account successfully activated"}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class PasswordResetView(generics.GenericAPIView):
     serializer_class = PasswordResetSerializer
