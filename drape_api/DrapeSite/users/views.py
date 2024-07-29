@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
+from django.shortcuts import redirect
+
 
 User = get_user_model()
 
@@ -39,7 +41,7 @@ class ActivateAccountView(generics.GenericAPIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return Response({"detail": "Account successfully activated"}, status=status.HTTP_200_OK)
+            return redirect("https://yengsabs.netlify.app")
         else:
             return Response({"detail": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
 

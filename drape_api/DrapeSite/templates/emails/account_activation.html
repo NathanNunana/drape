@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load i18n %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Your Account</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            padding: 20px;
         }
         .container {
-            width: 80%;
+            max-width: 600px;
             margin: 0 auto;
-            background: #fff;
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 0;
             text-align: center;
-            border-radius: 5px 5px 0 0;
+            padding: 10px 0;
         }
         .header h1 {
             margin: 0;
             font-size: 24px;
+            color: #333333;
         }
         .content {
-            padding: 20px;
-            line-height: 1.6;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .content p {
+            font-size: 16px;
+            color: #666666;
+            line-height: 1.5;
         }
         .button {
             display: inline-block;
-            background-color: #007bff;
-            color: #fff;
             padding: 10px 20px;
-            font-size: 16px;
+            background-color: #4CAF50;
+            color: #ffffff;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 16px;
             margin-top: 20px;
-            cursor: pointer;
         }
         .footer {
             text-align: center;
-            margin-top: 20px;
+            padding: 10px 0;
             font-size: 14px;
-            color: #666;
+            color: #aaaaaa;
         }
     </style>
 </head>
@@ -60,24 +61,15 @@
             <h1>Activate Your Account</h1>
         </div>
         <div class="content">
-            <p>Hi {{ user.first_name }},</p>
-            {% url 'activate' uidb64=uid token=token as activation_url %}
-            {% blocktrans with email=user.email %}
-            <p>Thank you for registering with us. To complete your registration, please click the button below to activate your account:</p>
-            <a id="activationLink" href="{{ activation_url }}" class="button">Activate Account</a>
-            <p>If you did not sign up for this account, you can ignore this email.</p>
-            {% endblocktrans %}
+            <p>Hello {{ user.first_name }},</p>
+            <p>Thank you for registering. Please click the button below to activate your account:</p>
+            <a href="{{ activation_url }}" class="button">Activate Account</a>
+            <p>If the button doesn't work, you can also click the link below:</p>
+            <p><a href="{{ activation_url }}">{{ activation_url }}</a></p>
         </div>
         <div class="footer">
-            <p>&copy; 2024 Your Company. All rights reserved.</p>
+            <p>&copy; <script>new Date().getFullYear() </script> Your Company. All rights reserved.</p>
         </div>
     </div>
-    <script>
-        // Automatically redirect the user to the sign-in URL after clicking the activation link
-        document.getElementById("activationLink").addEventListener("click", function(event) {
-            event.preventDefault();  // Prevent the default behavior of the link
-            window.location.href = "https://yengsabs.netlify.app.com";  // Redirect to the sign-in URL
-        });
-    </script>
 </body>
 </html>

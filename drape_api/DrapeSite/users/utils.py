@@ -20,7 +20,7 @@ def send_activation_email(user, request):
     subject = "Activate Your Account"
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    activation_url = f"{domain}/activate/{uid}/{token}/"
+    activation_url = f"{domain}/auth/activate/{uid}/{token}/"
     message = render_to_string(
         "emails/account_activation.html",
         {
@@ -43,7 +43,7 @@ def send_password_reset_email(user, request):
     base_host = get_base_host(request)
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.id))
-    reset_link = f"{base_host}/password-reset-confirm/{uid}/{token}/"
+    reset_link = f"{base_host}/auth/password-reset-confirm/{uid}/{token}/"
 
     subject = "Reset Your Password"
     message = render_to_string('emails/password_reset.html', {
