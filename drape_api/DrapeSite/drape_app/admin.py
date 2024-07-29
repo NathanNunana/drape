@@ -24,12 +24,6 @@ class OpeningHoursInline(admin.TabularInline):
     model = OpeningHours
     extra = 1  # Number of empty forms to display
 
-@admin.register(OpeningHoursType)
-class OpeningHoursTypeAdmin(admin.ModelAdmin):
-    inlines = [OpeningHoursInline]
-    list_display = ('name',)
-    search_fields = ('name',)
-
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ('name', 'logo')
