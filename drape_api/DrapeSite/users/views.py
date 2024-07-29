@@ -41,9 +41,12 @@ class ActivateAccountView(generics.GenericAPIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return redirect("https://yengsabs.netlify.app")
+            frontend_base_url = request.frontend_base_url
+            return redirect(f"{frontend_base_url}/auth/login")
         else:
             return Response({"detail": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class PasswordResetView(generics.GenericAPIView):
     serializer_class = PasswordResetSerializer
