@@ -42,7 +42,7 @@ class ActivateAccountView(generics.GenericAPIView):
             user.is_active = True
             user.save()
             frontend_base_url = request.frontend_base_url
-            return redirect(f"{frontend_base_url}/auth/login")
+            return redirect("https://drape-dev.netlify.app/auth/login")
         else:
             return Response({"detail": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
 
