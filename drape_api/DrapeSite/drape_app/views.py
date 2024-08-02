@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
                               Service, AboutUs, Product, Analytics, ContactUs, Schedule)
 from drape_app.permissions import IsSuperAdminOrReadOnly
@@ -55,3 +56,14 @@ class ContactUsViewSet(viewsets.ModelViewSet):
     queryset = ContactUs.objects.all()
     serializer_class = ContactUsSerializer
     permission_classes = [IsSuperAdminOrReadOnly]
+
+
+class ScheduleViewSet(viewsets.ModelViewSet):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
