@@ -1,12 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../drape/store"; // Adjust the import path as needed
+import {
+  fetchAboutUs,
+  createAboutUs,
+  updateAboutUs,
+} from "../../slice/aboutUsSlice"; // Adjust the import path as needed
 
 const ManageAboutUs: React.FC = () => {
-  const [motor, setMotor] = useState("");
-  const [companyDescription, setCompanyDescription] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const aboutUs = useSelector((state: RootState) => state.aboutUs);
+
+  const [motor, setMotor] = useState(aboutUs.motor);
+  const [companyDescription, setCompanyDescription] = useState(
+    aboutUs.company_description,
+  );
+
+  useEffect(() => {
+    dispatch(fetchAboutUs());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setMotor(aboutUs.motor);
+    setCompanyDescription(aboutUs.company_description);
+  }, [aboutUs.motor, aboutUs.company_description]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic
+    const updateData = {
+      motor,
+      company_description: companyDescription,
+    };
+
+    if (aboutUs.id) {
+      dispatch(updateAboutUs({ id: aboutUs.id, ...updateData }));
+    } else {
+      dispatch(createAboutUs(updateData));
+    }
   };
 
   return (

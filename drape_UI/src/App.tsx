@@ -1,26 +1,38 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { Suspense } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./drape/store";
 import "./App.css";
 import { Login, Register, Dashboard } from "./pages/admin";
 import { Main } from "./pages/website";
-import { Suspense } from "react";
-import { Provider } from "react-redux";
-import store from "./drape/store";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
-function App() {
+const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Suspense fallback="Loading....">
         <Router>
           <Routes>
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/register" element={<Register />} />
-            <Route path="/dashboard/*" element={<Dashboard />} />
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home/*" element={<Main />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard/*"
+              element={<ProtectedRoute element={<Dashboard />} />}
+            />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </Suspense>
     </Provider>
   );
-}
+};
 
 export default App;
