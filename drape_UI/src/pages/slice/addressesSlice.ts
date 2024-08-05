@@ -93,12 +93,9 @@ const addressSlice = createSlice({
       .addCase(createAddress.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        createAddress.fulfilled,
-        (state, action: PayloadAction<AddressState>) => {
-          state.status = "succeeded";
-        },
-      )
+      .addCase(createAddress.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
       .addCase(createAddress.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
@@ -106,12 +103,9 @@ const addressSlice = createSlice({
       .addCase(updateAddress.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        updateAddress.fulfilled,
-        (state, action: PayloadAction<AddressState>) => {
-          state.status = "succeeded";
-        },
-      )
+      .addCase(updateAddress.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
       .addCase(updateAddress.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
