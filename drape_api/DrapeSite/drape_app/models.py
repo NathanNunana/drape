@@ -1,4 +1,7 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
 
 # Address
 class Address(models.Model):
@@ -97,3 +100,22 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return f'{self.your_name} - {self.subject}'
+
+class Schedule(models.Model):
+    SERVICE_CHOICES = [
+        ('MAINTENANCE', 'Maintenance'),
+        ('SERVICE2', 'Service 2'),
+        ('SERVICE3', 'Service 3'),
+        ('SERVICE4', 'Service 4'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    booking_date = models.DateTimeField(auto_now_add=True)
+    services = models.CharField(max_length=50, choices=SERVICE_CHOICES)
+    start_date = models.DateTimeField()
+    due_date = models.DateTimeField()
+    message = models.TextField()
+
+    def __str__(self):
+        return f"Schedule for {self.user.email} - {self.product.name}"

@@ -30,12 +30,20 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        # Adding user information to the token
+        token['id'] = str(user.id)
+        token['username'] = user.username
         token['email'] = user.email
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['user'] = CustomUserSerializer(self.user).data
+        # Adding user information to the response data
+        data['user'] = {
+            'id': str(self.user.id),
+            'username': self.user.username,
+            'email': self.user.email,
+        }
         return data
 
 class PasswordResetSerializer(serializers.Serializer):
