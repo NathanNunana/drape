@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
               HOME
             </NavLink>
             <NavLink
-              to="/about"
+              to="/home/about"
               className={({ isActive }) =>
                 isActive
                   ? "text-blue-500 font-medium text-sm"
@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
               ABOUT
             </NavLink>
             <NavLink
-              to="/services"
+              to="/home/services"
               className={({ isActive }) =>
                 isActive
                   ? "text-blue-500 font-medium text-sm"
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
               SERVICES
             </NavLink>
             <NavLink
-              to="/contact-us"
+              to="/home/contact-us"
               className={({ isActive }) =>
                 isActive
                   ? "text-blue-500 font-medium text-sm"
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
             </NavLink>
           </div>
           <Link
-            to="/quote"
+            to="/home/quote"
             className="hidden py-5 font-semibold lg:flex lg:items-center lg:gap-1 bg-blue-500 text-white px-4 hover:bg-blue-600"
           >
             GET A QUOTE{" "}

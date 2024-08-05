@@ -131,7 +131,7 @@ const Register: React.FC = () => {
         </form>
         <p className="text-center">
           Already have an account?{" "}
-          <Link to="/auth/login" className="text-blue-500">
+          <Link to="/login" className="text-blue-500">
             Login
           </Link>
         </p>

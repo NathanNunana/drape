@@ -9,7 +9,17 @@ interface AuthError {
 
 export interface AuthState {
   isAuthenticated: boolean;
-  user: { id: string; name: string } | null;
+  user: {
+    id: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+  } | null;
+  tokens: {
+    refresh: string;
+    access: string;
+  } | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: AuthError | null;
 }
@@ -17,72 +27,63 @@ export interface AuthState {
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
+  tokens: null,
   status: "idle",
   error: null,
 };
 
-export const login = createAsyncThunk<
-  { id: string; name: string },
-  { email: string; password: string },
-  { rejectValue: AuthError }
->(Endpoints.login, async (credentials, { rejectWithValue }) => {
-  try {
-    const response = await client.post(Endpoints.login, credentials);
-    return response.data;
-  } catch (err) {
-    const error = err as AxiosError<{ message: string }>;
-    if (error.response) {
-      return rejectWithValue({
-        message: error.response.data.message,
-        statusCode: error.response.status,
-      });
-    } else {
-      return rejectWithValue({
-        message: error.message,
-      });
-    }
-  }
-});
+const loadState = (): AuthState => {
+  const savedState = localStorage.getItem("authState");
+  return savedState ? JSON.parse(savedState) : initialState;
+};
 
-export const register = createAsyncThunk<
-  { id: string; name: string },
-  {
-    username: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    password: string;
-  },
-  { rejectValue: AuthError }
->(Endpoints.register, async (credentials, { rejectWithValue }) => {
-  console.log(credentials);
-  try {
-    const response = await client.post(Endpoints.register, credentials);
-    return response.data;
-  } catch (err) {
-    const error = err as AxiosError<{ message: string }>;
-    if (error.response) {
-      return rejectWithValue({
-        message: error.response.data.message,
-        statusCode: error.response.status,
-      });
-    } else {
-      return rejectWithValue({
-        message: error.message,
-      });
+export const login = createAsyncThunk(
+  "auth/login",
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await client.post(Endpoints.login, credentials);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        (error as AxiosError).response?.data || { message: "Login failed" },
+      );
     }
-  }
-});
+  },
+);
+
+export const register = createAsyncThunk(
+  "auth/register",
+  async (
+    userInfo: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await client.post(Endpoints.register, userInfo);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        (error as AxiosError).response?.data || {
+          message: "Registration failed",
+        },
+      );
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: loadState(),
   reducers: {
     logout(state) {
       state.isAuthenticated = false;
       state.user = null;
+      state.tokens = null;
       state.status = "idle";
       state.error = null;
+      localStorage.removeItem("authState");
     },
   },
   extraReducers: (builder) => {
@@ -92,20 +93,68 @@ const authSlice = createSlice({
       })
       .addCase(
         login.fulfilled,
-        (state, action: PayloadAction<{ id: string; name: string }>) => {
+        (
+          state,
+          action: PayloadAction<{
+            user: {
+              id: string;
+              username: string;
+              first_name: string;
+              last_name: string;
+              email: string;
+            };
+            refresh: string;
+            access: string;
+          }>,
+        ) => {
           state.isAuthenticated = true;
-          state.user = action.payload;
+          state.user = action.payload.user;
+          state.tokens = {
+            access: action.payload.access,
+            refresh: action.payload.refresh,
+          };
           state.status = "succeeded";
           state.error = null;
+          localStorage.setItem("authState", JSON.stringify(state));
         },
       )
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
-        if (action.payload) {
-          state.error = action.payload;
-        } else {
-          state.error = { message: "An unknown error occurred" };
-        }
+        state.error = (action.payload as AuthError) || {
+          message: "An unknown error occurred",
+        };
+      })
+      .addCase(register.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        register.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            user: {
+              id: string;
+              username: string;
+              first_name: string;
+              last_name: string;
+              email: string;
+            };
+            tokens: { refresh: string; access: string };
+          }>,
+        ) => {
+          state.isAuthenticated = true;
+          state.user = action.payload.user;
+          state.tokens = action.payload.tokens;
+          state.status = "succeeded";
+          state.error = null;
+          localStorage.setItem("authState", JSON.stringify(state));
+        },
+      )
+      .addCase(register.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = (action.payload as AuthError) || {
+          message: "An unknown error occurred",
+        };
       });
   },
 });
