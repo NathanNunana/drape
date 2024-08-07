@@ -17,8 +17,8 @@ def send_reminder_email(user_email, subject, text_content, html_content):
 @shared_task
 def schedule_reminders():
     tomorrow = now() + timedelta(days=1)
-    schedules_start = Schedule.objects.filter(start_date__date=tomorrow.date())
-    schedules_due = Schedule.objects.filter(due_date__date=tomorrow.date())
+    schedules_start = Schedule.objects.filter(start_date=tomorrow.date())
+    schedules_due = Schedule.objects.filter(due_date=tomorrow.date())
 
     for schedule in schedules_start:
         context = {
