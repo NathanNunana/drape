@@ -65,11 +65,11 @@ const Dashboard: React.FC = () => {
       </nav>
       <div className="flex-grow p-4">
         <Routes>
-          <Route path="about-us" element={<ManageAboutUs />} />
-          <Route path="address" element={<ManageAddress />} />
-          <Route path="analytics" element={<ManageAnalytics />} />
-          <Route path="opening-hours" element={<ManageOpeningHours />} />
-          <Route path="users" element={<Users />} />
+          <Route path="/about-us" element={<ManageAboutUs />} />
+          <Route path="/address" element={<ManageAddress />} />
+          <Route path="/analytics" element={<ManageAnalytics />} />
+          <Route path="/opening-hours" element={<ManageOpeningHours />} />
+          <Route path="/users" element={<Users />} />
         </Routes>
       </div>
     </div>

@@ -1,0 +1,13 @@
+<!-- templates/emails/due_reminder.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Due Soon</title>
+</head>
+<body>
+    <p>Dear {{ user.username }},</p>
+    <p>Your service for {{ product.name }} is due soon on {{ due_date }}. Please complete the necessary actions.</p>
+    <p>Best regards,<br>The Drape Team</p>
+</body>
+</html>

@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from celery.schedules import crontab
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 # Custom user model
@@ -185,4 +189,22 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES' : ('Bearer', ),
     'ACCESS_TOKEN_LIFETIME' : timedelta(minutes=100),
     'REFRESH_TOKEN_LIFETIME' : timedelta(days=1)
+}
+
+
+# Celery settings
+CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
+CELERY_RESULT_BACKEND = 'django-db'     # Using Django database to store task results
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+
+# Celery Beat schedule
+CELERY_BEAT_SCHEDULE = {
+    'send-reminder-email': {
+        'task': 'drape_app.tasks.schedule_reminders',
+        'schedule': crontab(hour=10, minute=40),  # Runs daily at midnight
+    },
 }
