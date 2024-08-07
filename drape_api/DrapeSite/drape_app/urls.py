@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drape_app.views import (AddressViewSet, OpeningHoursTypeViewSet, OpeningHoursViewSet, 
                              CompanyViewSet, ServiceTypeViewSet, ServiceViewSet, AboutUsViewSet, 
-                             ProductViewSet, AnalyticsViewSet, ContactUsViewSet)
+                             ProductViewSet, AnalyticsViewSet, ContactUsViewSet, ScheduleViewSet)
 
 router = DefaultRouter()
 router.register(r'addresses', AddressViewSet)
@@ -15,6 +15,8 @@ router.register(r'about-us', AboutUsViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'analytics', AnalyticsViewSet)
 router.register(r'contact-us', ContactUsViewSet)
+router.register(r'schedules', ScheduleViewSet, basename='schedule')
+
 
 urlpatterns = [
     path('', include(router.urls)),
