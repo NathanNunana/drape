@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
                      AboutUs, Product, Analytics, ContactUs)
 
+
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('street_name', 'digital_address', 'city', 'country', 'email')
