@@ -204,6 +204,6 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'send-reminder-email': {
         'task': 'drape_app.tasks.schedule_reminders',
-        'schedule': crontab(hour=0, minute=0),  # Runs daily at midnight UTC
+        'schedule': crontab(hour=7, minute=0),  # Runs daily at midnight UTC
     },
 }

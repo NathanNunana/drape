@@ -37,13 +37,12 @@ def schedule_reminders():
                     'product': schedule.product,
                     'start_date': schedule.start_date
                 }
-                text_content = render_to_string('emails/start_reminder.txt', context)
                 html_content = render_to_string('emails/start_reminder.html', context)
                 send_reminder_email.apply_async(
                     args=[
                         schedule.user.email,
                         'Reminder: Your service is starting soon',
-                        text_content,
+                        html_content,
                         html_content
                     ]
                 )
@@ -58,13 +57,12 @@ def schedule_reminders():
                     'product': schedule.product,
                     'due_date': schedule.due_date
                 }
-                text_content = render_to_string('emails/due_reminder.txt', context)
                 html_content = render_to_string('emails/due_reminder.html', context)
                 send_reminder_email.apply_async(
                     args=[
                         schedule.user.email,
                         'Reminder: Your service is due soon',
-                        text_content,
+                        html_content,
                         html_content
                     ]
                 )
