@@ -194,17 +194,16 @@ SIMPLE_JWT = {
 
 # Celery settings
 CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
-CELERY_RESULT_BACKEND = 'django-db'     # Using Django database to store task results
+CELERY_RESULT_BACKEND = 'django-db'     # Use Django database to store task results
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
-
 # Celery Beat schedule
 CELERY_BEAT_SCHEDULE = {
     'send-reminder-email': {
         'task': 'drape_app.tasks.schedule_reminders',
-        'schedule': crontab(hour=11, minute=0),  # Runs daily at midnight
+        'schedule': crontab(hour=0, minute=0),  # Runs daily at midnight UTC
     },
 }
