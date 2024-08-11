@@ -7,6 +7,7 @@ import {
   updateAnalytic,
   deleteAnalytic,
 } from "../../slice/analyticsSlice";
+import Modal from "../../../components/Modal";
 
 const ManageAnalytics: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,6 +23,7 @@ const ManageAnalytics: React.FC = () => {
     name: string;
     value: string;
   } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAnalytics());
@@ -31,6 +33,7 @@ const ManageAnalytics: React.FC = () => {
     if (currentAnalytic.name && currentAnalytic.value) {
       await dispatch(createAnalytic(currentAnalytic));
       setCurrentAnalytic({ name: "", value: "" });
+      setIsModalOpen(false);
     }
   };
 
@@ -41,6 +44,7 @@ const ManageAnalytics: React.FC = () => {
   const handleEditAnalytic = (analytic: { name: string; value: string }) => {
     setEditingAnalytic(analytic);
     setCurrentAnalytic(analytic);
+    setIsModalOpen(true);
   };
 
   const handleSaveEdit = async () => {
@@ -48,6 +52,16 @@ const ManageAnalytics: React.FC = () => {
       await dispatch(updateAnalytic(currentAnalytic));
       setEditingAnalytic(null);
       setCurrentAnalytic({ name: "", value: "" });
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingAnalytic) {
+      handleSaveEdit();
+    } else {
+      handleUploadAnalytic();
     }
   };
 
@@ -55,84 +69,108 @@ const ManageAnalytics: React.FC = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Manage Analytics</h1>
       {status === "loading" && <p>Loading...</p>}
-      {status === "failed" && <p>Error: {error}</p>}
+      {status === "failed" && <p className="text-red-500">Error: {error}</p>}
+      <button
+        onClick={() => {
+          setEditingAnalytic(null);
+          setCurrentAnalytic({ name: "", value: "" });
+          setIsModalOpen(true);
+        }}
+        className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+      >
+        Add Analytic
+      </button>
       {analytics.length > 0 && (
-        <table className="min-w-full divide-y divide-gray-200 mb-2">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Value
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {analytics.map((analytic) => (
-              <tr key={analytic.name}>
-                <td className="px-6 py-4 whitespace-nowrap">{analytic.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {analytic.value}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    onClick={() => handleEditAnalytic(analytic)}
-                    className="text-blue-500 hover:text-blue-700 mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleRemoveAnalytic(analytic.name)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Remove
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 bg-white border border-gray-300 rounded-lg shadow-md">
+            <thead className="bg-gray-100 border-b border-gray-300">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Value
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {analytics.map((analytic) => (
+                <tr key={analytic.name} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-800">
+                    {analytic.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                    {analytic.value}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => handleEditAnalytic(analytic)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleRemoveAnalytic(analytic.name)}
+                      className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-600 transition"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-      <div className="flex flex-wrap mb-2">
-        <input
-          type="text"
-          placeholder="Name"
-          value={currentAnalytic.name}
-          onChange={(e) =>
-            setCurrentAnalytic({ ...currentAnalytic, name: e.target.value })
-          }
-          className="mt-1 block w-full md:w-1/2 border border-gray-300 rounded-md shadow-sm p-2 mb-2 md:mb-0 md:mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Value"
-          value={currentAnalytic.value}
-          onChange={(e) =>
-            setCurrentAnalytic({ ...currentAnalytic, value: e.target.value })
-          }
-          className="mt-1 block w-full md:w-1/2 border border-gray-300 rounded-md shadow-sm p-2"
-        />
-      </div>
-      <div className="flex">
-        <button
-          onClick={handleUploadAnalytic}
-          className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
-        >
-          Upload Analytic
-        </button>
-        {editingAnalytic && (
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2 className="text-xl font-bold mb-4">
+          {editingAnalytic ? "Edit Analytic" : "Add Analytic"}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Name</label>
+            <input
+              type="text"
+              placeholder="Name"
+              value={currentAnalytic.name}
+              onChange={(e) =>
+                setCurrentAnalytic({ ...currentAnalytic, name: e.target.value })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Value</label>
+            <input
+              type="text"
+              placeholder="Value"
+              value={currentAnalytic.value}
+              onChange={(e) =>
+                setCurrentAnalytic({
+                  ...currentAnalytic,
+                  value: e.target.value,
+                })
+              }
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
           <button
-            onClick={handleSaveEdit}
-            className="bg-yellow-500 text-white px-4 py-2 mb-4 w-full lg:w-1/2"
+            type="submit"
+            className={`${
+              editingAnalytic
+                ? "bg-yellow-500 hover:bg-yellow-600"
+                : "bg-blue-500 hover:bg-blue-600"
+            } text-white px-4 py-2 rounded-md shadow-md transition`}
           >
-            Save Edit
+            {editingAnalytic ? "Save Edit" : "Upload Analytic"}
           </button>
-        )}
-      </div>
+        </form>
+      </Modal>
     </div>
   );
 };

@@ -9,6 +9,7 @@ export const Endpoints = {
   analytics: "/drape/analytics/",
   products: "/drape/products/",
   services: "/drape/services/",
+  serviceTypes: "/drape/service-types/",
   openingHours: "/drape/opening-hours/",
   openingHoursType: "/drape/opening-hours-types/",
 };
