@@ -3,233 +3,287 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../drape/store";
 import {
   fetchOpeningHours,
-  fetchTypes,
   createOpeningHour,
   updateOpeningHour,
   deleteOpeningHour,
+  fetchTypes,
   createType,
   updateType,
   deleteType,
   OpeningHour,
   OpeningHourType,
 } from "../../slice/openingHoursSlice";
+import Modal from "../../../components/Modal";
 
 const ManageOpeningHours: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { openingHours, types, status, error } = useSelector(
+  const { openingHours, types } = useSelector(
     (state: RootState) => state.openingHours,
   );
-
-  const [newOpeningHour, setNewOpeningHour] = useState<OpeningHour>({
+  const [isOpenHourModalOpen, setIsOpenHourModalOpen] = useState(false);
+  const [isTypeModalOpen, setIsTypeModalOpen] = useState(false);
+  const [isEditingOpeningHour, setIsEditingOpeningHour] = useState(false);
+  const [isEditingType, setIsEditingType] = useState(false);
+  const [currentOpeningHour, setCurrentOpeningHour] = useState<OpeningHour>({
     duration: "",
     type: 0,
   });
-  const [newType, setNewType] = useState<OpeningHourType>({
+  const [currentType, setCurrentType] = useState<OpeningHourType>({
     name: "",
     title: "",
   });
-  const [editingOpeningHour, setEditingOpeningHour] =
-    useState<OpeningHour | null>(null);
-  const [editingType, setEditingType] = useState<OpeningHourType | null>(null);
 
   useEffect(() => {
     dispatch(fetchOpeningHours());
     dispatch(fetchTypes());
   }, [dispatch]);
 
-  const handleAddOpeningHour = async () => {
-    await dispatch(createOpeningHour(newOpeningHour));
-    setNewOpeningHour({ duration: "", type: 0 });
+  const handleOpeningHourChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setCurrentOpeningHour({
+      ...currentOpeningHour,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleAddType = async () => {
-    await dispatch(createType(newType));
-    setNewType({ name: "", title: "" });
+  const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentType({
+      ...currentType,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleRemoveOpeningHour = (duration: string) => {
-    dispatch(deleteOpeningHour(duration));
+  const handleSubmitOpeningHour = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isEditingOpeningHour) {
+      dispatch(updateOpeningHour(currentOpeningHour));
+    } else {
+      dispatch(createOpeningHour(currentOpeningHour));
+    }
+    setIsOpenHourModalOpen(false);
+    setCurrentOpeningHour({ duration: "", type: 0 });
   };
 
-  const handleRemoveType = (name: string) => {
-    dispatch(deleteType(name));
+  const handleSubmitType = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isEditingType) {
+      dispatch(updateType(currentType));
+    } else {
+      dispatch(createType(currentType));
+    }
+    setIsTypeModalOpen(false);
+    setCurrentType({ name: "", title: "" });
   };
 
   const handleEditOpeningHour = (openingHour: OpeningHour) => {
-    setEditingOpeningHour(openingHour);
-    setNewOpeningHour(openingHour);
+    setCurrentOpeningHour(openingHour);
+    setIsEditingOpeningHour(true);
+    setIsOpenHourModalOpen(true);
   };
 
   const handleEditType = (type: OpeningHourType) => {
-    setEditingType(type);
-    setNewType(type);
-  };
-
-  const handleSaveEditOpeningHour = async () => {
-    if (editingOpeningHour) {
-      await dispatch(updateOpeningHour(newOpeningHour));
-      setEditingOpeningHour(null);
-      setNewOpeningHour({ duration: "", type: 0 });
-    }
-  };
-
-  const handleSaveEditType = async () => {
-    if (editingType) {
-      await dispatch(updateType(newType));
-      setEditingType(null);
-      setNewType({ name: "", title: "" });
-    }
+    setCurrentType(type);
+    setIsEditingType(true);
+    setIsTypeModalOpen(true);
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Manage Opening Hours</h1>
-      {status === "loading" && <p>Loading...</p>}
-      {status === "failed" && <p>Error: {error}</p>}
-      {openingHours.length > 0 && (
-        <table className="min-w-full divide-y divide-gray-200 mb-2">
-          <thead>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Manage Opening Hours</h2>
+      <button
+        onClick={() => {
+          setCurrentOpeningHour({ duration: "", type: 0 });
+          setIsEditingOpeningHour(false);
+          setIsOpenHourModalOpen(true);
+        }}
+        className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+      >
+        Add Opening Hour
+      </button>
+      <div className="overflow-x-auto mt-4 mb-8">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-100 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
                 Duration
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {openingHours.map((openingHour, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
+          <tbody>
+            {openingHours.map((openingHour) => (
+              <tr
+                key={openingHour.duration}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
+                <td className="py-4 px-4 text-gray-800">
                   {openingHour.duration}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {openingHour.type}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-4 text-gray-600">{openingHour.type}</td>
+                <td className="py-4 px-4">
                   <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                     onClick={() => handleEditOpeningHour(openingHour)}
-                    className="text-blue-500 hover:text-blue-700 mr-3"
                   >
                     Edit
                   </button>
                   <button
+                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
                     onClick={() =>
-                      handleRemoveOpeningHour(openingHour.duration)
+                      dispatch(deleteOpeningHour(openingHour.duration))
                     }
-                    className="text-red-500 hover:text-red-700"
                   >
-                    Remove
+                    Delete
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
-      <div className="flex flex-wrap mb-2">
-        <input
-          type="text"
-          placeholder="Duration"
-          value={newOpeningHour.duration}
-          onChange={(e) =>
-            setNewOpeningHour({ ...newOpeningHour, duration: e.target.value })
-          }
-          className="mt-1 block w-full md:w-1/2 border border-gray-300 rounded-md shadow-sm p-2 mb-2 md:mb-0 md:mr-2"
-        />
-        <input
-          type="number"
-          placeholder="Type"
-          value={newOpeningHour.type}
-          onChange={(e) =>
-            setNewOpeningHour({
-              ...newOpeningHour,
-              type: parseInt(e.target.value),
-            })
-          }
-          className="mt-1 block w-full md:w-1/2 border border-gray-300 rounded-md shadow-sm p-2"
-        />
       </div>
-      {editingOpeningHour ? (
-        <button
-          onClick={handleSaveEditOpeningHour}
-          className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
-        >
-          Save Edit
-        </button>
-      ) : (
-        <button
-          onClick={handleAddOpeningHour}
-          className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
-        >
-          Add Opening Hour
-        </button>
-      )}
 
-      <h1 className="text-2xl font-bold mb-4">Manage Types</h1>
-      {types.length > 0 && (
-        <table className="min-w-full divide-y divide-gray-200 mb-2">
-          <thead>
+      <h2 className="text-2xl font-bold mb-4">Manage Types</h2>
+      <button
+        onClick={() => {
+          setCurrentType({ name: "", title: "" });
+          setIsEditingType(false);
+          setIsTypeModalOpen(true);
+        }}
+        className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+      >
+        Add Type
+      </button>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-100 border-b border-gray-200">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {types.map((type, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">{type.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
+          <tbody>
+            {types.map((type) => (
+              <tr
+                key={type.name}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
+                <td className="py-4 px-4 text-gray-800">{type.name}</td>
+                <td className="py-4 px-4">
                   <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                     onClick={() => handleEditType(type)}
-                    className="text-blue-500 hover:text-blue-700 mr-3"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleRemoveType(type.name)}
-                    className="text-red-500 hover:text-red-700"
+                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                    onClick={() => dispatch(deleteType(type.name))}
                   >
-                    Remove
+                    Delete
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
-      <div className="flex flex-wrap mb-2">
-        <input
-          type="text"
-          placeholder="Name"
-          value={newType.name}
-          onChange={(e) => setNewType({ ...newType, name: e.target.value })}
-          className="mt-1 block w-full md:w-1/2 border border-gray-300 rounded-md shadow-sm p-2 mb-2 md:mb-0 md:mr-2"
-        />
       </div>
-      {editingType ? (
-        <button
-          onClick={handleSaveEditType}
-          className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
-        >
-          Save Edit
-        </button>
-      ) : (
-        <button
-          onClick={handleAddType}
-          className="bg-blue-500 text-white px-4 py-2 mb-4 mr-5 w-full lg:w-1/2"
-        >
-          Add Type
-        </button>
-      )}
+
+      {/* Opening Hour Modal */}
+      <Modal
+        isOpen={isOpenHourModalOpen}
+        onClose={() => setIsOpenHourModalOpen(false)}
+      >
+        <h2 className="text-xl font-bold mb-4">
+          {isEditingOpeningHour ? "Edit Opening Hour" : "Add Opening Hour"}
+        </h2>
+        <form onSubmit={handleSubmitOpeningHour}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Duration</label>
+            <input
+              type="text"
+              name="duration"
+              value={currentOpeningHour.duration}
+              onChange={handleOpeningHourChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Type</label>
+            <select
+              name="type"
+              value={currentOpeningHour.type}
+              onChange={handleOpeningHourChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            >
+              <option value="">Select Type</option>
+              {types.map((type) => (
+                <option key={type.name} value={type.name}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className={`bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition ${
+              isEditingOpeningHour ? "bg-yellow-500 hover:bg-yellow-600" : ""
+            }`}
+          >
+            {isEditingOpeningHour ? "Save Changes" : "Add Opening Hour"}
+          </button>
+        </form>
+      </Modal>
+
+      {/* Type Modal */}
+      <Modal isOpen={isTypeModalOpen} onClose={() => setIsTypeModalOpen(false)}>
+        <h2 className="text-xl font-bold mb-4">
+          {isEditingType ? "Edit Type" : "Add Type"}
+        </h2>
+        <form onSubmit={handleSubmitType}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={currentType.name}
+              onChange={handleTypeChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Title</label>
+            <input
+              type="text"
+              name="title"
+              value={currentType.title}
+              onChange={handleTypeChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className={`bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition ${
+              isEditingType ? "bg-yellow-500 hover:bg-yellow-600" : ""
+            }`}
+          >
+            {isEditingType ? "Save Changes" : "Add Type"}
+          </button>
+        </form>
+      </Modal>
     </div>
   );
 };
