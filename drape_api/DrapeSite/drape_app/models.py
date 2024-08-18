@@ -103,14 +103,14 @@ class ContactUs(models.Model):
 
 class Schedule(models.Model):
     SERVICE_CHOICES = [
-        ('MAINTENANCE', 'Maintenance'),
-        ('SERVICE2', 'Service 2'),
-        ('SERVICE3', 'Service 3'),
-        ('SERVICE4', 'Service 4'),
+        ('Diagnostic Test', 'Diagnostic Test'),
+        ('Engine Servicing', 'Engine Servicing'),
+        ('Tires Replacement', 'Tires Replacement'),
+        ('Oil Changing', 'Oil Changing'),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     booking_date = models.DateTimeField(auto_now_add=True)
     services = models.CharField(max_length=50, choices=SERVICE_CHOICES)
     start_date = models.DateTimeField()
