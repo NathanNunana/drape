@@ -36,6 +36,8 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AboutUsSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
+
     class Meta:
         model = AboutUs
         fields = '__all__'

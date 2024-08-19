@@ -142,9 +142,6 @@ TIME_ZONE = 'Africa/Accra'
 USE_I18N = True
 USE_TZ = True
 
-# Celery timezone settings
-CELERY_TIMEZONE = 'Africa/Accra'
-CELERY_ENABLE_UTC = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -154,7 +151,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'drape_app/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
@@ -194,6 +191,9 @@ SIMPLE_JWT = {
 }
 
 
+FRONTEND_URL = config('FRONTEND_URL')
+
+
 # Celery settings
 CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
 CELERY_RESULT_BACKEND = 'django-db'     # Use Django database to store task results
@@ -206,6 +206,11 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'send-reminder-email': {
         'task': 'drape_app.tasks.schedule_reminders',
-        'schedule': crontab(hour=16, minute=0),  # Runs daily at 4 PM Accra time
+        'schedule': crontab(hour=0, minute=0),  # Runs daily at 4 PM Accra time
     },
 }
+
+
+# Celery timezone settings
+CELERY_TIMEZONE = 'Africa/Accra'
+CELERY_ENABLE_UTC = True

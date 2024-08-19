@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client, Endpoints } from "../../api/client";
 
+// Define the Service interface
 export interface Service {
   id: number;
   title: string;
   description: string;
   operations: string;
-  file?: File | null;
+  image?: File | null; // Image can be a File object or null
   service_type: number;
 }
 
@@ -16,12 +17,14 @@ interface ServicesState {
   error: string | null;
 }
 
+// Initial state for the slice
 const initialState: ServicesState = {
   services: [],
   status: "idle",
   error: null,
 };
 
+// Fetch services
 export const fetchServices = createAsyncThunk(
   "services/fetchServices",
   async () => {
@@ -30,29 +33,63 @@ export const fetchServices = createAsyncThunk(
   },
 );
 
+// Create a new service
 export const createService = createAsyncThunk(
   "services/createService",
-  async (serviceData: Service) => {
-    const response = await client.post(Endpoints.services, serviceData);
+  async (serviceData: Omit<Service, 'id'>) => {
+    // Construct FormData
+    const formData = new FormData();
+    formData.append("title", serviceData.title);
+    formData.append("description", serviceData.description);
+    formData.append("operations", serviceData.operations);
+    formData.append("service_type", serviceData.service_type.toString());
+    if (serviceData.image) {
+      formData.append("image", serviceData.image);
+    }
+
+    // Make the API request
+    const response = await client.post(Endpoints.services, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   },
 );
 
+// Update an existing service
 export const updateService = createAsyncThunk(
   "services/updateService",
   async (serviceData: Service) => {
+    // Construct FormData
+    const formData = new FormData();
+    formData.append("title", serviceData.title);
+    formData.append("description", serviceData.description);
+    formData.append("operations", serviceData.operations);
+    formData.append("service_type", serviceData.service_type.toString());
+    if (serviceData.image) {
+      formData.append("image", serviceData.image);
+    }
+
+    // Make the API request
     const response = await client.put(
-      `${Endpoints.services}/${serviceData.id}/`,
-      serviceData,
+      `${Endpoints.services}${serviceData.id}/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response.data;
   },
 );
 
+// Delete a service
 export const deleteService = createAsyncThunk(
   "services/deleteService",
   async (id: number) => {
-    await client.delete(`${Endpoints.services}/${id}/`);
+    await client.delete(`${Endpoints.services}${id}/`);
     return id;
   },
 );
@@ -75,7 +112,7 @@ const servicesSlice = createSlice({
       )
       .addCase(fetchServices.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || null;
+        state.error = action.error.message || "Failed to fetch services";
       })
       .addCase(createService.pending, (state) => {
         state.status = "loading";
@@ -89,7 +126,7 @@ const servicesSlice = createSlice({
       )
       .addCase(createService.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || null;
+        state.error = action.error.message || "Failed to create service";
       })
       .addCase(updateService.pending, (state) => {
         state.status = "loading";
@@ -108,7 +145,7 @@ const servicesSlice = createSlice({
       )
       .addCase(updateService.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || null;
+        state.error = action.error.message || "Failed to update service";
       })
       .addCase(deleteService.pending, (state) => {
         state.status = "loading";
@@ -124,7 +161,7 @@ const servicesSlice = createSlice({
       )
       .addCase(deleteService.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || null;
+        state.error = action.error.message || "Failed to delete service";
       });
   },
 });

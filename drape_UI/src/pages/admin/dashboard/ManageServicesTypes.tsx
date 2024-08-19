@@ -8,6 +8,8 @@ import {
   deleteServiceType,
 } from "../../slice/servicesTypesSlice";
 import Modal from "../../../components/Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageServiceTypes: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,20 +37,25 @@ const ManageServiceTypes: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditing) {
-      dispatch(updateServiceType(currentServiceType));
-    } else {
-      dispatch(
-        createServiceType({
+    try {
+      if (isEditing) {
+        const resultAction = await dispatch(updateServiceType(currentServiceType)).unwrap();
+        toast.success("Service Type updated successfully!");
+      } else {
+        const resultAction = await dispatch(createServiceType({
           name: currentServiceType.name,
           description: currentServiceType.description,
-        }),
-      );
+        })).unwrap();
+        toast.success("Service Type added successfully!");
+      }
+    } catch (error) {
+      toast.error(`Error: ${(error as Error).message}`);
+    } finally {
+      setIsModalOpen(false);
+      setCurrentServiceType({ id: 0, name: "", description: "" });
     }
-    setIsModalOpen(false);
-    setCurrentServiceType({ id: 0, name: "", description: "" });
   };
 
   const handleEdit = (type: {
@@ -59,6 +66,15 @@ const ManageServiceTypes: React.FC = () => {
     setCurrentServiceType(type);
     setIsEditing(true);
     setIsModalOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await dispatch(deleteServiceType(id)).unwrap();
+      toast.success("Service Type deleted successfully!");
+    } catch (error) {
+      toast.error(`Error: ${(error as Error).message}`);
+    }
   };
 
   return (
@@ -106,7 +122,7 @@ const ManageServiceTypes: React.FC = () => {
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() => dispatch(deleteServiceType(type.id))}
+                    onClick={() => handleDelete(type.id)}
                   >
                     Delete
                   </button>
@@ -152,6 +168,7 @@ const ManageServiceTypes: React.FC = () => {
           </button>
         </form>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,8 +1,14 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client, Endpoints } from "../../api/client";
 
+export interface Analytic {
+  id: string;
+  name: string;
+  value: string;
+}
+
 export interface AnalyticsState {
-  analytics: { name: string; value: string }[];
+  analytics: Analytic[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -13,6 +19,7 @@ const initialState: AnalyticsState = {
   error: null,
 };
 
+// Thunks
 export const fetchAnalytics = createAsyncThunk(
   "analytics/fetchAnalytics",
   async () => {
@@ -23,7 +30,7 @@ export const fetchAnalytics = createAsyncThunk(
 
 export const createAnalytic = createAsyncThunk(
   "analytics/createAnalytic",
-  async (analyticData: { name: string; value: string }) => {
+  async (analyticData: Omit<Analytic, "id">) => {
     const response = await client.post(Endpoints.analytics, analyticData);
     return response.data;
   },
@@ -31,17 +38,17 @@ export const createAnalytic = createAsyncThunk(
 
 export const updateAnalytic = createAsyncThunk(
   "analytics/updateAnalytic",
-  async (analyticData: { name: string; value: string }) => {
-    const response = await client.put(Endpoints.analytics, analyticData);
+  async (analyticData: Analytic) => {
+    const response = await client.put(`${Endpoints.analytics}${analyticData.id}/`, analyticData);
     return response.data;
   },
 );
 
 export const deleteAnalytic = createAsyncThunk(
   "analytics/deleteAnalytic",
-  async (name: string) => {
-    await client.delete(`${Endpoints.analytics}/${name}`);
-    return name;
+  async (id: string) => {
+    await client.delete(`${Endpoints.analytics}${id}/`);
+    return id;
   },
 );
 
@@ -55,13 +62,10 @@ const analyticsSlice = createSlice({
       .addCase(fetchAnalytics.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        fetchAnalytics.fulfilled,
-        (state, action: PayloadAction<{ name: string; value: string }[]>) => {
-          state.status = "succeeded";
-          state.analytics = action.payload;
-        },
-      )
+      .addCase(fetchAnalytics.fulfilled, (state, action: PayloadAction<Analytic[]>) => {
+        state.status = "succeeded";
+        state.analytics = action.payload;
+      })
       .addCase(fetchAnalytics.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
@@ -69,7 +73,7 @@ const analyticsSlice = createSlice({
       .addCase(createAnalytic.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(createAnalytic.fulfilled, (state, action) => {
+      .addCase(createAnalytic.fulfilled, (state, action: PayloadAction<Analytic>) => {
         state.status = "succeeded";
         state.analytics.push(action.payload);
       })
@@ -80,11 +84,9 @@ const analyticsSlice = createSlice({
       .addCase(updateAnalytic.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateAnalytic.fulfilled, (state, action) => {
+      .addCase(updateAnalytic.fulfilled, (state, action: PayloadAction<Analytic>) => {
         state.status = "succeeded";
-        const index = state.analytics.findIndex(
-          (a) => a.name === action.payload.name,
-        );
+        const index = state.analytics.findIndex((a) => a.id === action.payload.id);
         if (index !== -1) {
           state.analytics[index] = action.payload;
         }
@@ -96,11 +98,9 @@ const analyticsSlice = createSlice({
       .addCase(deleteAnalytic.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(deleteAnalytic.fulfilled, (state, action) => {
+      .addCase(deleteAnalytic.fulfilled, (state, action: PayloadAction<string>) => {
         state.status = "succeeded";
-        state.analytics = state.analytics.filter(
-          (a) => a.name !== action.payload,
-        );
+        state.analytics = state.analytics.filter((a) => a.id !== action.payload);
       })
       .addCase(deleteAnalytic.rejected, (state, action) => {
         state.status = "failed";

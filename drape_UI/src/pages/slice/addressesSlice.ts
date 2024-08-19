@@ -1,68 +1,59 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { client, Endpoints } from "../../api/client";
 
-export interface AddressState {
+// Define the shape of an address object
+export interface Address {
   id: number;
   street_name: string;
   digital_address: string;
   city: string;
   country: string;
   email: string;
+}
+
+// Define the shape of the state
+export interface AddressState {
+  addresses: Address[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
+// Initial state for the slice
 const initialState: AddressState = {
-  id: 0,
-  street_name: "",
-  digital_address: "",
-  city: "",
-  country: "",
-  email: "",
+  addresses: [],
   status: "idle",
   error: null,
 };
 
+// Thunks for async operations
 export const fetchAddresses = createAsyncThunk(
   "addresses/fetchAddresses",
   async () => {
-    const response = await client.get(`${Endpoints.address}/1`);
+    const response = await client.get(Endpoints.address);
     return response.data;
-  },
+  }
 );
 
 export const createAddress = createAsyncThunk(
   "addresses/createAddress",
-  async (addressData: {
-    street_name: string;
-    digital_address: string;
-    city: string;
-    country: string;
-    email: string;
-  }) => {
+  async (addressData: Address) => {
     const response = await client.post(Endpoints.address, addressData);
     return response.data;
-  },
+  }
 );
 
 export const updateAddress = createAsyncThunk(
   "addresses/updateAddress",
-  async (addressData: {
-    id: number;
-    street_name: string;
-    digital_address: string;
-    city: string;
-    country: string;
-    email: string;
-  }) => {
+  async (addressData: Address) => {
     const response = await client.put(
-      `${Endpoints.address}/${addressData.id}/`,
-      addressData,
+      `${Endpoints.address}${addressData.id}/`,
+      addressData
     );
     return response.data;
-  },
+  }
 );
 
+// Slice definition
 const addressSlice = createSlice({
   name: "addresses",
   initialState,
@@ -72,20 +63,10 @@ const addressSlice = createSlice({
       .addCase(fetchAddresses.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        fetchAddresses.fulfilled,
-        (state, action: PayloadAction<AddressState>) => {
-          state.status = "succeeded";
-          const { id, street_name, digital_address, city, country, email } =
-            action.payload;
-          state.id = id;
-          state.street_name = street_name;
-          state.digital_address = digital_address;
-          state.city = city;
-          state.country = country;
-          state.email = email;
-        },
-      )
+      .addCase(fetchAddresses.fulfilled, (state, action: PayloadAction<Address[]>) => {
+        state.status = "succeeded";
+        state.addresses = action.payload;
+      })
       .addCase(fetchAddresses.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
@@ -93,8 +74,9 @@ const addressSlice = createSlice({
       .addCase(createAddress.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(createAddress.fulfilled, (state) => {
+      .addCase(createAddress.fulfilled, (state, action: PayloadAction<Address>) => {
         state.status = "succeeded";
+        state.addresses.push(action.payload);
       })
       .addCase(createAddress.rejected, (state, action) => {
         state.status = "failed";
@@ -103,8 +85,12 @@ const addressSlice = createSlice({
       .addCase(updateAddress.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateAddress.fulfilled, (state) => {
+      .addCase(updateAddress.fulfilled, (state, action: PayloadAction<Address>) => {
         state.status = "succeeded";
+        const index = state.addresses.findIndex(address => address.id === action.payload.id);
+        if (index !== -1) {
+          state.addresses[index] = action.payload;
+        }
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.status = "failed";

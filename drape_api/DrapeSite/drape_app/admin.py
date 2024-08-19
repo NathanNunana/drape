@@ -38,42 +38,42 @@ class ServiceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('title', 'service_type', 'file')
+    list_display = ('title', 'service_type', 'image')
     list_filter = ('service_type',)
     search_fields = ('title', 'description', 'operations', 'service_type__name')
-    readonly_fields = ('file',)  # Optional: To make the file field read-only
+    readonly_fields = ('image',)  # Optional: To make the file field read-only
 
-    def file_link(self, obj):
-        if obj.file:
-            return format_html("<a href='{}'>{}</a>", obj.file.url, obj.file.name)
+    def image_link(self, obj):
+        if obj.image:
+            return format_html("<a href='{}'>{}</a>", obj.image.url, obj.image.name)
         return "No file"
 
-    file_link.short_description = "File"
+    image_link.short_description = "File"
     
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
-    list_display = ('motor', 'company_description', 'file_link')
-    search_fields = ('motor', 'company_description')
+    list_display = ('motto', 'company_description', 'image_preview')
+    search_fields = ('motto', 'company_description')
 
-    def file_link(self, obj):
-        if obj.file:
-            return format_html("<a href='{}'>{}</a>", obj.file.url, obj.file.name)
-        return "No file"
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html("<a href='{}'><img src='{}' width='50' height='50' /></a>", obj.image.url, obj.image.url)
+        return "No image"
 
-    file_link.short_description = "File"
+    image_preview.short_description = "Image Preview"
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'base_type', 'color', 'noise_rating', 'file_link')
+    list_display = ('name', 'base_type', 'color', 'noise_rating', 'image_preview')
     search_fields = ('name', 'base_type', 'color', 'description', 'specification')
     list_filter = ('base_type', 'color')
 
-    def file_link(self, obj):
-        if obj.file:
-            return format_html("<a href='{}'>{}</a>", obj.file.url, obj.file.name)
-        return "No file"
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html("<a href='{}'><img src='{}' width='50' height='50' /></a>", obj.image.url, obj.image.url)
+        return "No image"
 
-    file_link.short_description = "File"
+    image_preview.short_description = "Image Preview"
 
 @admin.register(Analytics)
 class AnalyticsAdmin(admin.ModelAdmin):

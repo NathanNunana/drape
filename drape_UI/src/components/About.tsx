@@ -6,9 +6,11 @@ import { FaArrowRight } from "react-icons/fa";
 
 const AboutUs: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { id, file, motor, company_description, status, error } = useSelector(
-    (state: RootState) => state.aboutUs,
+  const { id, image, motto, company_description, status, error } = useSelector(
+    (state: RootState) => state.aboutUs
   );
+
+  console.log(image)
 
   useEffect(() => {
     if (status === "idle") {
@@ -17,41 +19,50 @@ const AboutUs: React.FC = () => {
   }, [dispatch, status]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div className="text-center text-lg">Loading...</div>;
   }
 
   if (status === "failed") {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-lg text-red-500">Error: {error}</div>;
   }
 
   return (
     <div className="py-5">
       <div className="container mx-auto px-6 lg:px-20">
         <div className="flex flex-col lg:flex-row gap-10">
+          {/* Image Section */}
           <div className="relative pt-4 lg:w-1/2">
             <div className="relative wow fadeIn" data-wow-delay="0.1s">
               <img
-                className="w-full min-h-[400px] lg:min-h-[500px] object-cover"
-                src={file}
+                className="w-full h-auto object-cover rounded-lg shadow-lg"
+                src={image || "/path/to/default-image.jpg"} // Fallback image path
                 alt="About Us"
               />
-              <div className="absolute top-0 right-0 mt-[-16px] mr-[-16px] py-4 px-5 bg-[rgba(0,0,0,0.08)]">
-                <h1 className="text-white text-4xl mb-0">
-                  {id} <span className="text-2xl">ID</span>
+              <div className="absolute top-4 right-4 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg">
+                <h1 className="text-2xl font-bold">
+                  {id} <span className="text-lg">ID</span>
                 </h1>
-                <h4 className="text-white">Identifier</h4>
+                <h4 className="text-sm">Identifier</h4>
               </div>
             </div>
           </div>
+
+          {/* Content Section */}
           <div className="lg:w-1/2 flex flex-col justify-center">
-            <h6 className="text-primary text-uppercase">// About Us //</h6>
-            <h1 className="mb-4 text-4xl font-bold">
+            <h6 className="text-primary text-uppercase mb-4">// About Us //</h6>
+            <h1 className="mb-4 text-3xl lg:text-4xl font-bold">
               <span className="text-primary">Drape</span> Is The Best Place For
               Your Generator
             </h1>
-            <p className="mb-4">{company_description}</p>
-            <p className="mb-4">{motor}</p>
-            <div className="mb-3 pb-3">
+            <p className="mb-4 text-lg">
+              {company_description || "We provide high-quality generators to meet all your needs."}
+            </p>
+            <p className="mb-4 text-lg italic">
+              {motto || "Our motto is to deliver excellence and reliability."}
+            </p>
+
+            {/* Features List */}
+            <div className="mb-6">
               {[
                 {
                   number: "01",
@@ -77,24 +88,26 @@ const AboutUs: React.FC = () => {
                   data-wow-delay={item.delay}
                   key={index}
                 >
-                  <div className="flex">
+                  <div className="flex items-start gap-3">
                     <div
-                      className="bg-gray-200 flex items-center justify-center mt-1"
+                      className="bg-gray-200 flex items-center justify-center rounded-full"
                       style={{ width: "45px", height: "45px" }}
                     >
                       <span className="font-bold text-secondary">
                         {item.number}
                       </span>
                     </div>
-                    <div className="pl-3">
-                      <h6>{item.title}</h6>
-                      <span>{item.description}</span>
+                    <div>
+                      <h6 className="font-semibold text-lg">{item.title}</h6>
+                      <p className="text-base">{item.description}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            <button className="flex items-center font-semibold bg-blue-500 text-white py-3 px-5">
+
+            {/* Read More Button */}
+            <button className="flex items-center font-semibold bg-blue-500 text-white py-3 px-5 rounded-lg hover:bg-blue-600 transition duration-300">
               Read More
               <FaArrowRight className="ml-3" />
             </button>
