@@ -41,10 +41,10 @@ const ManageServiceTypes: React.FC = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        const resultAction = await dispatch(updateServiceType(currentServiceType)).unwrap();
+        await dispatch(updateServiceType(currentServiceType)).unwrap();
         toast.success("Service Type updated successfully!");
       } else {
-        const resultAction = await dispatch(createServiceType({
+        await dispatch(createServiceType({
           name: currentServiceType.name,
           description: currentServiceType.description,
         })).unwrap();

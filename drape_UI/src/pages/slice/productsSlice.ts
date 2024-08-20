@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { client, Endpoints } from "../../api/client";
 
 export interface Product {
@@ -43,10 +43,9 @@ export const createProduct = createAsyncThunk<Product, Omit<Product, "id">>(
     try {
       const formData = new FormData();
       Object.entries(productData).forEach(([key, value]) => {
-        // Only append the image field if it's not null or empty
-        if (key === 'image' && value) {
-          formData.append(key, value as Blob);
-        } else if (key !== 'image') {
+        if (key === "image" && value) {
+          formData.append(key, value);
+        } else if (key !== "image") {
           formData.append(key, value as string);
         }
       });
@@ -58,7 +57,6 @@ export const createProduct = createAsyncThunk<Product, Omit<Product, "id">>(
       });
       return response.data;
     } catch (error: any) {
-      // Handle the specific error for invalid file submission
       if (error.response && error.response.data && error.response.data.image) {
         return rejectWithValue(error.response.data.image[0]);
       }
@@ -73,10 +71,9 @@ export const updateProduct = createAsyncThunk<Product, Product>(
     try {
       const formData = new FormData();
       Object.entries(productData).forEach(([key, value]) => {
-        // Only append the image field if it's not null or empty
-        if (key === 'image' && value) {
+        if (key === "image" && value) {
           formData.append(key, value as Blob);
-        } else if (key !== 'image') {
+        } else if (key !== "image") {
           formData.append(key, value as string);
         }
       });
@@ -92,7 +89,6 @@ export const updateProduct = createAsyncThunk<Product, Product>(
       );
       return response.data;
     } catch (error: any) {
-      // Handle the specific error for invalid file submission
       if (error.response && error.response.data && error.response.data.image) {
         return rejectWithValue(error.response.data.image[0]);
       }
@@ -134,30 +130,30 @@ const productsSlice = createSlice({
         state.status = "succeeded";
         state.products.push(action.payload);
       })
-      .addCase(createProduct.rejected, (state, action: PayloadAction<string | undefined>) => {
+      .addCase(createProduct.rejected, (state, action: PayloadAction<unknown, string, { arg: Omit<Product, "id">; requestId: string; requestStatus: "rejected"; aborted: boolean; condition: boolean; } & ({ rejectedWithValue: true; } | ({ rejectedWithValue: false; } & {})), SerializedError>) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to create product";
+        state.error = (action.payload as string) || "Failed to create product";
       })
       .addCase(updateProduct.pending, (state) => {
         state.status = "loading";
       })
       .addCase(updateProduct.fulfilled, (state, action: PayloadAction<Product>) => {
         state.status = "succeeded";
-        const index = state.products.findIndex(product => product.id === action.payload.id);
+        const index = state.products.findIndex((product) => product.id === action.payload.id);
         if (index !== -1) {
           state.products[index] = action.payload;
         }
       })
-      .addCase(updateProduct.rejected, (state, action: PayloadAction<string | undefined>) => {
+      .addCase(updateProduct.rejected, (state, action: PayloadAction<unknown, string, { arg: Product; requestId: string; requestStatus: "rejected"; aborted: boolean; condition: boolean; } & ({ rejectedWithValue: true; } | ({ rejectedWithValue: false; } & {})), SerializedError>) => {
         state.status = "failed";
-        state.error = action.payload || "Failed to update product";
+        state.error = (action.payload as string) || "Failed to update product";
       })
       .addCase(deleteProduct.pending, (state) => {
         state.status = "loading";
       })
       .addCase(deleteProduct.fulfilled, (state, action: PayloadAction<number>) => {
         state.status = "succeeded";
-        state.products = state.products.filter(product => product.id !== action.payload);
+        state.products = state.products.filter((product) => product.id !== action.payload);
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.status = "failed";

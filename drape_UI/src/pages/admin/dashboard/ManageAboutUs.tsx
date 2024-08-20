@@ -36,30 +36,30 @@ const ManageAboutUs: React.FC = () => {
     }
   };
 
-  console.log(aboutUs, aboutUs.id)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    const formData = new FormData();
-    formData.append("motto", motto);
-    formData.append("company_description", companyDescription);
-    if (image) {
-      formData.append("image", image);
-    }
+    const aboutUsData = {
+      id: aboutUs.id || 0,  // Assuming 0 is used as a placeholder for new entries
+      motto: motto,
+      company_description: companyDescription,
+      image: image || undefined,
+    };
   
     try {
       if (aboutUs.id) {
-        await dispatch(updateAboutUs(formData));  // Pass FormData directly
+        await dispatch(updateAboutUs(aboutUsData));  // Pass the object with correct types
         toast.success("About Us updated successfully!");
       } else {
-        await dispatch(createAboutUs(formData));  // Pass FormData directly
+        await dispatch(createAboutUs(aboutUsData));  // Pass the object with correct types
         toast.success("About Us created successfully!");
       }
     } catch (error) {
       toast.error("Failed to save About Us. Please try again.");
     }
   };
+  
   
 
   return (

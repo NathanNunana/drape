@@ -28,6 +28,7 @@ const ManageOpeningHours: React.FC = () => {
   const [isEditingOpeningHour, setIsEditingOpeningHour] = useState(false);
   const [isEditingType, setIsEditingType] = useState(false);
   const [currentOpeningHour, setCurrentOpeningHour] = useState<OpeningHour>({
+    id: 0,
     duration: "",
     type: 0,
   });
@@ -67,30 +68,30 @@ const ManageOpeningHours: React.FC = () => {
 
   const handleSubmitOpeningHour = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditingOpeningHour) {
-      dispatch(updateOpeningHour(currentOpeningHour)).then(() =>
-        toast.success("Opening hour updated successfully!")
+    const action = isEditingOpeningHour
+      ? updateOpeningHour(currentOpeningHour)
+      : createOpeningHour(currentOpeningHour);
+
+    dispatch(action).then(() => {
+      toast.success(
+        isEditingOpeningHour
+          ? "Opening hour updated successfully!"
+          : "Opening hour added successfully!"
       );
-    } else {
-      dispatch(createOpeningHour(currentOpeningHour)).then(() =>
-        toast.success("Opening hour added successfully!")
-      );
-    }
-    closeOpeningHourModal();
+      closeOpeningHourModal();
+    });
   };
 
   const handleSubmitType = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditingType) {
-      dispatch(updateType(currentType)).then(() =>
-        toast.success("Type updated successfully!")
+    const action = isEditingType ? updateType(currentType) : createType(currentType);
+
+    dispatch(action).then(() => {
+      toast.success(
+        isEditingType ? "Type updated successfully!" : "Type added successfully!"
       );
-    } else {
-      dispatch(createType(currentType)).then(() =>
-        toast.success("Type added successfully!")
-      );
-    }
-    closeTypeModal();
+      closeTypeModal();
+    });
   };
 
   const handleEditOpeningHour = (openingHour: OpeningHour) => {
@@ -119,7 +120,7 @@ const ManageOpeningHours: React.FC = () => {
 
   const closeOpeningHourModal = () => {
     setIsOpenHourModalOpen(false);
-    setCurrentOpeningHour({ duration: "", type: 0 });
+    setCurrentOpeningHour({ id: 0, duration: "", type: 0 });
   };
 
   const closeTypeModal = () => {
@@ -134,7 +135,7 @@ const ManageOpeningHours: React.FC = () => {
       <h2 className="text-2xl font-bold mb-4">Manage Opening Hours</h2>
       <button
         onClick={() => {
-          setCurrentOpeningHour({ duration: "", type: 0 });
+          setCurrentOpeningHour({ id: 0, duration: "", type: 0 });
           setIsEditingOpeningHour(false);
           setIsOpenHourModalOpen(true);
         }}
@@ -160,15 +161,14 @@ const ManageOpeningHours: React.FC = () => {
           <tbody>
             {openingHours.map((openingHour) => (
               <tr
-                key={openingHour.duration}
+                key={openingHour.id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
                 <td className="py-4 px-4 text-gray-800">
                   {openingHour.duration}
                 </td>
                 <td className="py-4 px-4 text-gray-600">
-                  {types.find((type) => type.id === openingHour.type)?.name ||
-                    openingHour.type}
+                  {types.find((type) => type.id === openingHour.type)?.name || openingHour.type}
                 </td>
                 <td className="py-4 px-4">
                   <button
@@ -179,9 +179,7 @@ const ManageOpeningHours: React.FC = () => {
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() =>
-                      handleDeleteOpeningHour(openingHour.id)
-                    }
+                    onClick={() => handleDeleteOpeningHour(openingHour.id)}
                   >
                     Delete
                   </button>
@@ -298,7 +296,10 @@ const ManageOpeningHours: React.FC = () => {
       </Modal>
 
       {/* Type Modal */}
-      <Modal isOpen={isTypeModalOpen} onClose={closeTypeModal}>
+      <Modal
+        isOpen={isTypeModalOpen}
+        onClose={closeTypeModal}
+      >
         <h2 className="text-xl font-bold mb-4">
           {isEditingType ? "Edit Type" : "Add Type"}
         </h2>

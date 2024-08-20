@@ -11,7 +11,6 @@ const ActivateAccount: React.FC = () => {
   const [toastType, setToastType] = useState<'success' | 'error' | 'warning'>('success');
   const [toastMessage, setToastMessage] = useState('');
   const dispatch = useAppDispatch();
-  const authStatus = useAppSelector((state: RootState) => state.auth.status);
   const authError = useAppSelector((state: RootState) => state.auth.error);
   const navigate = useNavigate();
 
