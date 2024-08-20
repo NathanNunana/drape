@@ -15,12 +15,12 @@ def get_base_host(request):
 
 
 def send_activation_email(user, request):
-    current_site = get_current_site(request)
-    domain = get_base_host(request)
+    frontend_base_url = settings.FRONTEND_URL  # Use the setting here
     subject = "Activate Your Account"
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    activation_url = f"{domain}/auth/activate/{uid}/{token}/"
+    activation_url = f"{frontend_base_url}/auth/activate/{uid}/{token}/"
+    
     message = render_to_string(
         "emails/account_activation.html",
         {
@@ -28,6 +28,7 @@ def send_activation_email(user, request):
             "activation_url": activation_url,
         },
     )
+    
     text_content = strip_tags(message)
     email_message = EmailMultiAlternatives(
         subject,
@@ -37,6 +38,7 @@ def send_activation_email(user, request):
     )
     email_message.attach_alternative(message, "text/html")
     email_message.send()
+
 
 
 def send_password_reset_email(user, request):

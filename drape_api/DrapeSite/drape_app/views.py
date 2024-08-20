@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
                               Service, AboutUs, Product, Analytics, ContactUs, Schedule)
@@ -36,16 +37,19 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
     permission_classes = [IsSuperAdminOrReadOnly]
-
+    
 class AboutUsViewSet(viewsets.ModelViewSet):
     queryset = AboutUs.objects.all()
     serializer_class = AboutUsSerializer
     permission_classes = [IsSuperAdminOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsSuperAdminOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
 
 class AnalyticsViewSet(viewsets.ModelViewSet):
     queryset = Analytics.objects.all()

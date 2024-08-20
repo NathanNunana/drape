@@ -8,7 +8,7 @@ import {
 import { Provider } from "react-redux";
 import store from "./drape/store";
 import "./App.css";
-import { Login, Register, Dashboard } from "./pages/admin";
+import { Login, Register, ActivateAccount, Dashboard } from "./pages/admin";
 import { Main } from "./pages/website";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoutes";
@@ -23,6 +23,7 @@ const App: React.FC = () => {
             <Route path="/home/*" element={<Main />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/auth/activate/:uidb64/:token" element={<ActivateAccount />} />
             <Route
               path="/dashboard/*"
               element={<ProtectedRoute element={<Dashboard />} />}

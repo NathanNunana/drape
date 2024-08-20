@@ -42,9 +42,10 @@ const Booking: React.FC = () => {
                   <option value="" disabled>
                     Select A Service
                   </option>
-                  <option value="1">Service 1</option>
-                  <option value="2">Service 2</option>
-                  <option value="3">Service 3</option>
+                  <option value="Diagnostic Test">Diagnostic Test</option>
+                  <option value="Engine Servicing">Engine Servicing</option>
+                  <option value="Tires Replacement">Tires Replacement</option>
+                  <option value="Oil Changing">Oil Changing</option>
                 </select>
                 <input
                   type="text"

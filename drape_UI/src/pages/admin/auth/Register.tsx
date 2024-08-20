@@ -38,11 +38,11 @@ const Register: React.FC = () => {
       .unwrap()
       .then(() => {
         setToastType("success");
-        setToastMessage("Registration successful!");
+        setToastMessage("Registration successful! Kindly activate your account");
         setShowToast(true);
         setTimeout(() => {
           setShowToast(false);
-          navigate("/auth/login");
+          navigate("/login");
         }, 3000);
       })
       .catch((error) => {

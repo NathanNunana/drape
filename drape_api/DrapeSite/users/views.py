@@ -8,6 +8,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import redirect
+from django.conf import settings
 
 
 User = get_user_model()
@@ -29,7 +30,7 @@ class ActivateAccountView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
 
     def get_serializer_class(self):
-        return None  # No serializer is needed
+        return None
 
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
@@ -41,12 +42,11 @@ class ActivateAccountView(generics.GenericAPIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            frontend_base_url = request.frontend_base_url
-            return redirect("https://drape-dev.netlify.app/auth/login")
+            # Use the FRONTEND_URL from settings
+            login_url = f"{settings.FRONTEND_URL}/login"
+            return redirect(login_url)
         else:
             return Response({"detail": "Invalid activation link"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class PasswordResetView(generics.GenericAPIView):
     serializer_class = PasswordResetSerializer

@@ -8,6 +8,8 @@ import {
   deleteAnalytic,
 } from "../../slice/analyticsSlice";
 import Modal from "../../../components/Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageAnalytics: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,40 +21,60 @@ const ManageAnalytics: React.FC = () => {
     name: "",
     value: "",
   });
-  const [editingAnalytic, setEditingAnalytic] = useState<{
-    name: string;
-    value: string;
-  } | null>(null);
+  const [editingAnalytic, setEditingAnalytic] = useState<{ id: string; name: string; value: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAnalytics());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (status === "succeeded") {
+    }
+    if (status === "failed") {
+      toast.error(`Error: ${error}`);
+    }
+  }, [status, error]);
+
   const handleUploadAnalytic = async () => {
     if (currentAnalytic.name && currentAnalytic.value) {
-      await dispatch(createAnalytic(currentAnalytic));
-      setCurrentAnalytic({ name: "", value: "" });
-      setIsModalOpen(false);
+      try {
+        await dispatch(createAnalytic(currentAnalytic));
+        toast.success("Analytic added successfully!");
+        setCurrentAnalytic({ name: "", value: "" });
+        setIsModalOpen(false);
+      } catch {
+        toast.error("Failed to add analytic");
+      }
     }
   };
 
-  const handleRemoveAnalytic = (name: string) => {
-    dispatch(deleteAnalytic(name));
+  const handleRemoveAnalytic = async (id: string) => {
+    try {
+      await dispatch(deleteAnalytic(id));
+      toast.success("Analytic removed successfully!");
+    } catch {
+      toast.error("Failed to delete analytic");
+    }
   };
 
-  const handleEditAnalytic = (analytic: { name: string; value: string }) => {
+  const handleEditAnalytic = (analytic: { id: string; name: string; value: string }) => {
     setEditingAnalytic(analytic);
-    setCurrentAnalytic(analytic);
+    setCurrentAnalytic({ name: analytic.name, value: analytic.value });
     setIsModalOpen(true);
   };
 
   const handleSaveEdit = async () => {
     if (editingAnalytic) {
-      await dispatch(updateAnalytic(currentAnalytic));
-      setEditingAnalytic(null);
-      setCurrentAnalytic({ name: "", value: "" });
-      setIsModalOpen(false);
+      try {
+        await dispatch(updateAnalytic({ ...currentAnalytic, id: editingAnalytic.id }));
+        toast.success("Analytic updated successfully!");
+        setEditingAnalytic(null);
+        setCurrentAnalytic({ name: "", value: "" });
+        setIsModalOpen(false);
+      } catch {
+        toast.error("Failed to update analytic");
+      }
     }
   };
 
@@ -69,7 +91,6 @@ const ManageAnalytics: React.FC = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Manage Analytics</h1>
       {status === "loading" && <p>Loading...</p>}
-      {status === "failed" && <p className="text-red-500">Error: {error}</p>}
       <button
         onClick={() => {
           setEditingAnalytic(null);
@@ -98,7 +119,7 @@ const ManageAnalytics: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {analytics.map((analytic) => (
-                <tr key={analytic.name} className="hover:bg-gray-50">
+                <tr key={analytic.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-gray-800">
                     {analytic.name}
                   </td>
@@ -113,7 +134,7 @@ const ManageAnalytics: React.FC = () => {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleRemoveAnalytic(analytic.name)}
+                      onClick={() => handleRemoveAnalytic(analytic.id)}
                       className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-600 transition"
                     >
                       Remove
@@ -171,6 +192,7 @@ const ManageAnalytics: React.FC = () => {
           </button>
         </form>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

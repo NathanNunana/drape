@@ -9,17 +9,19 @@ import {
   Product,
 } from "../../slice/productsSlice";
 import Modal from "../../../components/Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageProducts: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products } = useSelector((state: RootState) => state.products);
+  const { products, status, error } = useSelector((state: RootState) => state.products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<
     Product | Omit<Product, "id">
   >({
     name: "",
-    file: null,
+    image: null,
     base_type: "",
     color: "",
     noise_rating: "",
@@ -35,6 +37,12 @@ const ManageProducts: React.FC = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (status === "failed" && error) {
+      toast.error(error);
+    }
+  }, [status, error]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -44,41 +52,56 @@ const ManageProducts: React.FC = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setCurrentProduct({ ...currentProduct, file });
+    const image = e.target.files?.[0] || null;
+    setCurrentProduct({ ...currentProduct, image });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditing) {
-      if ("id" in currentProduct) {
-        dispatch(updateProduct(currentProduct));
+    try {
+      if (isEditing) {
+        if ("id" in currentProduct) {
+          await dispatch(updateProduct(currentProduct)).unwrap();
+          toast.success("Product updated successfully");
+        } else {
+          console.error("Product ID is missing for update");
+        }
       } else {
-        console.error("Product ID is missing for update");
+        await dispatch(createProduct(currentProduct)).unwrap();
+        toast.success("Product created successfully");
       }
-    } else {
-      dispatch(createProduct(currentProduct));
+      setIsModalOpen(false);
+      setCurrentProduct({
+        name: "",
+        image: null,
+        base_type: "",
+        color: "",
+        noise_rating: "",
+        integrated_diesel_tank_capacity: "",
+        fuel_consumption: "",
+        dimension: "",
+        dry_weight: "",
+        description: "",
+        specification: "",
+      });
+    } catch (err) {
+      toast.error("Failed to save product");
     }
-    setIsModalOpen(false);
-    setCurrentProduct({
-      name: "",
-      file: null,
-      base_type: "",
-      color: "",
-      noise_rating: "",
-      integrated_diesel_tank_capacity: "",
-      fuel_consumption: "",
-      dimension: "",
-      dry_weight: "",
-      description: "",
-      specification: "",
-    });
   };
 
   const handleEdit = (product: Product) => {
     setCurrentProduct(product);
     setIsEditing(true);
     setIsModalOpen(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await dispatch(deleteProduct(id)).unwrap();
+      toast.success("Product deleted successfully");
+    } catch (err) {
+      toast.error("Failed to delete product");
+    }
   };
 
   return (
@@ -93,103 +116,45 @@ const ManageProducts: React.FC = () => {
       >
         Add Product
       </button>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead className="bg-gray-100 border-b border-gray-200">
-            <tr>
-              {/* Table headers */}
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Name
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                File
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Base Type
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Color
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Noise Rating
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Integrated Diesel Tank Capacity
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Fuel Consumption
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Dimension
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Dry Weight
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Description
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Specification
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr
-                key={product.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
+        {products.map((product) => (
+          <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-md p-4">
+            {product.image ? (
+              <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md" />
+            ) : (
+              <div className="w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
+                No Image
+              </div>
+            )}
+            <h3 className="text-lg font-bold mt-4">{product.name}</h3>
+            <p className="text-gray-600"><strong>Base Type:</strong> {product.base_type}</p>
+            <p className="text-gray-600"><strong>Color:</strong> {product.color}</p>
+            <p className="text-gray-600"><strong>Noise Rating:</strong> {product.noise_rating}</p>
+            <p className="text-gray-600"><strong>Diesel Tank Capacity:</strong> {product.integrated_diesel_tank_capacity}</p>
+            <p className="text-gray-600"><strong>Fuel Consumption:</strong> {product.fuel_consumption}</p>
+            <p className="text-gray-600"><strong>Dimension:</strong> {product.dimension}</p>
+            <p className="text-gray-600"><strong>Dry Weight:</strong> {product.dry_weight}</p>
+            <p className="text-gray-600"><strong>Description:</strong> {product.description}</p>
+            <p className="text-gray-600"><strong>Specification:</strong> {product.specification}</p>
+            <div className="mt-4 flex justify-between">
+              <button
+                className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition"
+                onClick={() => handleEdit(product)}
               >
-                <td className="py-4 px-4 text-gray-800">{product.name}</td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.file ? product.file.name : "No file"}
-                </td>
-                <td className="py-4 px-4 text-gray-600">{product.base_type}</td>
-                <td className="py-4 px-4 text-gray-600">{product.color}</td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.noise_rating}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.integrated_diesel_tank_capacity}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.fuel_consumption}
-                </td>
-                <td className="py-4 px-4 text-gray-600">{product.dimension}</td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.dry_weight}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.description}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {product.specification}
-                </td>
-                <td className="py-4 px-4">
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
-                    onClick={() => handleEdit(product)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() => dispatch(deleteProduct(product.id))}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                Edit
+              </button>
+              <button
+                className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                onClick={() => handleDelete(product.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="max-h-[80vh] overflow-y-auto">
-          {" "}
-          {/* Make modal scrollable */}
           <h2 className="text-xl font-bold mb-4">
             {isEditing ? "Edit Product" : "Add Product"}
           </h2>
@@ -209,7 +174,7 @@ const ManageProducts: React.FC = () => {
               <label className="block text-gray-700">File</label>
               <input
                 type="file"
-                name="file"
+                name="image"
                 onChange={handleFileChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               />
@@ -239,7 +204,7 @@ const ManageProducts: React.FC = () => {
             <div className="mb-4">
               <label className="block text-gray-700">Noise Rating</label>
               <input
-                type="number"
+                type="text"
                 name="noise_rating"
                 value={currentProduct.noise_rating}
                 onChange={handleChange}
@@ -248,11 +213,9 @@ const ManageProducts: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">
-                Integrated Diesel Tank Capacity
-              </label>
+              <label className="block text-gray-700">Integrated Diesel Tank Capacity</label>
               <input
-                type="number"
+                type="text"
                 name="integrated_diesel_tank_capacity"
                 value={currentProduct.integrated_diesel_tank_capacity}
                 onChange={handleChange}
@@ -263,7 +226,7 @@ const ManageProducts: React.FC = () => {
             <div className="mb-4">
               <label className="block text-gray-700">Fuel Consumption</label>
               <input
-                type="number"
+                type="text"
                 name="fuel_consumption"
                 value={currentProduct.fuel_consumption}
                 onChange={handleChange}
@@ -274,7 +237,7 @@ const ManageProducts: React.FC = () => {
             <div className="mb-4">
               <label className="block text-gray-700">Dimension</label>
               <input
-                type="number"
+                type="text"
                 name="dimension"
                 value={currentProduct.dimension}
                 onChange={handleChange}
@@ -285,7 +248,7 @@ const ManageProducts: React.FC = () => {
             <div className="mb-4">
               <label className="block text-gray-700">Dry Weight</label>
               <input
-                type="number"
+                type="text"
                 name="dry_weight"
                 value={currentProduct.dry_weight}
                 onChange={handleChange}
@@ -313,15 +276,18 @@ const ManageProducts: React.FC = () => {
                 required
               />
             </div>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
-            >
-              {isEditing ? "Update Product" : "Add Product"}
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+              >
+                {isEditing ? "Update" : "Add"}
+              </button>
+            </div>
           </form>
         </div>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

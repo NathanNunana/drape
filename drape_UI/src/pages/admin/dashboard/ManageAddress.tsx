@@ -5,17 +5,20 @@ import {
   fetchAddresses,
   createAddress,
   updateAddress,
-  AddressState,
+  Address,
 } from "../../slice/addressesSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageAddress: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const addressState: AddressState = useSelector(
-    (state: RootState) => state.addresses,
-  );
-
-  // Initialize the address state
-  const [address, setAddress] = useState({
+  
+  // Select the address state from the Redux store
+  const addressState = useSelector((state: RootState) => state.addresses);
+  
+  // Initialize local state for address form
+  const [address, setAddress] = useState<Address>({
+    id: 0,
     street_name: "",
     digital_address: "",
     city: "",
@@ -28,31 +31,30 @@ const ManageAddress: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (addressState) {
-      setAddress({
-        street_name: addressState.street_name || "",
-        digital_address: addressState.digital_address || "",
-        city: addressState.city || "",
-        country: addressState.country || "",
-        email: addressState.email || "",
-      });
+    if (addressState.addresses.length > 0) {
+      const latestAddress = addressState.addresses[addressState.addresses.length - 1];
+      setAddress(latestAddress);
     }
   }, [addressState]);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const addressData = {
-      street_name: address.street_name,
-      digital_address: address.digital_address,
-      city: address.city,
-      country: address.country,
-      email: address.email,
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setAddress((prev) => ({ ...prev, [id]: value }));
+  };
 
-    if (addressState.id) {
-      dispatch(updateAddress({ id: addressState.id, ...addressData }));
-    } else {
-      dispatch(createAddress(addressData));
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      if (address.id) {
+        await dispatch(updateAddress(address));
+        toast.success("Address updated successfully!");
+      } else {
+        await dispatch(createAddress(address));
+        toast.success("Address created successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to save address. Please try again.");
     }
   };
 
@@ -72,9 +74,7 @@ const ManageAddress: React.FC = () => {
               type="text"
               id="street_name"
               value={address.street_name}
-              onChange={(e) =>
-                setAddress({ ...address, street_name: e.target.value })
-              }
+              onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
@@ -89,9 +89,7 @@ const ManageAddress: React.FC = () => {
               type="text"
               id="digital_address"
               value={address.digital_address}
-              onChange={(e) =>
-                setAddress({ ...address, digital_address: e.target.value })
-              }
+              onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
@@ -106,7 +104,7 @@ const ManageAddress: React.FC = () => {
               type="text"
               id="city"
               value={address.city}
-              onChange={(e) => setAddress({ ...address, city: e.target.value })}
+              onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
@@ -121,9 +119,7 @@ const ManageAddress: React.FC = () => {
               type="text"
               id="country"
               value={address.country}
-              onChange={(e) =>
-                setAddress({ ...address, country: e.target.value })
-              }
+              onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
@@ -138,9 +134,7 @@ const ManageAddress: React.FC = () => {
               type="email"
               id="email"
               value={address.email}
-              onChange={(e) =>
-                setAddress({ ...address, email: e.target.value })
-              }
+              onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             />
           </div>
@@ -152,6 +146,7 @@ const ManageAddress: React.FC = () => {
           Save
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
