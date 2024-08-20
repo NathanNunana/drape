@@ -4,6 +4,7 @@ import store, { RootState } from "../drape/store";
 export const Endpoints = {
   login: "/auth/login/",
   register: "auth/register/",
+  activateAccount: (uidb64: string, token: string) => `/auth/activate/${uidb64}/${token}/`,
   aboutUs: "/drape/about-us/",
   address: "/drape/addresses/",
   analytics: "/drape/analytics/",
@@ -15,7 +16,8 @@ export const Endpoints = {
 };
 
 export const client = axios.create({
-  baseURL: "https://yengsebastian1.pythonanywhere.com",
+  baseURL: "https://yeng1.pythonanywhere.com/",
+  // baseURL: "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
   },

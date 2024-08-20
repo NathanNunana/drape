@@ -4,9 +4,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
 from .utils import send_activation_email, send_password_reset_email
 
 User = get_user_model()
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,29 +24,44 @@ class CustomUserSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name'],
             password=validated_data['password']
         )
-        if user:
-            send_activation_email(user, self.context['request'])
+        send_activation_email(user, self.context['request'])
         return user
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
+        # Get the token for the user
         token = super().get_token(user)
-        # Adding user information to the token
-        token['id'] = str(user.id)
+        # Add custom claims
         token['username'] = user.username
         token['email'] = user.email
         return token
 
     def validate(self, attrs):
+        # Validate the credentials
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = authenticate(request=self.context.get('request'), email=email, password=password)
+        
+        if not user:
+            raise serializers.ValidationError('Invalid email or password.')
+
+        # Generate the token
         data = super().validate(attrs)
-        # Adding user information to the response data
-        data['user'] = {
-            'id': str(self.user.id),
-            'username': self.user.username,
-            'email': self.user.email,
-        }
+        token = self.get_token(user)
+        data.update({
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+            },
+            'access': str(token.access_token),
+            'refresh': str(token),
+        })
+        
         return data
+
 
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()

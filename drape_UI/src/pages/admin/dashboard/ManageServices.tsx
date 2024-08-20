@@ -10,6 +10,8 @@ import {
 } from "../../slice/servicesSlice";
 import { fetchServiceTypes } from "../../slice/servicesTypesSlice";
 import Modal from "../../../components/Modal";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageServices: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,16 +45,31 @@ const ManageServices: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    setCurrentService({ ...currentService, file });
+    setCurrentService({ ...currentService, image: file });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const servicePayload = { ...currentService } as Service;
+
     if (isEditing && "id" in currentService) {
-      dispatch(updateService(servicePayload));
+      dispatch(updateService(servicePayload))
+        .unwrap()
+        .then(() => {
+          toast.success("Service updated successfully!");
+        })
+        .catch(() => {
+          toast.error("Failed to update service.");
+        });
     } else {
-      dispatch(createService(servicePayload));
+      dispatch(createService(servicePayload))
+        .unwrap()
+        .then(() => {
+          toast.success("Service created successfully!");
+        })
+        .catch(() => {
+          toast.error("Failed to create service.");
+        });
     }
     setIsModalOpen(false);
     setCurrentService({
@@ -69,6 +86,17 @@ const ManageServices: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (id: number) => {
+    dispatch(deleteService(id))
+      .unwrap()
+      .then(() => {
+        toast.success("Service deleted successfully!");
+      })
+      .catch(() => {
+        toast.error("Failed to delete service.");
+      });
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manage Services</h2>
@@ -81,68 +109,41 @@ const ManageServices: React.FC = () => {
       >
         Add Service
       </button>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead className="bg-gray-100 border-b border-gray-200">
-            <tr>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Title
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Description
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Operations
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                File
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Service Type
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service) => (
-              <tr
-                key={service.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-gray-800">{service.title}</td>
-                <td className="py-4 px-4 text-gray-600">
-                  {service.description}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {service.operations}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {service.file ? service.file.name : "No File"}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {serviceTypes.find((type) => type.id === service.service_type)
-                    ?.name || "N/A"}
-                </td>
-                <td className="py-4 px-4">
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
-                    onClick={() => handleEdit(service)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() => dispatch(deleteService(service.id))}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4">
+        {services.map((service) => (
+          <div
+            key={service.id}
+            className="bg-white border border-gray-200 rounded-lg shadow-md p-4"
+          >
+            <div className="flex flex-col items-center">
+              <img
+                src={service.image ? service.image : "/default-image.png"}
+                alt={service.title}
+                className="w-full h-40 object-cover mb-4 rounded-lg"
+              />
+              <h3 className="text-xl font-bold mb-2">{service.title}</h3>
+              <p className="text-gray-600 mb-2">{service.description}</p>
+              <p className="text-gray-600 mb-2">Operations: {service.operations}</p>
+              <p className="text-gray-600 mb-2">
+                Service Type: {serviceTypes.find((type) => type.id === service.service_type)?.name || "N/A"}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition"
+                  onClick={() => handleEdit(service)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                  onClick={() => handleDelete(service.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">
@@ -182,13 +183,12 @@ const ManageServices: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">File</label>
+            <label className="block text-gray-700">Image</label>
             <input
               type="file"
-              name="file"
+              name="image"
               onChange={handleFileChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              // file input does not require a value attribute
             />
           </div>
           <div className="mb-4">
@@ -216,6 +216,7 @@ const ManageServices: React.FC = () => {
           </button>
         </form>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };
