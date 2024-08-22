@@ -202,14 +202,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
-# Celery Beat schedule
-CELERY_BEAT_SCHEDULE = {
-    'send-reminder-email': {
-        'task': 'drape_app.tasks.schedule_reminders',
-        'schedule': crontab(hour=0, minute=0),  # Runs daily at 4 PM Accra time
-    },
-}
-
 
 # Celery timezone settings
 CELERY_TIMEZONE = 'Africa/Accra'
