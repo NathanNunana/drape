@@ -20,7 +20,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'send-reminder-email': {
         'task': 'drape_app.tasks.schedule_reminders',
-        'schedule': crontab(hour=19, minute=25),  # Runs daily at 4 PM Accra time
+        'schedule': crontab(hour=7, minute=31),  # Runs daily at 4 PM Accra time
     },
 }
 

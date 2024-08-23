@@ -194,6 +194,8 @@ SIMPLE_JWT = {
 FRONTEND_URL = config('FRONTEND_URL')
 
 
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 # Celery settings
 CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
 CELERY_RESULT_BACKEND = 'django-db'     # Use Django database to store task results
