@@ -52,7 +52,7 @@ const ManageProducts: React.FC = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files?.[0].name || null;
+    const image = e.target.files?.[0];
     setCurrentProduct({ ...currentProduct, image });
   };
 
@@ -120,7 +120,8 @@ const ManageProducts: React.FC = () => {
         {products.map((product) => (
           <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-md p-4">
             {product.image ? (
-              <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md" />
+              <img src={product.image ? product.image.toString() : "/default-image.png"}
+                alt={product.name} className="w-full h-48 object-cover rounded-md" />
             ) : (
               <div className="w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
                 No Image

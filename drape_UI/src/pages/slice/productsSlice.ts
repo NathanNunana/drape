@@ -4,7 +4,7 @@ import { client, Endpoints } from "../../api/client";
 export interface Product {
   id: number;
   name: string;
-  image: string | null;
+  image?: File | string | null;
   base_type: string;
   color: string;
   noise_rating: string;
