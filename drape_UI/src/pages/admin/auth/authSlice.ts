@@ -90,7 +90,7 @@ export const activateAccount = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await client.get(Endpoints.activateAccount(uidb64, token));
+      const response = await client.get(Endpoints.activate(uidb64, token));
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -99,6 +99,7 @@ export const activateAccount = createAsyncThunk(
     }
   },
 );
+
 
 // Auth slice
 const authSlice = createSlice({
