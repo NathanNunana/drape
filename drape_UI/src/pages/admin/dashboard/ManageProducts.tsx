@@ -52,7 +52,7 @@ const ManageProducts: React.FC = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files?.[0] || null;
+    const image = e.target.files?.[0].name || null;
     setCurrentProduct({ ...currentProduct, image });
   };
 

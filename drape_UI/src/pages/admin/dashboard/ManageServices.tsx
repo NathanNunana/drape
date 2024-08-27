@@ -117,7 +117,7 @@ const ManageServices: React.FC = () => {
           >
             <div className="flex flex-col items-center">
               <img
-                src={service.image ? service.image : "/default-image.png"}
+                src={service.image ? service.image.toString() : "/default-image.png"}
                 alt={service.title}
                 className="w-full h-40 object-cover mb-4 rounded-lg"
               />
