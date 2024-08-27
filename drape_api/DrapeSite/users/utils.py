@@ -15,7 +15,7 @@ def get_base_host(request):
 
 
 def send_activation_email(user, request):
-    frontend_base_url = settings.FRONTEND_URL  # Use the setting here
+    frontend_base_url = settings.FRONTEND_URL
     subject = "Activate Your Account"
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
@@ -38,7 +38,6 @@ def send_activation_email(user, request):
     )
     email_message.attach_alternative(message, "text/html")
     email_message.send()
-
 
 
 def send_password_reset_email(user, request):
