@@ -16,8 +16,8 @@ export const Endpoints = {
 };
 
 export const client = axios.create({
-  // baseURL: "https://yeng1.pythonanywhere.com",
-  baseURL: "http://localhost:8000",
+  baseURL: "https://yeng1.pythonanywhere.com",
+  // baseURL: "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
   },

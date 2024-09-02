@@ -7,7 +7,7 @@ export interface Service {
   title: string;
   description: string;
   operations: string;
-  image?: string; // Image is a URL or undefined
+  image?: File | string | null; // Image can be a File object or null
   service_type: number;
 }
 

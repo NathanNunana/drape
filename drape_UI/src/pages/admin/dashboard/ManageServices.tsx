@@ -109,43 +109,71 @@ const ManageServices: React.FC = () => {
       >
         Add Service
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-4">
-        {services.map((service) => (
-          <div
-            key={service.id}
-            className="bg-white border border-gray-200 rounded-lg shadow-md p-4"
-          >
-            <div className="flex flex-col items-center">
-              <img
-                src={service.image ? service.image : "/default-image.png"}
-                alt={service.title}
-                className="w-full h-40 object-cover mb-4 rounded-lg"
-              />
-              <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-              <p className="text-gray-600 mb-2">{service.description}</p>
-              <p className="text-gray-600 mb-2">Operations: {service.operations}</p>
-              <p className="text-gray-600 mb-2">
-                Service Type: {serviceTypes.find((type) => type.id === service.service_type)?.name || "N/A"}
-              </p>
-              <div className="flex gap-2">
-                <button
-                  className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition"
-                  onClick={() => handleEdit(service)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                  onClick={() => handleDelete(service.id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+     <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-100 border-b border-gray-200">
+            <tr>
+               <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                File
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Title
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Description
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Operations
+              </th>
+             
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Service Type
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr
+                key={service.id}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
+                 <td className="py-4 px-4 text-gray-600">
+                  <img className="w-10 h-10" src={service.image ? service.image.toString() : "/default-image.png"} />
+                </td>
+                <td className="py-4 px-4 text-gray-800">{service.title}</td>
+                <td className="py-4 px-4 text-gray-600">
+                  {service.description}
+                </td>
+                <td className="py-4 px-4 text-gray-600">
+                  {service.operations}
+                </td>
+             
+                <td className="py-4 px-4 text-gray-600">
+                  {serviceTypes.find((type) => type.id === service.service_type)
+                    ?.name || "N/A"}
+                </td>
+                <td className="py-4 px-4">
+                  <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                    onClick={() => handleEdit(service)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                    onClick={() => handleDelete(service.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">
           {isEditing ? "Edit Service" : "Add Service"}
         </h2>
