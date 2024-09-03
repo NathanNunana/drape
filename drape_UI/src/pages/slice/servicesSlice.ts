@@ -7,7 +7,7 @@ export interface Service {
   title: string;
   description: string;
   operations: string;
-  image?: File | null; // Image can be a File object or null
+  image?: File | string | null; // Image can be a File object or null
   service_type: number;
 }
 
@@ -37,7 +37,6 @@ export const fetchServices = createAsyncThunk(
 export const createService = createAsyncThunk(
   "services/createService",
   async (serviceData: Omit<Service, 'id'>) => {
-    // Construct FormData
     const formData = new FormData();
     formData.append("title", serviceData.title);
     formData.append("description", serviceData.description);
@@ -47,11 +46,8 @@ export const createService = createAsyncThunk(
       formData.append("image", serviceData.image);
     }
 
-    // Make the API request
     const response = await client.post(Endpoints.services, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
@@ -61,7 +57,6 @@ export const createService = createAsyncThunk(
 export const updateService = createAsyncThunk(
   "services/updateService",
   async (serviceData: Service) => {
-    // Construct FormData
     const formData = new FormData();
     formData.append("title", serviceData.title);
     formData.append("description", serviceData.description);
@@ -71,14 +66,11 @@ export const updateService = createAsyncThunk(
       formData.append("image", serviceData.image);
     }
 
-    // Make the API request
     const response = await client.put(
       `${Endpoints.services}${serviceData.id}/`,
       formData,
       {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       }
     );
     return response.data;
@@ -108,7 +100,7 @@ const servicesSlice = createSlice({
         (state, action: PayloadAction<Service[]>) => {
           state.status = "succeeded";
           state.services = action.payload;
-        },
+        }
       )
       .addCase(fetchServices.rejected, (state, action) => {
         state.status = "failed";
@@ -122,7 +114,7 @@ const servicesSlice = createSlice({
         (state, action: PayloadAction<Service>) => {
           state.status = "succeeded";
           state.services.push(action.payload);
-        },
+        }
       )
       .addCase(createService.rejected, (state, action) => {
         state.status = "failed";
@@ -136,12 +128,12 @@ const servicesSlice = createSlice({
         (state, action: PayloadAction<Service>) => {
           state.status = "succeeded";
           const index = state.services.findIndex(
-            (s) => s.id === action.payload.id,
+            (s) => s.id === action.payload.id
           );
           if (index !== -1) {
             state.services[index] = action.payload;
           }
-        },
+        }
       )
       .addCase(updateService.rejected, (state, action) => {
         state.status = "failed";
@@ -155,9 +147,9 @@ const servicesSlice = createSlice({
         (state, action: PayloadAction<number>) => {
           state.status = "succeeded";
           state.services = state.services.filter(
-            (s) => s.id !== action.payload,
+            (s) => s.id !== action.payload
           );
-        },
+        }
       )
       .addCase(deleteService.rejected, (state, action) => {
         state.status = "failed";

@@ -17,11 +17,9 @@ const ManageProducts: React.FC = () => {
   const { products, status, error } = useSelector((state: RootState) => state.products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<
-    Product | Omit<Product, "id">
-  >({
+  const [currentProduct, setCurrentProduct] = useState<Product | Omit<Product, "id">>({
     name: "",
-    image: null,
+    image: "",
     base_type: "",
     color: "",
     noise_rating: "",
@@ -32,6 +30,7 @@ const ManageProducts: React.FC = () => {
     description: "",
     specification: "",
   });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -43,47 +42,26 @@ const ManageProducts: React.FC = () => {
     }
   }, [status, error]);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setCurrentProduct({ ...currentProduct, [e.target.name]: e.target.value });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files?.[0] || null;
+    const image = e.target.files?.[0];
     setCurrentProduct({ ...currentProduct, image });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (isEditing) {
-        if ("id" in currentProduct) {
-          await dispatch(updateProduct(currentProduct)).unwrap();
-          toast.success("Product updated successfully");
-        } else {
-          console.error("Product ID is missing for update");
-        }
+      if (isEditing && "id" in currentProduct) {
+        await dispatch(updateProduct(currentProduct)).unwrap();
+        toast.success("Product updated successfully");
       } else {
         await dispatch(createProduct(currentProduct)).unwrap();
         toast.success("Product created successfully");
       }
-      setIsModalOpen(false);
-      setCurrentProduct({
-        name: "",
-        image: null,
-        base_type: "",
-        color: "",
-        noise_rating: "",
-        integrated_diesel_tank_capacity: "",
-        fuel_consumption: "",
-        dimension: "",
-        dry_weight: "",
-        description: "",
-        specification: "",
-      });
+      resetForm();
     } catch (err) {
       toast.error("Failed to save product");
     }
@@ -91,6 +69,7 @@ const ManageProducts: React.FC = () => {
 
   const handleEdit = (product: Product) => {
     setCurrentProduct(product);
+    setImagePreview(typeof product.image === "string" ? product.image : null); // Set preview based on image type
     setIsEditing(true);
     setIsModalOpen(true);
   };
@@ -104,56 +83,133 @@ const ManageProducts: React.FC = () => {
     }
   };
 
+  const resetForm = () => {
+    setCurrentProduct({
+      name: "",
+      image: "",
+      base_type: "",
+      color: "",
+      noise_rating: "",
+      integrated_diesel_tank_capacity: "",
+      fuel_consumption: "",
+      dimension: "",
+      dry_weight: "",
+      description: "",
+      specification: "",
+    });
+    setImagePreview(null);
+    setIsEditing(false);
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
       <button
         onClick={() => {
           setIsEditing(false);
+          resetForm();
           setIsModalOpen(true);
         }}
         className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
       >
         Add Product
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-4">
-        {products.map((product) => (
-          <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-md p-4">
-            {product.image ? (
-              <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded-md" />
-            ) : (
-              <div className="w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
-                No Image
-              </div>
-            )}
-            <h3 className="text-lg font-bold mt-4">{product.name}</h3>
-            <p className="text-gray-600"><strong>Base Type:</strong> {product.base_type}</p>
-            <p className="text-gray-600"><strong>Color:</strong> {product.color}</p>
-            <p className="text-gray-600"><strong>Noise Rating:</strong> {product.noise_rating}</p>
-            <p className="text-gray-600"><strong>Diesel Tank Capacity:</strong> {product.integrated_diesel_tank_capacity}</p>
-            <p className="text-gray-600"><strong>Fuel Consumption:</strong> {product.fuel_consumption}</p>
-            <p className="text-gray-600"><strong>Dimension:</strong> {product.dimension}</p>
-            <p className="text-gray-600"><strong>Dry Weight:</strong> {product.dry_weight}</p>
-            <p className="text-gray-600"><strong>Description:</strong> {product.description}</p>
-            <p className="text-gray-600"><strong>Specification:</strong> {product.specification}</p>
-            <div className="mt-4 flex justify-between">
-              <button
-                className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition"
-                onClick={() => handleEdit(product)}
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-100 border-b border-gray-200">
+            <tr>
+              {/* Table headers */}
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Image
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Name
+              </th>
+
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Base Type
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Color
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Noise Rating
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Integrated Diesel Tank Capacity
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Fuel Consumption
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Dimension
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Dry Weight
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Description
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Specification
+              </th>
+              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr
+                key={product.id}
+                className="border-b border-gray-200 hover:bg-gray-50"
               >
-                Edit
-              </button>
-              <button
-                className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                onClick={() => handleDelete(product.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <td className="py-4 px-4 text-gray-600">
+                  <img className="w-10 h-10" src={product.image ? product.image.toString() : "/default-image.png"} />
+                </td>
+                <td className="py-4 px-4 text-gray-800">{product.name}</td>
+
+                <td className="py-4 px-4 text-gray-600">{product.base_type}</td>
+                <td className="py-4 px-4 text-gray-600">{product.color}</td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.noise_rating}
+                </td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.integrated_diesel_tank_capacity}
+                </td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.fuel_consumption}
+                </td>
+                <td className="py-4 px-4 text-gray-600">{product.dimension}</td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.dry_weight}
+                </td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.description}
+                </td>
+                <td className="py-4 px-4 text-gray-600">
+                  {product.specification}
+                </td>
+                <td className="py-4 px-4">
+                  <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                    onClick={() => handleEdit(product)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                    onClick={() => handleDelete(product.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="max-h-[80vh] overflow-y-auto">
           <h2 className="text-xl font-bold mb-4">
             {isEditing ? "Edit Product" : "Add Product"}
@@ -171,13 +227,20 @@ const ManageProducts: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">File</label>
+              <label className="block text-gray-700">Image</label>
               <input
                 type="file"
                 name="image"
                 onChange={handleFileChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Image Preview"
+                  className="w-full h-48 object-cover mt-2 rounded-md"
+                />
+              )}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Base Type</label>
@@ -263,6 +326,7 @@ const ManageProducts: React.FC = () => {
                 value={currentProduct.description}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                rows={4}
                 required
               />
             </div>
@@ -273,15 +337,23 @@ const ManageProducts: React.FC = () => {
                 value={currentProduct.specification}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                rows={4}
                 required
               />
             </div>
             <div className="flex justify-end">
               <button
+                type="button"
+                onClick={resetForm}
+                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+              >
+                Cancel
+              </button>
+              <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
               >
-                {isEditing ? "Update" : "Add"}
+                {isEditing ? "Update Product" : "Add Product"}
               </button>
             </div>
           </form>
