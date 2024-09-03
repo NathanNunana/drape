@@ -70,16 +70,63 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/', blank=True, null=True)
     base_type = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
-    noise_rating = models.DecimalField(max_digits=10, decimal_places=2)
-    integrated_diesel_tank_capacity = models.DecimalField(max_digits=10, decimal_places=2)
-    fuel_consumption = models.DecimalField(max_digits=10, decimal_places=2)
-    dimension = models.DecimalField(max_digits=10, decimal_places=2)
-    dry_weight = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     specification = models.TextField()
+    
+    # Warranty
+    warranty_duration = models.CharField(max_length=100, blank=True, null=True)
+    
+    # Technical Parameters of Generator Equipment
+    model_number = models.CharField(max_length=100, blank=True, null=True)
+    output_power = models.CharField(max_length=100, blank=True, null=True)
+    power_factor = models.CharField(max_length=100, blank=True, null=True)
+    output_voltage = models.CharField(max_length=100, blank=True, null=True)
+    output_current = models.CharField(max_length=100, blank=True, null=True)
+    normal_frequency = models.CharField(max_length=100, blank=True, null=True)
+    rated_speed = models.CharField(max_length=100, blank=True, null=True)
+    diesel_oil_type = models.CharField(max_length=100, blank=True, null=True)
+    steady_state_voltage_regulation_rate = models.CharField(max_length=100, blank=True, null=True)
+    voltage_fluctuation_rate = models.CharField(max_length=100, blank=True, null=True)
+    transient_voltage_regulation = models.CharField(max_length=100, blank=True, null=True)
+    voltage_settling_time = models.CharField(max_length=100, blank=True, null=True)
+    steady_state_frequency_control = models.CharField(max_length=100, blank=True, null=True)
+    frequency_jitter = models.CharField(max_length=100, blank=True, null=True)
+    transient_frequency_fluctuation = models.CharField(max_length=100, blank=True, null=True)
+    frequency_stabilization_time = models.CharField(max_length=100, blank=True, null=True)
+    fuel_consumption_mcr = models.CharField(max_length=100, blank=True, null=True)
+    noise_lp7m = models.CharField(max_length=100, blank=True, null=True)
+
+    # Technical Parameters of Diesel Engine
+    diesel_engine_brand_provenance = models.CharField(max_length=100, blank=True, null=True)
+    diesel_engine_model_number = models.CharField(max_length=100, blank=True, null=True)
+    stand_by_power = models.CharField(max_length=100, blank=True, null=True)
+    cylinder_model_type = models.CharField(max_length=100, blank=True, null=True)
+    bore_stroke = models.CharField(max_length=100, blank=True, null=True)
+    compression_ratio = models.CharField(max_length=100, blank=True, null=True)
+    starting_system = models.CharField(max_length=100, blank=True, null=True)
+    cooling_system = models.CharField(max_length=100, blank=True, null=True)
+    fuel_system = models.CharField(max_length=100, blank=True, null=True)
+    speed_regulating_system = models.CharField(max_length=100, blank=True, null=True)
+    air_intake_method = models.CharField(max_length=100, blank=True, null=True)
+    displacement = models.CharField(max_length=100, blank=True, null=True)
+    engine_oil_capacity = models.CharField(max_length=100, blank=True, null=True)
+    rotation_rate = models.CharField(max_length=100, blank=True, null=True)
+
+    # Technical Parameters of Alternator
+    alternator_brand_place_of_origin = models.CharField(max_length=100, blank=True, null=True)
+    motor_type = models.CharField(max_length=100, blank=True, null=True)
+    rated_power = models.CharField(max_length=100, blank=True, null=True)
+    rated_voltage = models.CharField(max_length=100, blank=True, null=True)
+    insulation_grade = models.CharField(max_length=100, blank=True, null=True)
+    protection_degree = models.CharField(max_length=100, blank=True, null=True)
+    connection_mode = models.CharField(max_length=100, blank=True, null=True)
+    adjustment_mode = models.CharField(max_length=100, blank=True, null=True)
+    output_frequency = models.CharField(max_length=100, blank=True, null=True)
+    output_factor = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
 
 # Analytics
 class Analytics(models.Model):
