@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction, SerializedError } from "@reduxjs/toolkit";
 import { client, Endpoints } from "../../api/client";
 
+// Define the Product interface, allowing image to be string, File, or null
 export interface Product {
   id: number;
   name: string;
@@ -43,8 +44,8 @@ export const createProduct = createAsyncThunk<Product, Omit<Product, "id">>(
     try {
       const formData = new FormData();
       Object.entries(productData).forEach(([key, value]) => {
-        if (key === "image" && value) {
-          formData.append(key, value);
+        if (key === "image" && value instanceof File) {
+          formData.append(key, value); // Only append File objects as files
         } else if (key !== "image") {
           formData.append(key, value as string);
         }
@@ -71,8 +72,8 @@ export const updateProduct = createAsyncThunk<Product, Product>(
     try {
       const formData = new FormData();
       Object.entries(productData).forEach(([key, value]) => {
-        if (key === "image" && value) {
-          formData.append(key, value as Blob);
+        if (key === "image" && value instanceof File) {
+          formData.append(key, value); // Only append File objects as files
         } else if (key !== "image") {
           formData.append(key, value as string);
         }

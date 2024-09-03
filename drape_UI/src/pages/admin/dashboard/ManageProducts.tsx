@@ -17,11 +17,9 @@ const ManageProducts: React.FC = () => {
   const { products, status, error } = useSelector((state: RootState) => state.products);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<
-    Product | Omit<Product, "id">
-  >({
+  const [currentProduct, setCurrentProduct] = useState<Product | Omit<Product, "id">>({
     name: "",
-    image: null,
+    image: "",
     base_type: "",
     color: "",
     noise_rating: "",
@@ -32,6 +30,7 @@ const ManageProducts: React.FC = () => {
     description: "",
     specification: "",
   });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -43,11 +42,7 @@ const ManageProducts: React.FC = () => {
     }
   }, [status, error]);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setCurrentProduct({ ...currentProduct, [e.target.name]: e.target.value });
   };
 
@@ -59,31 +54,14 @@ const ManageProducts: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (isEditing) {
-        if ("id" in currentProduct) {
-          await dispatch(updateProduct(currentProduct)).unwrap();
-          toast.success("Product updated successfully");
-        } else {
-          console.error("Product ID is missing for update");
-        }
+      if (isEditing && "id" in currentProduct) {
+        await dispatch(updateProduct(currentProduct)).unwrap();
+        toast.success("Product updated successfully");
       } else {
         await dispatch(createProduct(currentProduct)).unwrap();
         toast.success("Product created successfully");
       }
-      setIsModalOpen(false);
-      setCurrentProduct({
-        name: "",
-        image: null,
-        base_type: "",
-        color: "",
-        noise_rating: "",
-        integrated_diesel_tank_capacity: "",
-        fuel_consumption: "",
-        dimension: "",
-        dry_weight: "",
-        description: "",
-        specification: "",
-      });
+      resetForm();
     } catch (err) {
       toast.error("Failed to save product");
     }
@@ -91,6 +69,7 @@ const ManageProducts: React.FC = () => {
 
   const handleEdit = (product: Product) => {
     setCurrentProduct(product);
+    setImagePreview(typeof product.image === "string" ? product.image : null); // Set preview based on image type
     setIsEditing(true);
     setIsModalOpen(true);
   };
@@ -104,12 +83,32 @@ const ManageProducts: React.FC = () => {
     }
   };
 
+  const resetForm = () => {
+    setCurrentProduct({
+      name: "",
+      image: "",
+      base_type: "",
+      color: "",
+      noise_rating: "",
+      integrated_diesel_tank_capacity: "",
+      fuel_consumption: "",
+      dimension: "",
+      dry_weight: "",
+      description: "",
+      specification: "",
+    });
+    setImagePreview(null);
+    setIsEditing(false);
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Manage Products</h2>
       <button
         onClick={() => {
           setIsEditing(false);
+          resetForm();
           setIsModalOpen(true);
         }}
         className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
@@ -228,13 +227,20 @@ const ManageProducts: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">File</label>
+              <label className="block text-gray-700">Image</label>
               <input
                 type="file"
                 name="image"
                 onChange={handleFileChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Image Preview"
+                  className="w-full h-48 object-cover mt-2 rounded-md"
+                />
+              )}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Base Type</label>
@@ -320,6 +326,7 @@ const ManageProducts: React.FC = () => {
                 value={currentProduct.description}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                rows={4}
                 required
               />
             </div>
@@ -330,15 +337,23 @@ const ManageProducts: React.FC = () => {
                 value={currentProduct.specification}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                rows={4}
                 required
               />
             </div>
             <div className="flex justify-end">
               <button
+                type="button"
+                onClick={resetForm}
+                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+              >
+                Cancel
+              </button>
+              <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
               >
-                {isEditing ? "Update" : "Add"}
+                {isEditing ? "Update Product" : "Add Product"}
               </button>
             </div>
           </form>
