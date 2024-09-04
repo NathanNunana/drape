@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
-                     AboutUs, Product, Analytics, ContactUs, Schedule)
+                     AboutUs, Price, Product, Analytics, ContactUs, Schedule)
 
 
 @admin.register(Address)
@@ -61,6 +61,11 @@ class AboutUsAdmin(admin.ModelAdmin):
         return "No image"
 
     image_preview.short_description = "Image Preview"
+
+@admin.register(Price)
+class PriceAdmin(admin.ModelAdmin):
+    list_display = ('product', 'price', 'effective_date',)
+    search_fields = ('product', 'price',)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
