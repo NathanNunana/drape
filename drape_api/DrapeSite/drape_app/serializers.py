@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                              Service, AboutUs, Product, Analytics, ContactUs, Schedule)
+                              Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
 
 
 
@@ -45,6 +45,16 @@ class AboutUsSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        fields = '__all__'
+        
+class PriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = '__all__'
+
+class ProductTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductType
         fields = '__all__'
 
 class AnalyticsSerializer(serializers.ModelSerializer):

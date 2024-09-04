@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
-                     AboutUs, Product, Analytics, ContactUs, Schedule)
+                     AboutUs, Price, Product, ProductType, Analytics, ContactUs, Schedule)
 
 
 @admin.register(Address)
@@ -62,18 +62,19 @@ class AboutUsAdmin(admin.ModelAdmin):
 
     image_preview.short_description = "Image Preview"
 
+@admin.register(Price)
+class PriceAdmin(admin.ModelAdmin):
+    list_display = ('product', 'price', 'effective_date',)
+    search_fields = ('product', 'price',)
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'base_type', 'color', 'noise_rating', 'image_preview')
+    list_display = ('name', 'base_type', 'color', 'description', 'specification')
     search_fields = ('name', 'base_type', 'color', 'description', 'specification')
     list_filter = ('base_type', 'color')
 
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html("<a href='{}'><img src='{}' width='50' height='50' /></a>", obj.image.url, obj.image.url)
-        return "No image"
 
-    image_preview.short_description = "Image Preview"
+admin.site.register(ProductType)
 
 @admin.register(Analytics)
 class AnalyticsAdmin(admin.ModelAdmin):
