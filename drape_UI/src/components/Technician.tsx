@@ -68,7 +68,7 @@ const Technicians: React.FC = () => {
                     <FaInstagram size={20} />
                   </a>
                 </div>
-                <div className="bg-gray-100 text-center p-4">
+                <div className="bg-white text-center p-4">
                   <h5 className="font-bold mb-1">{tech.name}</h5>
                   <small>{tech.designation}</small>
                 </div>
