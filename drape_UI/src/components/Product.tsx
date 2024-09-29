@@ -32,7 +32,7 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
         <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
         <p className="text-gray-700 mb-4">{product.description}</p>
         <Link
-          to={`/home/product/${product.id}`}
+          to={`/product/${product.name}`}
           state={{ product }}
           className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg w-full justify-center"
         >
