@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                              Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+                            Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
 
 
 
