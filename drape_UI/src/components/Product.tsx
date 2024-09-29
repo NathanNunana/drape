@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ProductData } from "../pages/website/Products";
+import { Product } from "../pages/slice/productsSlice";
 
 interface ProductProps {
-  product: ProductData;
+  product: Product;
 }
 
-const Product: React.FC<ProductProps> = ({ product }) => {
+const ProductCard: React.FC<ProductProps> = ({ product }) => {
   return (
     <>
       <motion.div
@@ -20,19 +20,20 @@ const Product: React.FC<ProductProps> = ({ product }) => {
         <div className="relative">
           <img
             className="w-full h-40 object-cover rounded-lg mb-4"
-            src={product.image}
-            alt={product.title}
+            src={product.image?.toString()}
+            alt={product.name}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
             <h3 className="text-white text-xl font-bold">
-              {product.title}
+              {product.name}
             </h3>
           </div>
         </div>
-        <h3 className="text-xl font-semibold mb-2">{product.title}</h3>
+        <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
         <p className="text-gray-700 mb-4">{product.description}</p>
         <Link
           to={`/home/product/${product.id}`}
+          state={{ product }}
           className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg w-full justify-center"
         >
           View Details
@@ -42,5 +43,5 @@ const Product: React.FC<ProductProps> = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductCard;
 

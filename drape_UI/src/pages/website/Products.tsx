@@ -1,84 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Product from "../../components/Product";
+import ProductCard from "../../components/Product";
+import { fetchProducts, Product } from "../slice/productsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../drape/store";
+import { toast } from "react-toastify";
 
-export interface ProductData {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  image: string;
-  features: string[];
-  generalInfo: { label: string; value: string }[]; // For specifications
-}
-
-const productData: ProductData[] = [
-  {
-    id: 1,
-    title: "50 kVA 3 Phase FAW Power Generator",
-    description:
-      "A silent weather-resistant power generator with a 50kVA prime power rating.",
-    image: "/assets/images/service-1.jpg",
-    category: "Generators",
-    features: ["Canopy Type: Silent", "Fuel Consumption @ 75% Load: 9.21 l/h"],
-    generalInfo: [
-      { label: "Canopy Type", value: "Silent weather resistant enclosure" },
-      { label: "Noise Rating", value: "Semi-silent" },
-      { label: "Dry Weight", value: "1036kg" },
-    ],
-  },
-  {
-    id: 1,
-    title: "50 kVA 3 Phase FAW Power Generator",
-    description:
-      "A silent weather-resistant power generator with a 50kVA prime power rating.",
-    image: "/assets/images/product-1.jpg",
-    category: "Generators",
-    features: ["Canopy Type: Silent", "Fuel Consumption @ 75% Load: 9.21 l/h"],
-    generalInfo: [
-      { label: "Canopy Type", value: "Silent weather resistant enclosure" },
-      { label: "Noise Rating", value: "Semi-silent" },
-      { label: "Dry Weight", value: "1036kg" },
-    ],
-  },
-  {
-    id: 1,
-    title: "50 kVA 3 Phase FAW Power Generator",
-    description:
-      "A silent weather-resistant power generator with a 50kVA prime power rating.",
-    image: "/assets/images/product-1.jpg",
-    category: "Generators",
-    features: ["Canopy Type: Silent", "Fuel Consumption @ 75% Load: 9.21 l/h"],
-    generalInfo: [
-      { label: "Canopy Type", value: "Silent weather resistant enclosure" },
-      { label: "Noise Rating", value: "Semi-silent" },
-      { label: "Dry Weight", value: "1036kg" },
-    ],
-  },
-  {
-    id: 1,
-    title: "50 kVA 3 Phase FAW Power Generator",
-    description:
-      "A silent weather-resistant power generator with a 50kVA prime power rating.",
-    image: "/assets/images/product-1.jpg",
-    category: "Generators",
-    features: ["Canopy Type: Silent", "Fuel Consumption @ 75% Load: 9.21 l/h"],
-    generalInfo: [
-      { label: "Canopy Type", value: "Silent weather resistant enclosure" },
-      { label: "Noise Rating", value: "Semi-silent" },
-      { label: "Dry Weight", value: "1036kg" },
-    ],
-  },
-
-  // Add more products with categories
-];
 const Products: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, status, error } = useSelector((state: RootState) => state.products);
   const categories = ["All", "Generators", "Accessories", "Parts"];
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(categories[0])
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(categories[0]);
 
-  const filteredProducts = selectedCategory && selectedCategory !== "All"
-    ? productData.filter(product => product.category === selectedCategory)
-    : productData;
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (status === "failed" && error) {
+      toast.error(error);
+    }
+  }, [status, error]);
+
+  const filteredProducts =
+    // selectedCategory && selectedCategory !== "All"
+    //   ? products.filter((product: Product) => product.category === selectedCategory)
+    products;
 
   return (
     <div className="container mx-auto p-4">
@@ -96,8 +43,7 @@ const Products: React.FC = () => {
         {categories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 mx-2 rounded-full ${selectedCategory === category ? "bg-primary text-white" : "bg-white"
-              }`}
+            className={`px-4 py-2 mx-2 rounded-full ${selectedCategory === category ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => setSelectedCategory(category)}
           >
             {category}
@@ -106,9 +52,13 @@ const Products: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
-          <Product product={product} />
-        ))}
+        {filteredProducts && filteredProducts.length > 0 ? (
+          filteredProducts.map((product: Product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        ) : (
+          <p className="text-center">No products available.</p>
+        )}
       </div>
     </div>
   );

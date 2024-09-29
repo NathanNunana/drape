@@ -9,7 +9,7 @@ export interface ServiceType {
 }
 
 // Define the initial state of the service types
-interface ServiceTypesState {
+export interface ServiceTypesState {
   serviceTypes: ServiceType[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;

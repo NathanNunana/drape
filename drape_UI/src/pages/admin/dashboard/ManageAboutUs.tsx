@@ -8,6 +8,7 @@ import {
 } from "../../slice/aboutUsSlice"; // Adjust the import path as needed
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageAboutUs: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,14 +40,14 @@ const ManageAboutUs: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const aboutUsData = {
       id: aboutUs.id || 0,  // Assuming 0 is used as a placeholder for new entries
       motto: motto,
       company_description: companyDescription,
       image: image || undefined,
     };
-  
+
     try {
       if (aboutUs.id) {
         await dispatch(updateAboutUs(aboutUsData));  // Pass the object with correct types
@@ -59,75 +60,77 @@ const ManageAboutUs: React.FC = () => {
       toast.error("Failed to save About Us. Please try again.");
     }
   };
-  
-  
+
+
 
   return (
-    <div className="container mx-auto p-6">
-      <ToastContainer />
-      <h2 className="text-3xl font-bold mb-6">Manage About Us</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Motto Field */}
-          <div>
-            <label htmlFor="motto" className="block text-gray-700 text-lg font-semibold">
-              Motto
-            </label>
-            <input
-              type="text"
-              id="motto"
-              value={motto}
-              onChange={(e) => setMotto(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md mt-2"
-            />
-          </div>
-
-          {/* Company Description Field */}
-          <div>
-            <label htmlFor="companyDescription" className="block text-gray-700 text-lg font-semibold">
-              Company Description
-            </label>
-            <textarea
-              id="companyDescription"
-              value={companyDescription}
-              onChange={(e) => setCompanyDescription(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md mt-2"
-              rows={4}
-            />
-          </div>
-        </div>
-
-        {/* Image Upload Field */}
-        <div>
-          <label htmlFor="image" className="block text-gray-700 text-lg font-semibold">
-            Image (Optional)
-          </label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full p-2 border border-gray-300 rounded-md mt-2"
-          />
-          {imagePreview && (
-            <div className="mt-4">
-              <img
-                src={imagePreview}
-                alt="About Us"
-                className="w-full max-w-sm h-auto border border-gray-300 rounded-md"
+    <>
+      <DashboardHeader title="About Us Management" />
+      <div className="container mx-auto p-6">
+        <ToastContainer />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Motto Field */}
+            <div>
+              <label htmlFor="motto" className="block text-gray-700 text-lg font-semibold">
+                Motto
+              </label>
+              <input
+                type="text"
+                id="motto"
+                value={motto}
+                onChange={(e) => setMotto(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md mt-2"
               />
             </div>
-          )}
-        </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-6 py-3 w-full lg:w-1/2 rounded-md mt-6 hover:bg-blue-700 transition duration-300"
-        >
-          Save
-        </button>
-      </form>
-    </div>
+            {/* Company Description Field */}
+            <div>
+              <label htmlFor="companyDescription" className="block text-gray-700 text-lg font-semibold">
+                Company Description
+              </label>
+              <textarea
+                id="companyDescription"
+                value={companyDescription}
+                onChange={(e) => setCompanyDescription(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md mt-2"
+                rows={4}
+              />
+            </div>
+          </div>
+
+          {/* Image Upload Field */}
+          <div>
+            <label htmlFor="image" className="block text-gray-700 text-lg font-semibold">
+              Image (Optional)
+            </label>
+            <input
+              type="file"
+              id="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full p-2 border border-gray-300 rounded-md mt-2"
+            />
+            {imagePreview && (
+              <div className="mt-4">
+                <img
+                  src={imagePreview}
+                  alt="About Us"
+                  className="w-full max-w-sm h-auto border border-gray-300 rounded-md"
+                />
+              </div>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-3 w-full lg:w-1/2 rounded-md mt-6 hover:bg-blue-700 transition duration-300"
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
