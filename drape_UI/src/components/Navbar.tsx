@@ -16,11 +16,11 @@ const Navbar: React.FC = () => {
         <div className="flex flex-row gap-5">
           <div className="hidden lg:flex items-center justify-between space-x-8">
             <NavLink
-              to="/"
+              to="/home"
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-500 font-medium text-sm"
-                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+                  ? "text-blue-500 font-medium text-lg"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-lg"
               }
             >
               HOME
@@ -29,28 +29,39 @@ const Navbar: React.FC = () => {
               to="/home/about"
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-500 font-medium text-sm"
-                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+                  ? "text-blue-500 font-medium text-lg"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-lg"
               }
             >
               ABOUT
             </NavLink>
             <NavLink
+              to="/home/products"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-blue-500 font-medium text-lg"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-lg"
+              }
+            >
+              PRODUCTS
+            </NavLink>
+            <NavLink
               to="/home/services"
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-500 font-medium text-sm"
-                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+                  ? "text-blue-500 font-medium text-lg"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-lg"
               }
             >
               SERVICES
             </NavLink>
+
             <NavLink
               to="/home/contact-us"
               className={({ isActive }) =>
                 isActive
-                  ? "text-blue-500 font-medium text-sm"
-                  : "text-gray-700 hover:text-blue-500 font-medium text-sm"
+                  ? "text-blue-500 font-medium text-lg"
+                  : "text-gray-700 hover:text-blue-500 font-medium text-lg"
               }
             >
               CONTACT

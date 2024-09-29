@@ -4,9 +4,9 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 const ContactUs: React.FC = () => {
   return (
     <div className="container mx-auto p-6 md:p-12">
-      <h1 className="text-3xl font-bold mb-6 text-center">Contact Us</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">CONTACT US</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 shadow-lg">
+        <div className="bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
           <p className="text-gray-600 mb-4">
             We would love to hear from you! Whether you have a question,
@@ -42,13 +42,13 @@ const ContactUs: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition w-full"
             >
               Send Message
             </button>
           </form>
         </div>
-        <div className="bg-white p-6 shadow-lg">
+        <div className="bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-semibold mb-4">Our Location</h2>
           <div className="mb-4">
             <div className="flex items-center mb-2">
