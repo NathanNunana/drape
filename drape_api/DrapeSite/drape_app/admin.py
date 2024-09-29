@@ -69,8 +69,8 @@ class PriceAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'base_type', 'color', 'description', 'specification')
-    search_fields = ('name', 'base_type', 'color', 'description', 'specification')
+    list_display = ('name', 'base_type', 'color', 'description')
+    search_fields = ('name', 'base_type', 'color', 'description')
     list_filter = ('base_type', 'color')
 
 

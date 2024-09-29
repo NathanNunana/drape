@@ -10,4 +10,4 @@ export { default as Booking } from "./Booking";
 export { default as Technician } from "./Technician";
 export { default as Testimonial } from "./Testimonial";
 export { default as Toast } from "./Toast";
-export { default as ServiceCard } from "./ServiceCard";
+export { default as ServiceCard } from "./Service";

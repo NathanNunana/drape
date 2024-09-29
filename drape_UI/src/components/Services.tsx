@@ -83,11 +83,10 @@ const Service: React.FC = () => {
             {services.map((service) => (
               <button
                 key={service.id}
-                className={`p-4 mb-4 flex items-center text-start ${
-                  activeTab === service.id
+                className={`p-4 mb-4 flex items-center text-start ${activeTab === service.id
                     ? "bg-primary text-white"
-                    : "bg-gray-100 text-black"
-                }`}
+                    : "bg-white text-black"
+                  }`}
                 onClick={() => setActiveTab(service.id)}
                 type="button"
               >
@@ -101,9 +100,8 @@ const Service: React.FC = () => {
           {services.map((service) => (
             <motion.div
               key={service.id}
-              className={`${
-                activeTab === service.id ? "block" : "hidden"
-              } transition-opacity duration-500`}
+              className={`${activeTab === service.id ? "block" : "hidden"
+                } transition-opacity duration-500`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >

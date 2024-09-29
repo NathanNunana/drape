@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-from celery.schedules import crontab
 
 
 
@@ -54,8 +53,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
-    'django_celery_beat',
-    'django_celery_results',
+    'django_apscheduler',
 ]
 
 # Custom user model
@@ -194,17 +192,17 @@ SIMPLE_JWT = {
 FRONTEND_URL = config('FRONTEND_URL')
 
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-# Celery settings
-CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
-CELERY_RESULT_BACKEND = 'django-db'     # Use Django database to store task results
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+# # Celery settings
+# CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ broker URL
+# CELERY_RESULT_BACKEND = 'django-db'     # Use Django database to store task results
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
 
 
-# Celery timezone settings
-CELERY_TIMEZONE = 'Africa/Accra'
-CELERY_ENABLE_UTC = True
+# # Celery timezone settings
+# CELERY_TIMEZONE = 'Africa/Accra'
+# CELERY_ENABLE_UTC = True
