@@ -22,7 +22,7 @@ const Navbar: React.FC = () => {
 
         {/* Hamburger Menu Icon for mobile */}
         <div className="lg:hidden">
-          <button onClick={toggleMenu}>
+          <button onClick={toggleMenu} className="pr-10">
             {isMenuOpen ? (
               <FaTimes className="text-2xl text-blue-500" />
             ) : (
@@ -152,15 +152,15 @@ const Navbar: React.FC = () => {
               >
                 CONTACT
               </NavLink>
-
-              <Link
-                to="/quote"
-                className="py-2 font-semibold flex items-center gap-1 bg-blue-500 text-white px-4 hover:bg-blue-600"
-                onClick={toggleMenu}
-              >
-                GET A QUOTE
-                <FaArrowRight />
-              </Link>
+              {/**/}
+              {/* <Link */}
+              {/*   to="/quote" */}
+              {/*   className="py-2 font-semibold flex items-center gap-1 bg-blue-500 text-white px-4 hover:bg-blue-600" */}
+              {/*   onClick={toggleMenu} */}
+              {/* > */}
+              {/*   GET A QUOTE */}
+              {/*   <FaArrowRight /> */}
+              {/* </Link> */}
             </ul>
           </div>
         )}
