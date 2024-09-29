@@ -5,7 +5,7 @@ const ServiceSection: React.FC = () => {
   return (
     <div className="py-16 bg-gray-50">
       <div className="container mx-auto">
-        <div className="px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="px-5 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-white p-6 shadow-sm flex items-start">
             <i className="text-blue-500 text-4xl mr-4">
               <FaCertificate />
