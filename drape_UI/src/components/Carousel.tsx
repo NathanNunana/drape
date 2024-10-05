@@ -6,7 +6,7 @@ const Carousel: React.FC = () => {
 
   const slides = [
     {
-      image: "/assets/images/carousel-bg-1.jpg",
+      image: "/assets/images/carousel-bg1.jpeg",
       imageIcon: "/assets/images/generator-1.png",
       heading: "Quality Generators",
       text: "Generators",
@@ -15,7 +15,7 @@ const Carousel: React.FC = () => {
       imgAlt: "Image 1",
     },
     {
-      image: "/assets/images/carousel-bg-2.jpg",
+      image: "/assets/images/carousel-bg2.jpeg",
       heading: "Qualified Generator Service Center",
       imageIcon: "/assets/images/generator-2.png",
       text: "Generators",
@@ -23,6 +23,25 @@ const Carousel: React.FC = () => {
       buttonLink: "#",
       imgAlt: "Image 2",
     },
+    {
+      image: "/assets/images/carousel-bg3.jpeg",
+      heading: "Qualified Generator Service Center",
+      imageIcon: "/assets/images/generator-1.png",
+      text: "Generators",
+      buttonLabel: "Learn More",
+      buttonLink: "#",
+      imgAlt: "Image 2",
+    },
+    {
+      image: "/assets/images/carousel-bg4.jpeg",
+      heading: "Qualified Generator Service Center",
+      imageIcon: "/assets/images/generator-2.png",
+      text: "Generators",
+      buttonLabel: "Learn More",
+      buttonLink: "#",
+      imgAlt: "Image 2",
+    },
+
   ];
 
   const goToNextSlide = () => {

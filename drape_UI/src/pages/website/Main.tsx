@@ -12,7 +12,7 @@ const ContactUs = lazy(() => import("../website/Contact"));
 
 function Main() {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 flex flex-col min-h-screen">
       <Topbar />
       <Navbar />
       <Suspense fallback={<div>Loading...</div>}>

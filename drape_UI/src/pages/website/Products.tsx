@@ -28,7 +28,7 @@ const Products: React.FC = () => {
     products;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 flex-grow">
       <motion.h1
         className="text-3xl font-bold mb-6 text-center"
         initial={{ opacity: 0, y: -20 }}
@@ -57,7 +57,7 @@ const Products: React.FC = () => {
             <ProductCard key={product.id} product={product} />
           ))
         ) : (
-          <p className="text-center">No products available.</p>
+          <p className="container text-center w-screen pt-10">No products available.</p>
         )}
       </div>
     </div>
