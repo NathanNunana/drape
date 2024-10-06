@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
-                     AboutUs, Price, Product, ProductType, Analytics, ContactUs, Schedule)
+                    AboutUs, Price, Product, ProductType, Analytics, ContactUs, Schedule, 
+                    BookForService)
 
 
 @admin.register(Address)
@@ -100,3 +101,9 @@ class ScheduleAdmin(admin.ModelAdmin):
     search_fields = ('user__email', 'product__name', 'services')
 
 admin.site.register(Schedule, ScheduleAdmin)
+
+
+@admin.register(BookForService)
+class BookForServiceAdmin(admin.ModelAdmin):
+    list_display = ('your_name', 'email_address', 'service_date')
+    search_fields = ('your_name', 'email_address')

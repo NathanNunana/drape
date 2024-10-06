@@ -1,7 +1,11 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                            Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+                            Service, AboutUs, Product, Price, ProductType, Analytics, 
+                            ContactUs, Schedule, BookForService)
+from drape_app.utils import send_email
+from django.template.loader import render_to_string
 
 
 
@@ -25,6 +29,20 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = '__all__'
 
+    def validate_logo(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
+
 class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceType
@@ -34,6 +52,20 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
 
 class AboutUsSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
@@ -41,7 +73,20 @@ class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutUs
         fields = '__all__'
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
 
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
 
 
 
@@ -75,6 +120,20 @@ class ProductSerializer(serializers.ModelSerializer):
             'output_frequency', 'output_factor',
             'specifications'
         ]
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value        
 
     def get_specifications(self, obj):
         return {
@@ -176,7 +235,30 @@ class AnalyticsSerializer(serializers.ModelSerializer):
 class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
-        fields = '__all__'
+        fields = ['your_name', 'subject', 'email', 'message']
+
+    def create(self, validated_data):
+        # Create the ContactUs instance
+        contact_us_instance = ContactUs.objects.create(**validated_data)
+
+        # Prepare the email context
+        context = {
+            'name': contact_us_instance.your_name,
+            'subject': contact_us_instance.subject,
+            'message': contact_us_instance.message
+        }
+        
+        # Render the email template
+        html_content = render_to_string('emails/contact_confirmation.html', context)
+
+        # Send the confirmation email
+        subject = "Thank you for contacting Drape"
+        text_content = "Thank you for reaching out. We have received your message and will get back to you soon."
+        recipient_list = [contact_us_instance.email]
+
+        send_email(subject, text_content, html_content, recipient_list)
+
+        return contact_us_instance
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -191,3 +273,30 @@ class ScheduleSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         validated_data['user'] = user
         return super().create(validated_data)
+
+
+class BookForServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookForService
+        fields = '__all__'
+
+    def create(self, validated_data):
+        # Create the BookForService instance
+        instance = BookForService.objects.create(**validated_data)
+
+        # Prepare email content for the submission confirmation
+        subject = "Service Booking Submission"
+        context = {
+            'user_name': instance.your_name,
+            'services': instance.services,
+            'service_date': instance.service_date,
+            'special_request': instance.special_request,
+        }
+
+        text_content = f"Dear {instance.your_name},\n\nThank you for booking our service on {instance.service_date}."
+        html_content = render_to_string('emails/service_submission.html', context)
+
+        # Send submission confirmation email
+        send_email(subject, text_content, html_content, [instance.email_address])
+
+        return instance
