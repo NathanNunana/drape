@@ -53,7 +53,7 @@ def schedule_reminders():
     except Exception as e:
         logger.error(f'Failed to schedule reminders: {e}')
 
-scheduler = BackgroundScheduler()
-scheduler.add_jobstore(DjangoJobStore(), "default")
-scheduler.add_job(schedule_reminders, 'interval', hours=24)  # Adjust the interval as needed
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_jobstore(DjangoJobStore(), "default")
+# scheduler.add_job(schedule_reminders, 'interval', hours=24)  # Adjust the interval as needed
+# scheduler.start()
