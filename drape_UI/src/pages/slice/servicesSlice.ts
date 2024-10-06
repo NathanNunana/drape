@@ -7,11 +7,11 @@ export interface Service {
   title: string;
   description: string;
   operations: string;
-  image?: File | string | null; // Image can be a File object or null
+  image?: File | string | null;
   service_type: number;
 }
 
-interface ServicesState {
+export interface ServicesState {
   services: Service[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;

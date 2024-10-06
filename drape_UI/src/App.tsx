@@ -20,7 +20,7 @@ const App: React.FC = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/home/*" element={<Main />} />
+            <Route path="/*" element={<Main />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/auth/activate/:uidb64/:token" element={<ActivateAccount />} />

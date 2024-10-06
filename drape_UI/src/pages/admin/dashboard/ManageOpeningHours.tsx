@@ -16,6 +16,7 @@ import {
 import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageOpeningHours: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -129,210 +130,211 @@ const ManageOpeningHours: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
-      <ToastContainer />
-
-      <h2 className="text-2xl font-bold mb-4">Manage Opening Hours</h2>
-      <button
-        onClick={() => {
-          setCurrentOpeningHour({ id: 0, duration: "", type: 0 });
-          setIsEditingOpeningHour(false);
-          setIsOpenHourModalOpen(true);
-        }}
-        className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
-      >
-        Add Opening Hour
-      </button>
-      <div className="overflow-x-auto mt-4 mb-8">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead className="bg-gray-100 border-b border-gray-200">
-            <tr>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Duration
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Type
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {openingHours.map((openingHour) => (
-              <tr
-                key={openingHour.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-gray-800">
-                  {openingHour.duration}
-                </td>
-                <td className="py-4 px-4 text-gray-600">
-                  {types.find((type) => type.id === openingHour.type)?.name || openingHour.type}
-                </td>
-                <td className="py-4 px-4">
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
-                    onClick={() => handleEditOpeningHour(openingHour)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() => handleDeleteOpeningHour(openingHour.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+    <>
+      <DashboardHeader title="Opening Hours Management" />
+      <div className="p-4">
+        <ToastContainer />
+        <button
+          onClick={() => {
+            setCurrentOpeningHour({ id: 0, duration: "", type: 0 });
+            setIsEditingOpeningHour(false);
+            setIsOpenHourModalOpen(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+        >
+          Add Opening Hour
+        </button>
+        <div className="overflow-x-auto mt-4 mb-8">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead className="bg-gray-100 border-b border-gray-200">
+              <tr>
+                <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  Duration
+                </th>
+                <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  Type
+                </th>
+                <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-2xl font-bold mb-4">Manage Types</h2>
-      <button
-        onClick={() => {
-          setCurrentType({ id: 0, name: "" });
-          setIsEditingType(false);
-          setIsTypeModalOpen(true);
-        }}
-        className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
-      >
-        Add Type
-      </button>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-          <thead className="bg-gray-100 border-b border-gray-200">
-            <tr>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Name
-              </th>
-              <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {types.map((type) => (
-              <tr
-                key={type.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-gray-800">{type.name}</td>
-                <td className="py-4 px-4">
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
-                    onClick={() => handleEditType(type)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
-                    onClick={() => handleDeleteType(type.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Opening Hour Modal */}
-      <Modal
-        isOpen={isOpenHourModalOpen}
-        onClose={closeOpeningHourModal}
-      >
-        <h2 className="text-xl font-bold mb-4">
-          {isEditingOpeningHour ? "Edit Opening Hour" : "Add Opening Hour"}
-        </h2>
-        <form onSubmit={handleSubmitOpeningHour}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Duration</label>
-            <input
-              type="text"
-              name="duration"
-              value={currentOpeningHour.duration}
-              onChange={handleOpeningHourChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Type</label>
-            <select
-              name="type"
-              value={currentOpeningHour.type}
-              onChange={handleOpeningHourChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            >
-              <option value={0}>Select a type</option>
-              {types.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
+            </thead>
+            <tbody>
+              {openingHours.map((openingHour) => (
+                <tr
+                  key={openingHour.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  <td className="py-4 px-4 text-gray-800">
+                    {openingHour.duration}
+                  </td>
+                  <td className="py-4 px-4 text-gray-600">
+                    {types.find((type) => type.id === openingHour.type)?.name || openingHour.type}
+                  </td>
+                  <td className="py-4 px-4">
+                    <button
+                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      onClick={() => handleEditOpeningHour(openingHour)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      onClick={() => handleDeleteOpeningHour(openingHour.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
               ))}
-            </select>
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={closeOpeningHourModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
-            >
-              {isEditingOpeningHour ? "Update" : "Add"}
-            </button>
-          </div>
-        </form>
-      </Modal>
+            </tbody>
+          </table>
+        </div>
 
-      {/* Type Modal */}
-      <Modal
-        isOpen={isTypeModalOpen}
-        onClose={closeTypeModal}
-      >
-        <h2 className="text-xl font-bold mb-4">
-          {isEditingType ? "Edit Type" : "Add Type"}
-        </h2>
-        <form onSubmit={handleSubmitType}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={currentType.name}
-              onChange={handleTypeChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            />
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={closeTypeModal}
-              className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
-            >
-              {isEditingType ? "Update" : "Add"}
-            </button>
-          </div>
-        </form>
-      </Modal>
-    </div>
+        <h2 className="text-2xl font-bold mb-4">Manage Types</h2>
+        <button
+          onClick={() => {
+            setCurrentType({ id: 0, name: "" });
+            setIsEditingType(false);
+            setIsTypeModalOpen(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+        >
+          Add Type
+        </button>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead className="bg-gray-100 border-b border-gray-200">
+              <tr>
+                <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  Name
+                </th>
+                <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {types.map((type) => (
+                <tr
+                  key={type.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  <td className="py-4 px-4 text-gray-800">{type.name}</td>
+                  <td className="py-4 px-4">
+                    <button
+                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      onClick={() => handleEditType(type)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      onClick={() => handleDeleteType(type.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Opening Hour Modal */}
+        <Modal
+          isOpen={isOpenHourModalOpen}
+          onClose={closeOpeningHourModal}
+        >
+          <h2 className="text-xl font-bold mb-4">
+            {isEditingOpeningHour ? "Edit Opening Hour" : "Add Opening Hour"}
+          </h2>
+          <form onSubmit={handleSubmitOpeningHour}>
+            <div className="mb-4">
+              <label className="block text-gray-700">Duration</label>
+              <input
+                type="text"
+                name="duration"
+                value={currentOpeningHour.duration}
+                onChange={handleOpeningHourChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Type</label>
+              <select
+                name="type"
+                value={currentOpeningHour.type}
+                onChange={handleOpeningHourChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                required
+              >
+                <option value={0}>Select a type</option>
+                {types.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeOpeningHourModal}
+                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+              >
+                {isEditingOpeningHour ? "Update" : "Add"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+
+        {/* Type Modal */}
+        <Modal
+          isOpen={isTypeModalOpen}
+          onClose={closeTypeModal}
+        >
+          <h2 className="text-xl font-bold mb-4">
+            {isEditingType ? "Edit Type" : "Add Type"}
+          </h2>
+          <form onSubmit={handleSubmitType}>
+            <div className="mb-4">
+              <label className="block text-gray-700">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={currentType.name}
+                onChange={handleTypeChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                required
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={closeTypeModal}
+                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+              >
+                {isEditingType ? "Update" : "Add"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      </div>
+    </>
   );
 };
 

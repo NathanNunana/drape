@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 
 // Testimonial data
 const testimonials = [
@@ -48,7 +49,24 @@ const testimonials = [
 
 const Testimonial: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slidesToShow = 3;
+  const [slidesToShow, setSlidesToShow] = useState(3); // Default to 3 for larger screens
+
+  useEffect(() => {
+    // Adjust slidesToShow based on screen size
+    const updateSlidesToShow = () => {
+      if (window.innerWidth >= 1024) {
+        setSlidesToShow(3); // Show 3 testimonials per slide on larger screens
+      } else {
+        setSlidesToShow(1); // Show 1 testimonial per slide on smaller screens
+      }
+    };
+
+    updateSlidesToShow(); // Set the initial value
+
+    window.addEventListener("resize", updateSlidesToShow); // Listen for window resize
+    return () => window.removeEventListener("resize", updateSlidesToShow);
+  }, []);
+
   const totalSlides = Math.ceil(testimonials.length / slidesToShow);
 
   const nextSlide = () => {
@@ -82,7 +100,11 @@ const Testimonial: React.FC = () => {
                 (currentSlide + 1) * slidesToShow,
               )
               .map((testimonial) => (
-                <div key={testimonial.id} className="w-1/3 p-4">
+                <div
+                  key={testimonial.id}
+                  className={`w-full ${slidesToShow === 3 ? "lg:w-1/3" : "w-full"
+                    } p-4`}
+                >
                   <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
                     <img
                       className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 mb-4"
@@ -100,6 +122,7 @@ const Testimonial: React.FC = () => {
                 </div>
               ))}
           </div>
+          {/* Prev and Next Buttons */}
           <button
             className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-primary text-white p-2 rounded-full"
             onClick={prevSlide}
@@ -119,3 +142,4 @@ const Testimonial: React.FC = () => {
 };
 
 export default Testimonial;
+

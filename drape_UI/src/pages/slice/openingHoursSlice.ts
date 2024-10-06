@@ -13,7 +13,7 @@ export interface OpeningHourType {
   name: string;
 }
 
-interface OpeningHoursState {
+export interface OpeningHoursState {
   openingHours: OpeningHour[];
   types: OpeningHourType[];
   status: "idle" | "loading" | "succeeded" | "failed";
