@@ -1,16 +1,16 @@
-from celery import shared_task
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
+# drape_app/scheduler.py
+from django_apscheduler.jobstores import DjangoJobStore, DjangoJob
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.utils.timezone import now
-from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 from drape_app.models import Schedule
 from datetime import timedelta
+from django.conf import settings
 import logging
 
-# Set up logging
 logger = logging.getLogger(__name__)
 
-@shared_task
 def send_reminder_email(user_email, subject, text_content, html_content):
     try:
         email = EmailMultiAlternatives(subject, text_content, settings.EMAIL_HOST_USER, [user_email])
@@ -20,16 +20,12 @@ def send_reminder_email(user_email, subject, text_content, html_content):
     except Exception as e:
         logger.error(f'Failed to send reminder email to {user_email}: {e}')
 
-@shared_task
 def schedule_reminders():
     try:
-        tomorrow = now() + timedelta(days=1)  # Calculate the time for tomorrow
-        # Get all schedules starting tomorrow
+        tomorrow = now() + timedelta(days=1)
         schedules_start = Schedule.objects.filter(start_date__date=tomorrow.date())
-        # Get all schedules due tomorrow
         schedules_due = Schedule.objects.filter(due_date__date=tomorrow.date())
 
-        # Send reminder for schedules starting soon
         for schedule in schedules_start:
             try:
                 context = {
@@ -38,18 +34,10 @@ def schedule_reminders():
                     'start_date': schedule.start_date
                 }
                 html_content = render_to_string('emails/start_reminder.html', context)
-                send_reminder_email.apply_async(
-                    args=[
-                        schedule.user.email,
-                        'Reminder: Your service is starting soon',
-                        html_content,
-                        html_content
-                    ]
-                )
+                send_reminder_email(schedule.user.email, 'Reminder: Your service is starting soon', html_content, html_content)
             except Exception as e:
                 logger.error(f'Error scheduling start reminder for {schedule.user.email}: {e}')
 
-        # Send reminder for schedules due soon
         for schedule in schedules_due:
             try:
                 context = {
@@ -58,16 +46,14 @@ def schedule_reminders():
                     'due_date': schedule.due_date
                 }
                 html_content = render_to_string('emails/due_reminder.html', context)
-                send_reminder_email.apply_async(
-                    args=[
-                        schedule.user.email,
-                        'Reminder: Your service is due soon',
-                        html_content,
-                        html_content
-                    ]
-                )
+                send_reminder_email(schedule.user.email, 'Reminder: Your service is due soon', html_content, html_content)
             except Exception as e:
                 logger.error(f'Error scheduling due reminder for {schedule.user.email}: {e}')
 
     except Exception as e:
         logger.error(f'Failed to schedule reminders: {e}')
+
+scheduler = BackgroundScheduler()
+scheduler.add_jobstore(DjangoJobStore(), "default")
+scheduler.add_job(schedule_reminders, 'interval', hours=24)  # Adjust the interval as needed
+scheduler.start()

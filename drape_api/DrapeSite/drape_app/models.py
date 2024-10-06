@@ -88,6 +88,8 @@ class ProductType(models.Model):
 
     def __str__(self):
         return self.type_name
+    
+    
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -95,13 +97,10 @@ class Product(models.Model):
     base_type = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
     description = models.TextField()
-    specification = models.TextField()
     product_type = models.ForeignKey(ProductType, on_delete=models.SET_NULL, null=True)
-    
-    # Warranty
     warranty_duration = models.CharField(max_length=100, blank=True, null=True)
-    
-    # Technical Parameters of Generator Equipment
+
+    # Technical Parameters of Generator Equipment (specification)
     model_number = models.CharField(max_length=100, blank=True, null=True)
     output_power = models.CharField(max_length=100, blank=True, null=True)
     power_factor = models.CharField(max_length=100, blank=True, null=True)
