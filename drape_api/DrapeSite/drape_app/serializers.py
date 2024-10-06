@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+from drape_app.utils import send_email
+from django.template.loader import render_to_string
 
 
 
@@ -232,7 +234,30 @@ class AnalyticsSerializer(serializers.ModelSerializer):
 class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
-        fields = '__all__'
+        fields = ['your_name', 'subject', 'email', 'message']
+
+    def create(self, validated_data):
+        # Create the ContactUs instance
+        contact_us_instance = ContactUs.objects.create(**validated_data)
+
+        # Prepare the email context
+        context = {
+            'name': contact_us_instance.your_name,
+            'subject': contact_us_instance.subject,
+            'message': contact_us_instance.message
+        }
+        
+        # Render the email template
+        html_content = render_to_string('emails/contact_confirmation.html', context)
+
+        # Send the confirmation email
+        subject = "Thank you for contacting Drape"
+        text_content = "Thank you for reaching out. We have received your message and will get back to you soon."
+        recipient_list = [contact_us_instance.email]
+
+        send_email(subject, text_content, html_content, recipient_list)
+
+        return contact_us_instance
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

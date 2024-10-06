@@ -2,11 +2,11 @@ from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                              Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+                            Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
 from drape_app.permissions import IsSuperAdminOrReadOnly
 from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, CompanySerializer, 
-                          ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
-                          AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer)
+                        ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
+                        AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer)
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -69,7 +69,6 @@ class AnalyticsViewSet(viewsets.ModelViewSet):
 class ContactUsViewSet(viewsets.ModelViewSet):
     queryset = ContactUs.objects.all()
     serializer_class = ContactUsSerializer
-    permission_classes = [IsSuperAdminOrReadOnly]
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
