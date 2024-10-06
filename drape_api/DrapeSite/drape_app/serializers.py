@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.core.exceptions import ValidationError
 import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                            Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+                            Service, AboutUs, Product, Price, ProductType, Analytics, 
+                            ContactUs, Schedule, BookForService)
 from drape_app.utils import send_email
 from django.template.loader import render_to_string
 
@@ -272,3 +273,29 @@ class ScheduleSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         validated_data['user'] = user
         return super().create(validated_data)
+
+
+class BookForServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookForService
+        fields = '__all__'
+
+    def create(self, validated_data):
+        # Create the BookForService instance
+        instance = BookForService.objects.create(**validated_data)
+
+        # Prepare email content for the submission confirmation
+        subject = "Service Booking Submission"
+        context = {
+            'user_name': instance.your_name,
+            'service_date': instance.service_date,
+            'special_request': instance.special_request,
+        }
+
+        text_content = f"Dear {instance.your_name},\n\nThank you for booking our service on {instance.service_date}."
+        html_content = render_to_string('emails/service_submission.html', context)
+
+        # Send submission confirmation email
+        send_email(subject, text_content, html_content, [instance.email_address])
+
+        return instance
