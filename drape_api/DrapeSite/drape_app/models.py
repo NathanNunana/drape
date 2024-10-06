@@ -195,8 +195,15 @@ class Schedule(models.Model):
     
     
 class BookForService(models.Model):
+    SERVICE_CHOICES = [
+        ('Diagnostic Test', 'Diagnostic Test'),
+        ('Engine Servicing', 'Engine Servicing'),
+        ('Tires Replacement', 'Tires Replacement'),
+        ('Oil Changing', 'Oil Changing'),
+    ]
     your_name = models.CharField(max_length=100)
     email_address = models.EmailField()
+    services = models.CharField(max_length=50, choices=SERVICE_CHOICES)
     service_date = models.DateTimeField()
     special_request = models.TextField(blank=True)  # Allow blank requests
     is_confirmed = models.BooleanField(default=False)  # To track admin confirmation
@@ -211,6 +218,7 @@ class BookForService(models.Model):
         subject = "Service Booking Confirmed"
         context = {
             'user_name': self.your_name,
+            'services': self.services,
             'service_date': self.service_date,
             'special_request': self.special_request,
         }

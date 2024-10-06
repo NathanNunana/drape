@@ -52,7 +52,7 @@
         </div>
         <div class="content">
             <p>Dear {{ user_name }},</p>
-            <p>We are pleased to inform you that your booking for our service has been confirmed. Your service date is scheduled for <strong>{{ service_date }}</strong>.</p>
+            <p>We are pleased to inform you that your booking for our service has been confirmed. Your service on <strong>{{services}}</strong> date is scheduled for <strong>{{ service_date }}</strong>.</p>
             {% if special_request %}
                 <p>We have noted your special request: <strong>{{ special_request }}</strong>.</p>
             {% else %}

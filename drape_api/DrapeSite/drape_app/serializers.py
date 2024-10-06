@@ -288,6 +288,7 @@ class BookForServiceSerializer(serializers.ModelSerializer):
         subject = "Service Booking Submission"
         context = {
             'user_name': instance.your_name,
+            'services': instance.services,
             'service_date': instance.service_date,
             'special_request': instance.special_request,
         }
