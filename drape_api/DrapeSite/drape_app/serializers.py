@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
 
@@ -25,6 +26,20 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = '__all__'
 
+    def validate_logo(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
+
 class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceType
@@ -34,6 +49,20 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = '__all__'
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
 
 class AboutUsSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
@@ -41,7 +70,20 @@ class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutUs
         fields = '__all__'
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
 
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value
 
 
 
@@ -75,6 +117,20 @@ class ProductSerializer(serializers.ModelSerializer):
             'output_frequency', 'output_factor',
             'specifications'
         ]
+        
+    def validate_image(self, value):
+        # Validate file extension
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
+        ext = os.path.splitext(value.name)[1].lower()
+        if ext not in valid_extensions:
+            raise ValidationError(f'Unsupported file extension. Allowed extensions are: {", ".join(valid_extensions)}')
+
+        # Validate file size (max 1MB)
+        max_size = 1 * 1024 * 1024  # 1 MB
+        if value.size > max_size:
+            raise ValidationError('Image file size exceeds the maximum limit of 1MB.')
+
+        return value        
 
     def get_specifications(self, obj):
         return {

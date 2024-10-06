@@ -1,6 +1,3 @@
-# drape_app/scheduler.py
-from django_apscheduler.jobstores import DjangoJobStore, DjangoJob
-from apscheduler.schedulers.background import BackgroundScheduler
 from django.utils.timezone import now
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -52,8 +49,3 @@ def schedule_reminders():
 
     except Exception as e:
         logger.error(f'Failed to schedule reminders: {e}')
-
-# scheduler = BackgroundScheduler()
-# scheduler.add_jobstore(DjangoJobStore(), "default")
-# scheduler.add_job(schedule_reminders, 'interval', hours=24)  # Adjust the interval as needed
-# scheduler.start()
