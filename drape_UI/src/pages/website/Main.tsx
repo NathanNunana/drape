@@ -12,14 +12,14 @@ const ContactUs = lazy(() => import("../website/Contact"));
 
 function Main() {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 flex flex-col min-h-screen">
       <Topbar />
       <Navbar />
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/product/:id" element={<ProductDetails/>} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact-us" element={<ContactUs />} />
