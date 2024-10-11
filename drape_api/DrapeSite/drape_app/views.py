@@ -95,5 +95,7 @@ class BookForServiceViewSet(viewsets.ModelViewSet):
         # Check if the booking has been confirmed by the admin
         if not previous_status and instance.is_confirmed:
             instance.send_confirmation_email()  # Send confirmation email
+            print(f"Confirmation email triggered for: {instance.email_address}")  # Debugging log
 
         return response
+
