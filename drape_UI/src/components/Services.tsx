@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaCarSide,
@@ -8,6 +8,10 @@ import {
   FaCheck,
   FaArrowRight,
 } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../drape/store";
+import { fetchServiceTypes } from "../pages/slice/servicesTypesSlice";
+import { toast } from "react-toastify";
 
 interface ServiceType {
   id: number;
@@ -55,8 +59,20 @@ const services: ServiceType[] = [
 ];
 
 const Service: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { serviceTypes, status, error } = useSelector((state: RootState) => state.serviceTypes)
   const [activeTab, setActiveTab] = useState<number>(1);
 
+  useEffect(() => {
+    console.log("loading service types")
+    fetchServiceTypes();
+  }, [dispatch])
+
+  useEffect(() => {
+    if (status === "failed" && error) {
+      toast.error(error);
+    }
+  }, [status, error])
   return (
     <div className="container mx-auto p-4">
       <div className="text-center mb-6">
@@ -84,8 +100,8 @@ const Service: React.FC = () => {
               <button
                 key={service.id}
                 className={`p-4 mb-4 flex items-center text-start ${activeTab === service.id
-                    ? "bg-primary text-white"
-                    : "bg-white text-black"
+                  ? "bg-primary text-white"
+                  : "bg-white text-black"
                   }`}
                 onClick={() => setActiveTab(service.id)}
                 type="button"
@@ -97,6 +113,11 @@ const Service: React.FC = () => {
           </div>
         </div>
         <div className="w-full lg:w-2/3 px-4">
+          <div>
+            {serviceTypes.map((svc) => (
+              <p>{svc.name}</p>
+            ))}
+          </div>
           {services.map((service) => (
             <motion.div
               key={service.id}

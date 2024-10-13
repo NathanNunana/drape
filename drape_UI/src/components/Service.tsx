@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { Link } from "react-router-dom";
-import { ServiceData } from "../pages/website/Services";
+import { Service } from "../pages/slice/servicesSlice";
 
 interface ServiceProps {
-  service: ServiceData;
+  service: Service;
 }
 
-const Service: React.FC<ServiceProps> = ({ service }) => {
+const ServiceCard: React.FC<ServiceProps> = ({ service }) => {
   return (
     <>
       <motion.div
@@ -20,7 +19,7 @@ const Service: React.FC<ServiceProps> = ({ service }) => {
         <div className="relative">
           <img
             className="w-full h-40 object-cover rounded-lg mb-4"
-            src={service.image}
+            src={service.image?.toString() ?? "No Image"}
             alt={service.title}
           />
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300">
@@ -31,16 +30,11 @@ const Service: React.FC<ServiceProps> = ({ service }) => {
         </div>
         <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
         <p className="text-gray-700 mb-4">{service.description}</p>
-        <Link
-          to={`/home/product/${service.id}`}
-          className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg w-full justify-center"
-        >
-          View Details
-        </Link>
+        <p className="text-gray-700 mb-4">{service.operations}</p>
       </motion.div>
     </>
   );
 };
 
-export default Service;
+export default ServiceCard;
 
