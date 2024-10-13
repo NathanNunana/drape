@@ -2,11 +2,13 @@ from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
-                              Service, AboutUs, Product, Price, ProductType, Analytics, ContactUs, Schedule)
+                            Service, AboutUs, Product, Price, ProductType, Analytics, 
+                            ContactUs, Schedule, BookForService)
 from drape_app.permissions import IsSuperAdminOrReadOnly
 from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, CompanySerializer, 
-                          ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
-                          AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer)
+                        ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
+                        AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer,
+                        BookForServiceSerializer)
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -69,7 +71,6 @@ class AnalyticsViewSet(viewsets.ModelViewSet):
 class ContactUsViewSet(viewsets.ModelViewSet):
     queryset = ContactUs.objects.all()
     serializer_class = ContactUsSerializer
-    permission_classes = [IsSuperAdminOrReadOnly]
 
 
 class ScheduleViewSet(viewsets.ModelViewSet):
@@ -81,3 +82,20 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+    
+class BookForServiceViewSet(viewsets.ModelViewSet):
+    queryset = BookForService.objects.all()
+    serializer_class = BookForServiceSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        previous_status = instance.is_confirmed  # Capture the previous status
+        response = super().update(request, *args, **kwargs)
+
+        # Check if the booking has been confirmed by the admin
+        if not previous_status and instance.is_confirmed:
+            instance.send_confirmation_email()  # Send confirmation email
+            print(f"Confirmation email triggered for: {instance.email_address}")  # Debugging log
+
+        return response
+

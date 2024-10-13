@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.template.loader import render_to_string
+from drape_app.utils import send_email
+
 
 # Address
 class Address(models.Model):
@@ -88,6 +91,8 @@ class ProductType(models.Model):
 
     def __str__(self):
         return self.type_name
+    
+    
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -95,13 +100,10 @@ class Product(models.Model):
     base_type = models.CharField(max_length=100)
     color = models.CharField(max_length=100)
     description = models.TextField()
-    specification = models.TextField()
     product_type = models.ForeignKey(ProductType, on_delete=models.SET_NULL, null=True)
-    
-    # Warranty
     warranty_duration = models.CharField(max_length=100, blank=True, null=True)
-    
-    # Technical Parameters of Generator Equipment
+
+    # Technical Parameters of Generator Equipment (specification)
     model_number = models.CharField(max_length=100, blank=True, null=True)
     output_power = models.CharField(max_length=100, blank=True, null=True)
     power_factor = models.CharField(max_length=100, blank=True, null=True)
@@ -165,7 +167,7 @@ class Analytics(models.Model):
 # Contact Us
 class ContactUs(models.Model):
     your_name = models.CharField(max_length=255)
-    subject = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255, blank=True)
     email = models.EmailField()
     message = models.TextField()
 
@@ -190,3 +192,39 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"Schedule for {self.user.email} - {self.product.name}"
+    
+    
+class BookForService(models.Model):
+    SERVICE_CHOICES = [
+        ('Diagnostic Test', 'Diagnostic Test'),
+        ('Engine Servicing', 'Engine Servicing'),
+        ('Tires Replacement', 'Tires Replacement'),
+        ('Oil Changing', 'Oil Changing'),
+    ]
+    your_name = models.CharField(max_length=100)
+    email_address = models.EmailField()
+    services = models.CharField(max_length=50, choices=SERVICE_CHOICES)
+    service_date = models.DateTimeField()
+    special_request = models.TextField(blank=True)  # Allow blank requests
+    is_confirmed = models.BooleanField(default=False)  # To track admin confirmation
+
+    def __str__(self):
+        return f"Book for Service - {self.your_name} - {self.service_date}"
+
+    def send_confirmation_email(self):
+        """
+        This method sends a confirmation email when the booking is confirmed by the admin.
+        """
+        subject = "Service Booking Confirmed"
+        context = {
+            'user_name': self.your_name,
+            'services': self.services,
+            'service_date': self.service_date,
+            'special_request': self.special_request,
+        }
+
+        text_content = f"Dear {self.your_name},\n\nWe are pleased to inform you that your booking has been confirmed for {self.service_date}."
+        html_content = render_to_string('emails/booking_confirmed.html', context)
+
+        # Sending the confirmation email
+        send_email(subject, text_content, html_content, [self.email_address])
