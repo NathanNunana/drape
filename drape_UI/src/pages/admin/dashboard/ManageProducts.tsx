@@ -21,6 +21,7 @@ const ManageProducts: React.FC = () => {
     image: "",
     base_type: "",
     color: "",
+    category: "",
     description: "",
     product_type: null,
     warranty_duration: null,
