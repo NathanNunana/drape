@@ -125,16 +125,25 @@ const Products: React.FC = () => {
             </div>
           </div>
 
+
+
           {/* Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-h-[300px]">
             {currentProducts && currentProducts.length > 0 ? (
               currentProducts.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))
             ) : (
-              <p className="container text-center w-screen pt-10">No products available.</p>
+              <div className="flex items-center justify-center w-full h-full">
+                <div className="flex flex-col items-center">
+                  <img src="assets/images/notfound.png" alt="No Item" className="mb-4" />
+                  <p className="text-gray-700 font-semibold text-center">No products available.</p>
+                </div>
+              </div>
             )}
           </div>
+
+
 
           {/* Pagination */}
           <div className="mt-8 flex justify-center space-x-2">
