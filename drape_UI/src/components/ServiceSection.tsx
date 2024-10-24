@@ -5,7 +5,7 @@ const ServiceSection: React.FC = () => {
   return (
     <div className="py-16">
       <div className="container mx-auto">
-        <div className="px-32">
+        <div className="px-8 lg:px-48">
           <p className="text-gray-700 mb-4">
             Drape is a company dedicated to providing high-quality generator solutions for both commercial and residential clients. With a focus on reliability, performance, and energy efficiency, Drape specializes in the sales, installation, repair, and maintenance of generators of all sizes, from small backup units for homes to large industrial systems.
           </p>

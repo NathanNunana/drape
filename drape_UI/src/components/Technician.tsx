@@ -37,15 +37,17 @@ const technicians = [
 const Technicians: React.FC = () => {
   return (
     <div className="">
-      <div className="">
-        {/* Breadcrumb */}
-        <div className="text-left mb-5 text-gray-500 bg-gray-50 px-8 lg:px-48 py-5">
+      <div className="bg-gray-50">
+        <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / Our Technical Team
+            <span className="text-red-500">Home</span> / Our Team
           </p>
         </div>
+      </div>
+      <div className="">
+
         {/* Header */}
-        <div className="text-left mb-5 px-8 lg:px-48">
+        <div className="mx-auto container text-left mb-5 px-8 lg:px-48">
           <h6 className="text-red-500 text-3xl font-semibold mb-6">
             <span className="text-gray-700">Our Technical</span> Team
           </h6>
@@ -59,7 +61,7 @@ const Technicians: React.FC = () => {
 
         {/* Team Section */}
         <div className="bg-blue-50">
-          <div className="flex flex-wrap-mx-4 justify-center py-20 px-8 lg:px-48">
+          <div className="container mx-auto flex flex-wrap-mx-4 justify-center py-20 px-8 lg:px-48">
             {technicians.map((tech) => (
               <div
                 key={tech.id}

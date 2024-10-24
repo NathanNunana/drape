@@ -21,19 +21,30 @@ const Services: React.FC = () => {
   }, [status, error]);
 
   return (
-    <div className="container mx-auto p-4">
-      <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        OUR SERVICES
-      </motion.h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {services.map((service) => (
-          <ServiceCard service={service} />
-        ))}
+    <div>
+      <div className="bg-gray-50">
+        <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
+          <p className="text-sm">
+            <span className="text-red-500">Home</span> / Our Services
+          </p>
+        </div>
+      </div>
+      <div className="mx-auto bg-gray-50">
+      </div>
+      <div className="container mx-auto p-4">
+        <motion.h1
+          className="text-3xl mb-6 text-center font-semibold text-red-500"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="text-gray-700">Our</span> Services
+        </motion.h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {services.map((service) => (
+            <ServiceCard service={service} />
+          ))}
+        </div>
       </div>
     </div>
   );

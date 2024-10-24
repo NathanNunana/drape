@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
         <Link
           to={`/product/${product.name}`}
           state={{ product }}
-          className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg w-full justify-center"
+          className="inline-flex items-center py-2 px-4 bg-red-500 text-white rounded-lg w-full justify-center"
         >
           View Details
         </Link>

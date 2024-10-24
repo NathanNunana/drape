@@ -28,19 +28,19 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className="bg-gray-50 py-10">
-        <div className="container mx-auto text-gray-700 px-32">
+        <div className="container mx-auto text-gray-700 px-8 lg:px-48">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
             {/* TPSL Section */}
             <div>
               <h4 className="text-lg font-semibold mb-4">TPSL</h4>
-              <p>P. O. Box YK 534 Kanda - Accra Ghana</p>
+              <p>P. O. Box YK 534 Bono - Sunyani Ghana</p>
               <p className="flex items-center mt-2">
                 <FaPhoneAlt className="mr-2" />
-                233206883274
+                233207781224
               </p>
               <p className="flex items-center mt-2">
                 <FaEnvelope className="mr-2" />
-                sales@tropicalpartsg.com
+                admin@drape.com
               </p>
             </div>
 
@@ -172,7 +172,7 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="text-center text-gray-500 mt-10">
             <hr className="mb-4" />
-            <p>&copy; TPSL, All Rights Reserved. <br /> Designed by <a href="#" className="text-red-500">Nathan Kulewoshie</a></p>
+            <p>&copy; Drape, All Rights Reserved. <br /> Designed by <a href="#" className="text-red-500">Nathan Kulewoshie</a></p>
           </div>
         </div>
       </div>
