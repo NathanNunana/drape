@@ -59,13 +59,14 @@ const Technicians: React.FC = () => {
           </p>
         </div>
 
+
         {/* Team Section */}
         <div className="bg-blue-50">
-          <div className="container mx-auto flex flex-wrap-mx-4 justify-center py-20 px-8 lg:px-48">
+          <div className="container mx-auto flex flex-wrap justify-start py-20 px-8 lg:px-48">
             {technicians.map((tech) => (
               <div
                 key={tech.id}
-                className="w-full lg:w-1/4 md:w-1/2 p-4 wow fadeInUp"
+                className="w-full sm:w-1/2 lg:w-1/4 p-4 wow fadeInUp"
               >
                 <div className="bg-white text-center rounded-sm shadow-sm">
                   <img
@@ -81,9 +82,10 @@ const Technicians: React.FC = () => {
               </div>
             ))}
           </div>
+
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

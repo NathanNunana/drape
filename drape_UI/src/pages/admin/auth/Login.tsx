@@ -71,14 +71,14 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded"
+            className="w-full px-4 py-2 text-white bg-red-500 rounded"
           >
             {authStatus === "loading" ? "Loading..." : "Login"}
           </button>
         </form>
         <p className="text-center">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-500">
+          <Link to="/register" className="text-red-500">
             Register
           </Link>
         </p>

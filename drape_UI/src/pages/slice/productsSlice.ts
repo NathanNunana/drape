@@ -7,6 +7,7 @@ export interface Product {
   image?: File | string;
   base_type: string;
   color: string;
+  category: string;
   description: string;
   product_type: number | null;
   warranty_duration: number | null;
