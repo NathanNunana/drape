@@ -43,7 +43,7 @@ const Products: React.FC = () => {
         {categories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 mx-2 rounded-full ${selectedCategory === category ? "bg-primary text-white" : "bg-white"}`}
+            className={`px-4 py-2 mx-2 rounded-full ${selectedCategory === category ? "bg-red-500 text-white" : "bg-white"}`}
             onClick={() => setSelectedCategory(category)}
           >
             {category}

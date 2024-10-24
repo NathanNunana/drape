@@ -1,149 +1,182 @@
 import React from "react";
 import {
-  FaMapMarkerAlt,
   FaPhoneAlt,
   FaEnvelope,
   FaTwitter,
   FaFacebookF,
-  FaYoutube,
+  FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
-    <div
-      className="relative bg-cover bg-center text-white py-10"
-      style={{
-        backgroundImage: `url('/assets/images/footer.jpg')`,
-      }}
-    >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+    <footer className="">
 
-      <div className="relative container mx-auto py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center md:text-left">
-          {/* Address Section */}
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold mb-4">Address</h4>
-            <p className="flex items-center justify-center md:justify-start">
-              <FaMapMarkerAlt className="mr-3" />
-              123 Street, New York, USA
-            </p>
-            <p className="flex items-center justify-center md:justify-start">
-              <FaPhoneAlt className="mr-3" />
-              +012 345 67890
-            </p>
-            <p className="flex items-center justify-center md:justify-start">
-              <FaEnvelope className="mr-3" />
-              info@example.com
-            </p>
-            {/* Social Media Links */}
-            <div className="flex justify-center md:justify-start space-x-4 pt-2">
-              <a
-                className="p-2 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-colors"
-                href="#"
-              >
-                <FaTwitter />
-              </a>
-              <a
-                className="p-2 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-colors"
-                href="#"
-              >
-                <FaFacebookF />
-              </a>
-              <a
-                className="p-2 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-colors"
-                href="#"
-              >
-                <FaYoutube />
-              </a>
-              <a
-                className="p-2 bg-white text-dark rounded-full hover:bg-primary hover:text-white transition-colors"
-                href="#"
-              >
-                <FaLinkedinIn />
-              </a>
+      {/* Newsletter Section */}
+      <div className="text-center py-28 bg-blue-50">
+        <h3 className="text-2xl font-semibold mb-4">Join Our Newsletter</h3>
+        <p className="mb-5 text-md">Join Our news letters today</p>
+        <div className="max-w-md mx-auto relative">
+          <input
+            type="email"
+            className="w-full py-2 px-4 text-gray-700 border rounded-md"
+            placeholder="enter email"
+          />
+          <button className="absolute top-0 bottom-0 right-0 mt-0 mb-0 px-6 py-2 bg-red-500 text-white rounded-r-md">
+            Subscribe
+          </button>
+        </div>
+      </div>
+      <div className="bg-gray-50 py-10">
+        <div className="container mx-auto text-gray-700 px-32">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
+            {/* TPSL Section */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">TPSL</h4>
+              <p>P. O. Box YK 534 Kanda - Accra Ghana</p>
+              <p className="flex items-center mt-2">
+                <FaPhoneAlt className="mr-2" />
+                233206883274
+              </p>
+              <p className="flex items-center mt-2">
+                <FaEnvelope className="mr-2" />
+                sales@tropicalpartsg.com
+              </p>
+            </div>
+
+            {/* Useful Links Section */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Useful Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Our Team
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Take a Survey
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Our Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Our Services
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Customer Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Job Opening
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Service Packages
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Products
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Products Section */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Products</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    RS 30DT Automatic Transmission Cleaning Machine
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    RS A7 CCD Wheel Alignment Machine
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    RS 250E Two Post Electric Car Lift
+                  </a>
+                </li>
+              </ul>
+              <h4 className="text-lg font-semibold mt-6 mb-4">Services</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Top Mounting Replacement
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Ball Joint Replacement
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-red-500">
+                    Steering Rack Replacement
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Social Networks Section */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Our Social Networks</h4>
+              <p>Find us on our social media Platforms</p>
+              <div className="flex space-x-4 mt-4">
+                <a
+                  href="#"
+                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <FaTwitter />
+                </a>
+                <a
+                  href="#"
+                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <FaFacebookF />
+                </a>
+                <a
+                  href="#"
+                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <FaInstagram />
+                </a>
+                <a
+                  href="#"
+                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <FaLinkedinIn />
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Opening Hours */}
-          <div className="space-y-2">
-            <h4 className="text-xl font-semibold mb-4">Opening Hours</h4>
-            <h6>Monday - Friday:</h6>
-            <p>09:00 AM - 09:00 PM</p>
-            <h6>Saturday - Sunday:</h6>
-            <p>09:00 AM - 12:00 PM</p>
-          </div>
-
-          {/* Services Section */}
-          <div className="space-y-2">
-            <h4 className="text-xl font-semibold mb-4">Services</h4>
-            <a className="block hover:underline mb-2" href="#">
-              Diagnostic Test
-            </a>
-            <a className="block hover:underline mb-2" href="#">
-              Engine Servicing
-            </a>
-            <a className="block hover:underline mb-2" href="#">
-              Tires Replacement
-            </a>
-            <a className="block hover:underline mb-2" href="#">
-              Oil Changing
-            </a>
-            <a className="block hover:underline" href="#">
-              Vacuum Cleaning
-            </a>
-          </div>
-
-          {/* Newsletter Section */}
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold mb-4">Newsletter</h4>
-            <p className="mb-4">
-              Stay updated with our latest news and offers.
-            </p>
-            <div className="relative max-w-xs mx-auto md:mx-0">
-              <input
-                className="form-control border-0 w-full py-3 px-4 text-gray-700 placeholder-gray-500"
-                type="email"
-                placeholder="Your email"
-              />
-              <button
-                type="button"
-                className="absolute top-0 bottom-0 right-0 mt-0 px-4 py-2 bg-primary text-white"
-              >
-                SignUp
-              </button>
-            </div>
+          {/* Footer Bottom Section */}
+          <div className="text-center text-gray-500 mt-10">
+            <hr className="mb-4" />
+            <p>&copy; TPSL, All Rights Reserved. <br /> Designed by <a href="#" className="text-red-500">Nathan Kulewoshie</a></p>
           </div>
         </div>
       </div>
-
-      {/* Bottom Section */}
-      <div className="relative container mx-auto py-4">
-        <hr className="border-gray-600 mb-4" />
-        <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-          <div className="mb-3 md:mb-0">
-            &copy;{" "}
-            <a className="border-b hover:text-primary" href="#">
-              Your Site Name
-            </a>
-            , All Rights Reserved.
-            <br />
-            Designed by{" "}
-            <a className="border-b hover:text-primary" href="https://htmlcodex.com">
-              Nathan & Sebastian
-            </a>
-          </div>
-          <div>
-            <div className="flex justify-center md:justify-end space-x-4">
-              <a className="hover:text-primary" href="#">Home</a>
-              <a className="hover:text-primary" href="#">Cookies</a>
-              <a className="hover:text-primary" href="#">Help</a>
-              <a className="hover:text-primary" href="#">FQAs</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </footer>
   );
 };
 

@@ -4,10 +4,9 @@ import {
   ServiceSection,
   About,
   Fact,
-  Service,
-  Booking,
-  Technician,
-  Testimonial,
+  // Service,
+  // Booking,
+  // Testimonial,
 } from "../../components";
 
 const Home: React.FC = () => {
@@ -17,10 +16,9 @@ const Home: React.FC = () => {
       <ServiceSection />
       <About />
       <Fact />
-      <Service />
-      <Booking />
-      <Technician />
-      <Testimonial />
+      {/* <Service /> */}
+      {/* <Booking /> */}
+      {/* <Testimonial /> */}
     </>
   );
 };

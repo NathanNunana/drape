@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaArrowRight, FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 
 const Navbar: React.FC = () => {
@@ -10,161 +10,54 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="flex items-center justify-between">
-        <Link
-          to="/"
-          className="pl-10 flex items-center text-blue-500 text-xl font-semibold"
-        >
-          <i className="fas fa-car mr-3"></i>
-          <span className="py-5 lg:py-0">Drape</span>
+    <nav className="bg-white shadow-sm sticky top-0 z-50 py-5">
+      <div className="flex items-center justify-between container mx-auto px-8 lg:px-32">
+        <Link to="/" className="text-red-600 text-2xl font-extrabold">
+          <img src="/logo.png" alt="Logo" className="h-12" />
         </Link>
 
         {/* Hamburger Menu Icon for mobile */}
         <div className="lg:hidden">
-          <button onClick={toggleMenu} className="pr-10">
-            {isMenuOpen ? (
-              <FaTimes className="text-2xl text-blue-500" />
-            ) : (
-              <FaBars className="text-2xl text-blue-500" />
-            )}
+          <button onClick={toggleMenu} className="text-2xl text-red-600">
+            {isMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center justify-between space-x-8">
-          <NavLink
-            to="/home"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-500 font-medium text-lg"
-                : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-            }
-          >
-            HOME
-          </NavLink>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-500 font-medium text-lg"
-                : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-            }
-          >
-            ABOUT
-          </NavLink>
-          <NavLink
-            to="/products"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-500 font-medium text-lg"
-                : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-            }
-          >
-            PRODUCTS
-          </NavLink>
-          <NavLink
-            to="/services"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-500 font-medium text-lg"
-                : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-            }
-          >
-            SERVICES
-          </NavLink>
-          <NavLink
-            to="/contact-us"
-            className={({ isActive }) =>
-              isActive
-                ? "text-blue-500 font-medium text-lg"
-                : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-            }
-          >
-            CONTACT
-          </NavLink>
-
-          <Link
-            to="/quote"
-            className="py-5 font-semibold flex items-center gap-1 bg-blue-500 text-white px-4 hover:bg-blue-600"
-          >
-            GET A QUOTE
-            <FaArrowRight />
-          </Link>
+        <div className="hidden lg:flex space-x-8 items-center">
+          {['Home', 'Our Services', 'Products', 'Our Team', 'Service Packages', 'About Us', 'Contact'].map((item, index) => (
+            <NavLink
+              key={index}
+              to={`/${item.replace(/\s+/g, '-').toLowerCase()}`}
+              className={({ isActive }) =>
+                isActive
+                  ? "text-red-600 font-normal text-sm border-b-2 border-red-600 tracking-wide"
+                  : "text-gray-800 hover:text-red-600 font-normal text-sm tracking-wide"
+              }
+            >
+              {item}
+            </NavLink>
+          ))}
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden absolute top-16 left-0 right-0 bg-white shadow-lg">
-            <ul className="flex flex-col items-center py-5 space-y-4">
-              <NavLink
-                to="/home"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-500 font-medium text-lg"
-                    : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-                }
-                onClick={toggleMenu}
-              >
-                HOME
-              </NavLink>
-              <NavLink
-                to="/about"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-500 font-medium text-lg"
-                    : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-                }
-                onClick={toggleMenu}
-              >
-                ABOUT
-              </NavLink>
-              <NavLink
-                to="/products"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-500 font-medium text-lg"
-                    : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-                }
-                onClick={toggleMenu}
-              >
-                PRODUCTS
-              </NavLink>
-              <NavLink
-                to="/services"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-500 font-medium text-lg"
-                    : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-                }
-                onClick={toggleMenu}
-              >
-                SERVICES
-              </NavLink>
-              <NavLink
-                to="/contact-us"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-blue-500 font-medium text-lg"
-                    : "text-gray-700 hover:text-blue-500 font-medium text-lg"
-                }
-                onClick={toggleMenu}
-              >
-                CONTACT
-              </NavLink>
-              {/**/}
-              {/* <Link */}
-              {/*   to="/quote" */}
-              {/*   className="py-2 font-semibold flex items-center gap-1 bg-blue-500 text-white px-4 hover:bg-blue-600" */}
-              {/*   onClick={toggleMenu} */}
-              {/* > */}
-              {/*   GET A QUOTE */}
-              {/*   <FaArrowRight /> */}
-              {/* </Link> */}
-            </ul>
-          </div>
-        )}
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="lg:hidden bg-white shadow-md p-5">
+          <ul className="flex flex-col items-center space-y-4">
+            {['Home', 'Our Services', 'Products', 'Blog', 'Our Team', 'Service Packages', 'About Us', 'Contact'].map((item, index) => (
+              <NavLink
+                key={index}
+                to={`/${item.replace(/\s+/g, '-').toLowerCase()}`}
+                className="text-gray-800 hover:text-red-600 font-semibold text-lg tracking-wide"
+                onClick={toggleMenu}
+              >
+                {item}
+              </NavLink>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

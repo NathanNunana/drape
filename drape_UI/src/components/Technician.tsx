@@ -1,80 +1,84 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const technicians = [
   {
+    id: 4,
+    name: "Maxwell Anyison Kwasi",
+    designation: "Brake Lathe Operator",
+    image: "/assets/images/team-4.jpg",
+  },
+  {
     id: 1,
-    name: "Full Name",
-    designation: "Designation",
+    name: "Anita Ameworwor",
+    designation: "Administrative Officer",
     image: "/assets/images/team-1.jpg",
-    delay: "0.1s",
   },
   {
     id: 2,
-    name: "Full Name",
-    designation: "Designation",
+    name: "Emmanuel Kusi",
+    designation: "Automobile Mechanic",
     image: "/assets/images/team-2.jpg",
-    delay: "0.3s",
   },
   {
     id: 3,
-    name: "Full Name",
-    designation: "Designation",
+    name: "Shadrack Kwame Appoh",
+    designation: "Automobile Electrician",
     image: "/assets/images/team-3.jpg",
-    delay: "0.5s",
   },
   {
     id: 4,
-    name: "Full Name",
-    designation: "Designation",
+    name: "Maxwell Anyison Kwasi",
+    designation: "Brake Lathe Operator",
     image: "/assets/images/team-4.jpg",
-    delay: "0.7s",
   },
+
 ];
 
 const Technicians: React.FC = () => {
   return (
-    <div className="container-xxl py-5">
-      <div className="container mx-auto">
-        <div className="text-center mb-5">
-          <h6 className="text-primary text-lg font-semibold uppercase mb-2">
-            Our Technicians
-          </h6>
-          <h1 className="text-3xl lg:text-4xl font-bold mb-6">
-            Our Expert Technicians
-          </h1>
+    <div className="">
+      <div className="">
+        {/* Breadcrumb */}
+        <div className="text-left mb-5 text-gray-500 bg-gray-50 px-8 lg:px-48 py-5">
+          <p className="text-sm">
+            <span className="text-red-500">Home</span> / Our Technical Team
+          </p>
         </div>
-        <div className="flex flex-wrap -mx-4">
-          {technicians.map((tech) => (
-            <div
-              key={tech.id}
-              className={`w-full lg:w-1/4 md:w-1/2 p-4 wow fadeInUp`}
-              style={{ animationDelay: tech.delay }}
-            >
-              <div className="relative overflow-hidden bg-white shadow-sm">
-                <img
-                  src={tech.image}
-                  alt={tech.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <a href="#" className="text-white mx-1">
-                    <FaFacebookF size={20} />
-                  </a>
-                  <a href="#" className="text-white mx-1">
-                    <FaTwitter size={20} />
-                  </a>
-                  <a href="#" className="text-white mx-1">
-                    <FaInstagram size={20} />
-                  </a>
-                </div>
-                <div className="bg-white text-center p-4">
-                  <h5 className="font-bold mb-1">{tech.name}</h5>
-                  <small>{tech.designation}</small>
+        {/* Header */}
+        <div className="text-left mb-5 px-8 lg:px-48">
+          <h6 className="text-red-500 text-3xl font-semibold mb-6">
+            <span className="text-gray-700">Our Technical</span> Team
+          </h6>
+          <p className="text-md font-light mb-4">
+            We dedicate a lot of time and effort in ensuring that the people who
+            join our team are dedicated and well motivated. We hire experienced
+            people with the relevant qualifications to ensure that they deliver
+            to meet the expectations of our stakeholders especially customers.
+          </p>
+        </div>
+
+        {/* Team Section */}
+        <div className="bg-blue-50">
+          <div className="flex flex-wrap-mx-4 justify-center py-20 px-8 lg:px-48">
+            {technicians.map((tech) => (
+              <div
+                key={tech.id}
+                className="w-full lg:w-1/4 md:w-1/2 p-4 wow fadeInUp"
+              >
+                <div className="bg-white text-center rounded-sm shadow-sm">
+                  <img
+                    src={tech.image}
+                    alt={tech.name}
+                    className="w-full h-48 object-cover rounded-t-sm"
+                  />
+                  <div className="p-4">
+                    <h5 className="font-bold mb-1">{tech.name}</h5>
+                    <p className="text-red-500">{tech.designation}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -82,3 +86,4 @@ const Technicians: React.FC = () => {
 };
 
 export default Technicians;
+
