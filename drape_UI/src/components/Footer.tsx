@@ -173,7 +173,7 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="text-center text-gray-500 mt-10">
             <hr className="mb-4" />
-            <p>&copy; Drape, All Rights Reserved. <br /> Designed by <a href="#" className="text-primary">Nathan Kulewoshie</a></p>
+            <p>&copy; Drape, All Rights Reserved. <br /> Developed by <a href="https://www.linkedin.com/in/nathan-kulewoshie-9084b2192/" className="text-primary underline">Nathan Kulewoshie</a> & <a className="text-primary underline" href="https://www.linkedin.com/in/yeng-sebastian-26a9b520b/">Sebastian Yeng</a></p>
           </div>
         </div>
       </div>
