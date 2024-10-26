@@ -98,9 +98,9 @@ const Products: React.FC = () => {
             <div className="relative inline-block text-left">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="px-4 py-2 ml-4 bg-white border border-gray-300 rounded-lg shadow-sm"
+                className="px-4 py-2 ml-4 bg-white border border-gray-300 rounded-lg shadow-sm flex gap-1"
               >
-                Filter Categories
+                Filter <span className="hidden lg:block">Categories</span>
               </button>
 
               {isDropdownOpen && (

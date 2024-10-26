@@ -45,9 +45,18 @@ const Services: React.FC = () => {
         <div className="container mx-auto py-4">
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-rows-1 lg:grid-rows-1 gap-6">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+            {services && services.length > 0 ?
+              services.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              )) : (
+                <div className="flex items-center justify-center w-full h-full">
+                  <div className="flex flex-col items-center">
+                    <img src="assets/images/notfound.png" alt="No Item" className="mb-4" />
+                    <p className="text-gray-700 font-semibold text-center">No services available.</p>
+                  </div>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
