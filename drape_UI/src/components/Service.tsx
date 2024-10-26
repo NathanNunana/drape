@@ -25,7 +25,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service }) => {
       </div>
 
       {/* Service Details on the Right */}
-      <div className="flex-grow border border-gray-100 p-5">
+      <div className="flex-grow border border-gray-100 p-0 lg:p-5">
         {/* Title */}
         <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
 
