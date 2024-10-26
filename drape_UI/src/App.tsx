@@ -12,11 +12,12 @@ import { Login, Register, ActivateAccount, Dashboard } from "./pages/admin";
 import { Main } from "./pages/website";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoutes";
+import { TopLoader } from "./components/Loaders";
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <Suspense fallback="Loading....">
+      <Suspense fallback={TopLoader()}>
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />

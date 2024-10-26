@@ -108,12 +108,12 @@ const Footer: React.FC = () => {
                 </li>
                 <li>
                   <a href="#" className="hover:text-secondary">
-                    RS A7 CCD Wheel Alignment Machine
+                    RS A7 CCD Power Alignment Machine
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:text-secondary">
-                    RS 250E Two Post Electric Car Lift
+                    RS 250E Two Post Electric Generator Lift
                   </a>
                 </li>
               </ul>
@@ -131,7 +131,7 @@ const Footer: React.FC = () => {
                 </li>
                 <li>
                   <a href="#" className="hover:text-secondary">
-                    Steering Rack Replacement
+                    Power Rack Replacement
                   </a>
                 </li>
               </ul>
