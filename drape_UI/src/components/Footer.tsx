@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     <footer className="">
 
       {/* Newsletter Section */}
-      <div className="text-center py-28 bg-blue-50">
+      <div className="text-center py-28 px-8 lg:px-0 bg-blue-50">
         <h3 className="text-2xl font-semibold mb-4">Join Our Newsletter</h3>
         <p className="mb-5 text-md">Join Our news letters today</p>
         <div className="max-w-md mx-auto relative">
@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
             className="w-full py-2 px-4 text-gray-700 border rounded-md"
             placeholder="enter email"
           />
-          <button className="absolute top-0 bottom-0 right-0 mt-0 mb-0 px-6 py-2 bg-red-500 text-white rounded-r-md">
+          <button className="absolute top-0 bottom-0 right-0 mt-0 mb-0 px-6 py-2 bg-primary text-white rounded-r-md">
             Subscribe
           </button>
         </div>
@@ -49,47 +49,48 @@ const Footer: React.FC = () => {
               <h4 className="text-lg font-semibold mb-4">Useful Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Our Team
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Take a Survey
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Our Blog
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Our Services
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Customer Service
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Job Opening
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Service Packages
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary
+                    ">
                     Products
                   </a>
                 </li>
@@ -101,17 +102,17 @@ const Footer: React.FC = () => {
               <h4 className="text-lg font-semibold mb-4">Products</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     RS 30DT Automatic Transmission Cleaning Machine
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     RS A7 CCD Wheel Alignment Machine
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     RS 250E Two Post Electric Car Lift
                   </a>
                 </li>
@@ -119,17 +120,17 @@ const Footer: React.FC = () => {
               <h4 className="text-lg font-semibold mt-6 mb-4">Services</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Top Mounting Replacement
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Ball Joint Replacement
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-red-500">
+                  <a href="#" className="hover:text-secondary">
                     Steering Rack Replacement
                   </a>
                 </li>
@@ -143,25 +144,25 @@ const Footer: React.FC = () => {
               <div className="flex space-x-4 mt-4">
                 <a
                   href="#"
-                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                  className="bg-primary text-white p-3 rounded-full hover:bg-secondary transition-colors"
                 >
                   <FaTwitter />
                 </a>
                 <a
                   href="#"
-                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                  className="bg-primary text-white p-3 rounded-full hover:bg-secondary transition-colors"
                 >
                   <FaFacebookF />
                 </a>
                 <a
                   href="#"
-                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                  className="bg-primary text-white p-3 rounded-full hover:bg-secondary transition-colors"
                 >
                   <FaInstagram />
                 </a>
                 <a
                   href="#"
-                  className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition-colors"
+                  className="bg-primary text-white p-3 rounded-full hover:bg-secondary transition-colors"
                 >
                   <FaLinkedinIn />
                 </a>
@@ -172,7 +173,7 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="text-center text-gray-500 mt-10">
             <hr className="mb-4" />
-            <p>&copy; Drape, All Rights Reserved. <br /> Designed by <a href="#" className="text-red-500">Nathan Kulewoshie</a></p>
+            <p>&copy; Drape, All Rights Reserved. <br /> Designed by <a href="#" className="text-primary">Nathan Kulewoshie</a></p>
           </div>
         </div>
       </div>

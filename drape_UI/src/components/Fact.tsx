@@ -5,25 +5,25 @@ import CountUp from "react-countup";
 const Fact: React.FC = () => {
   const facts = [
     {
-      icon: <FaSmile className="text-red-500 mb-3" size={40} />,
+      icon: <FaSmile className="text-secondary mb-3" size={40} />,
       count: 5543,
       description: "Happy Clients",
       delay: "0.1s",
     },
     {
-      icon: <FaBriefcase className="text-red-500 mb-3" size={40} />,
+      icon: <FaBriefcase className="text-secondary mb-3" size={40} />,
       count: 10939,
       description: "Projects",
       delay: "0.3s",
     },
     {
-      icon: <FaClock className="text-red-500 mb-3" size={40} />,
+      icon: <FaClock className="text-secondary mb-3" size={40} />,
       count: 45.2,
       description: "Hours of Support",
       delay: "0.5s",
     },
     {
-      icon: <FaUsers className="text-red-500 mb-3" size={40} />,
+      icon: <FaUsers className="text-secondary mb-3" size={40} />,
       count: 26,
       description: "Hard Workers",
       delay: "0.7s",

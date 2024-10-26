@@ -44,7 +44,7 @@ const ContactUs: React.FC = () => {
       <div className="bg-gray-50">
         <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / Contact Us
+            <span className="text-primary">Home</span> / Contact Us
           </p>
         </div>
 
@@ -52,26 +52,26 @@ const ContactUs: React.FC = () => {
       <div className="bg-white">
 
         <div className="container mx-auto px-8 lg:px-48 mb-5">
-          <h1 className="text-3xl font-bold mb-6 text-center text-red-500">Contact Us</h1>
+          <h1 className="text-3xl font-bold mb-6 text-center text-secondary">Contact Us</h1>
           <p className="text-center text-gray-600 mb-8">Feel free to contact us</p>
 
           {/* Contact Info Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white p-6 shadow-sm text-center border border-gray-50">
-              <FaMapMarkerAlt className="text-red-500 text-3xl mx-auto mb-4" />
+              <FaMapMarkerAlt className="text-secondary text-3xl mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Our Address</h2>
               <p className="text-gray-700">Dabi 7, 1 Bono Street, GW-14565-3212, Sunyani Ghana</p>
             </div>
 
             <div className="bg-white p-6 shadow-sm text-center border border-gray-50">
-              <FaEnvelope className="text-red-500 text-3xl mx-auto mb-4" />
+              <FaEnvelope className="text-secondary text-3xl mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Email Us</h2>
               <p className="text-gray-700">sales@drape.com</p>
               <p className="text-gray-700">info@drape.com</p>
             </div>
 
             <div className="bg-white p-6 shadow-sm text-center border border-gray-50">
-              <FaPhone className="text-red-500 text-3xl mx-auto mb-4" />
+              <FaPhone className="text-secondary text-3xl mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Call Us</h2>
               <p className="text-gray-700">+233302438011</p>
               <p className="text-gray-700">+233206883274</p>
@@ -150,7 +150,7 @@ const ContactUs: React.FC = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 transition w-full"
+                  className="bg-primary text-white px-4 py-2 rounded-md shadow-md hover:bg-secondary transition w-full"
                 >
                   Send Message
                 </button>

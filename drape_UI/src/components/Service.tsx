@@ -10,7 +10,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service }) => {
   return (
     <motion.div
       key={service.id}
-      className="p-6 bg-white flex items-start gap-10"
+      className="p-6 bg-white flex items-start gap-10 flex-col lg:flex-row"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
@@ -39,7 +39,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service }) => {
           {service.operations.split(',').map((operation, index) => (
             <button
               key={index}
-              className="border border-red-500 text-red-500 py-1 px-3 rounded-full text-xs hover:bg-red-500 hover:text-white transition-colors"
+              className="border border-primary text-primary py-1 px-3 rounded-full text-xs hover:bg-secondary hover:text-white transition-colors"
             >
               {operation.trim()}
             </button>
@@ -49,7 +49,7 @@ const ServiceCard: React.FC<ServiceProps> = ({ service }) => {
         {/* View Details Button */}
         <a
           href="#"
-          className="inline-block text-red-500 border border-red-500 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
+          className="inline-block text-primary border border-primary rounded-lg px-4 py-2 text-sm font-semibold hover:bg-secondary hover:text-white transition-colors"
         >
           View Details
         </a>

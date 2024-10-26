@@ -124,14 +124,14 @@ const Register: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded"
+            className="w-full px-4 py-2 text-white bg-primary rounded"
           >
             {authStatus === "loading" ? "Loading..." : "Register"}
           </button>
         </form>
         <p className="text-center">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-500">
+          <Link to="/login" className="text-primary">
             Login
           </Link>
         </p>

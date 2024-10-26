@@ -25,14 +25,14 @@ const Services: React.FC = () => {
       <div className="bg-gray-50">
         <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / Our Services
+            <span className="text-primary">Home</span> / Our Services
           </p>
         </div>
       </div>
       <div className="container mx-auto px-8 lg:px-48">
         {/* Service Heading */}
         <motion.h2
-          className="text-3xl mb-6 text-left font-semibold text-red-500"
+          className="text-3xl mb-6 text-left font-semibold text-primary"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

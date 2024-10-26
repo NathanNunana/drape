@@ -66,7 +66,7 @@ const Products: React.FC = () => {
       <div className="bg-gray-50">
         <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / Our Products
+            <span className="text-primary">Home</span> / Our Products
           </p>
         </div>
       </div>
@@ -74,7 +74,7 @@ const Products: React.FC = () => {
       <div>
         <div className="container mx-auto p-4 flex-grow px-8 lg:px-48">
           <motion.h1
-            className="text-3xl mb-6 text-left font-semibold text-red-500"
+            className="text-3xl mb-6 text-left font-semibold text-primary"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -93,7 +93,7 @@ const Products: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
-  
+
             {/* Filter Dropdown */}
             <div className="relative inline-block text-left">
               <button
@@ -151,7 +151,7 @@ const Products: React.FC = () => {
               <button
                 key={page + 1}
                 onClick={() => handlePageChange(page + 1)}
-                className={`px-4 py-2 rounded-md ${currentPage === page + 1 ? "bg-red-500 text-white" : "bg-white border border-gray-300"}`}
+                className={`px-4 py-2 rounded-md ${currentPage === page + 1 ? "bg-primary text-white" : "bg-white border border-gray-300"}`}
               >
                 {page + 1}
               </button>

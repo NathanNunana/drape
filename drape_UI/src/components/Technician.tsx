@@ -40,7 +40,7 @@ const Technicians: React.FC = () => {
       <div className="bg-gray-50">
         <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / Our Team
+            <span className="text-primary">Home</span> / Our Team
           </p>
         </div>
       </div>
@@ -48,7 +48,7 @@ const Technicians: React.FC = () => {
 
         {/* Header */}
         <div className="mx-auto container text-left mb-5 px-8 lg:px-48">
-          <h6 className="text-red-500 text-3xl font-semibold mb-6">
+          <h6 className="text-primary text-3xl font-semibold mb-6">
             <span className="text-gray-700">Our Technical</span> Team
           </h6>
           <p className="text-md font-light mb-4">
@@ -76,7 +76,7 @@ const Technicians: React.FC = () => {
                   />
                   <div className="p-4">
                     <h5 className="font-bold mb-1">{tech.name}</h5>
-                    <p className="text-red-500">{tech.designation}</p>
+                    <p className="text-secondary">{tech.designation}</p>
                   </div>
                 </div>
               </div>

@@ -24,6 +24,19 @@ export const client = axios.create({
   },
 });
 
+client.interceptors.response.use(
+  (response) => {
+    console.log(response.status)
+    if (response.status === 401) {
+      localStorage.clear();
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
 client.interceptors.request.use(
   (config) => {
     const state: RootState = store.getState();
@@ -39,14 +52,3 @@ client.interceptors.request.use(
   },
 );
 
-client.interceptors.response.use(
-  (response) => {
-    if (response.status === 401) {
-      localStorage.clear();
-    }
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)

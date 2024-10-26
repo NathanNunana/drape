@@ -20,7 +20,7 @@ const ProductDetails: React.FC = () => {
       <div className="bg-gray-50">
         <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
           <p className="text-sm">
-            <span className="text-red-500">Home</span> / <span className="text-gray-800"> Product </span> / {product.name}
+            <span className="text-primary">Home</span> / <span className="text-gray-800"> Product </span> / {product.name}
           </p>
         </div>
       </div>
@@ -48,7 +48,7 @@ const ProductDetails: React.FC = () => {
         {/* Tabs */}
         <div className="border-b border-gray-200 mb-8">
           <ul className="flex">
-            <li className={`mr-6 ${activeTab === "description" ? "border-b-4 border-red-500" : ""}`}>
+            <li className={`mr-6 ${activeTab === "description" ? "border-b-4 border-primary" : ""}`}>
               <button
                 className="py-2 px-4 text-xl font-semibold"
                 onClick={() => handleTabClick("description")}
@@ -56,7 +56,7 @@ const ProductDetails: React.FC = () => {
                 Description
               </button>
             </li>
-            <li className={`mr-6 ${activeTab === "specifications" ? "border-b-4 border-red-500" : ""}`}>
+            <li className={`mr-6 ${activeTab === "specifications" ? "border-b-4 border-primary" : ""}`}>
               <button
                 className="py-2 px-4 text-xl font-semibold"
                 onClick={() => handleTabClick("specifications")}
@@ -114,7 +114,7 @@ const ProductDetails: React.FC = () => {
             <h2 className="text-2xl font-semibold mb-4">Specifications</h2>
             <div className="flex justify-between">
               {/* <p>{product.specifications.pdfDescription || 'No PDF Description available.'}</p> */}
-              <button className="inline-flex items-center py-2 px-4 bg-red-500 text-white rounded-lg">
+              <button className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg">
                 Download
               </button>
             </div>
