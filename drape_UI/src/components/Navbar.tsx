@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
     <nav className="bg-white shadow-sm sticky top-0 z-50 py-5">
       <div className="flex items-center justify-between container mx-auto px-8 lg:px-48">
         <Link to="/" className="text-primary text-2xl font-extrabold">
-          <img src="/logo.png" alt="Logo" className="h-12" />
+          <img src="assets/images/logo.jpeg" alt="Logo" className="h-12" />
         </Link>
 
         {/* Hamburger Menu Icon for mobile */}
