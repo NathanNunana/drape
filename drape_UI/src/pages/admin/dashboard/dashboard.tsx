@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Routes, NavLink, Navigate } from "react-router-dom";
+import { Route, Routes, NavLink, Navigate, useNavigate } from "react-router-dom";
 import ManageAboutUs from "./ManageAboutUs";
 import ManageAddress from "./ManageAddress";
 import ManageAnalytics from "./ManageAnalytics";
@@ -13,7 +13,7 @@ import {
   FaUserFriends,
   FaFileAlt,
   FaCalendarAlt,
-  FaUserCircle,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 // Define type for expanded menu state
@@ -37,6 +37,13 @@ const Dashboard: React.FC = () => {
     }));
   };
 
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.clear();
+    navigate("/login")
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Top Navigation */}
@@ -45,7 +52,7 @@ const Dashboard: React.FC = () => {
           <p>Drape Dashboard</p>
         </div>
         <div className="flex items-center space-x-4">
-          <FaUserCircle className="cursor-pointer hover:text-gray-200" />
+          <FaSignOutAlt className="cursor-pointer hover:text-gray-200" onClick={logout} />
         </div>
       </header>
 

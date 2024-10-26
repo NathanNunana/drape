@@ -114,7 +114,7 @@ const ManageProducts: React.FC = () => {
             ...currentSpecifications,
             [section]: {
               ...currentSection,
-              [name]: value, // update the property directly in the specified section
+              [name]: value,
             },
           },
         };
@@ -142,7 +142,8 @@ const ManageProducts: React.FC = () => {
     e.preventDefault();
     try {
       if (isEditing && "id" in currentProduct) {
-        await dispatch(updateProduct(currentProduct)).unwrap();
+        const { image: _, ...currentProductWithoutImage } = currentProduct
+        await dispatch(updateProduct((typeof currentProduct.image === "string") ? currentProductWithoutImage : currentProduct)).unwrap();
         toast.success("Product updated successfully");
       } else {
         await dispatch(createProduct(currentProduct)).unwrap();
@@ -442,31 +443,31 @@ const ManageProducts: React.FC = () => {
                 </button>
               ) : (
                 <button type="submit" className="w-full text-sm p-2 bg-secondary text-white rounded-md">
-                  Save
+                  {isEditing ? "Save Changes" : "Save"}
                 </button>
               )}
             </div>
           </form>
         </Modal>
-
-        <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}>
-          {viewProduct && (
-            <div>
-              <h2 className="text-sm font-bold mb-4">{viewProduct.name}</h2>
-              <div className="mb-4">
-                <img
-                  src={viewProduct.image ? viewProduct.image.toString() : ""}
-                  alt={`${viewProduct.name} Image`}
-                  className="w-full h-48 object-cover mb-2 rounded-md"
-                />
-              </div>
-              <p><strong>Model Number:</strong> {viewProduct.specifications?.basic_generator_parameters.model_number}</p>
-              <p><strong>Base Type:</strong> {viewProduct?.base_type}</p>
-              <p><strong>Color:</strong> {viewProduct?.color}</p>
-              <p><strong>Description:</strong> {viewProduct?.description}</p>
-            </div>
-          )}
-        </Modal>
+        {/**/}
+        {/* <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}> */}
+        {/*   {viewProduct && ( */}
+        {/*     <div> */}
+        {/*       <h2 className="text-sm font-bold mb-4">{viewProduct.name}</h2> */}
+        {/*       <div className="mb-4"> */}
+        {/*         <img */}
+        {/*           src={viewProduct.image ? viewProduct.image.toString() : ""} */}
+        {/*           alt={`${viewProduct.name} Image`} */}
+        {/*           className="w-full h-48 object-cover mb-2 rounded-md" */}
+        {/*         /> */}
+        {/*       </div> */}
+        {/*       <p><strong>Model Number:</strong> {viewProduct.specifications?.basic_generator_parameters.model_number}</p> */}
+        {/*       <p><strong>Base Type:</strong> {viewProduct?.base_type}</p> */}
+        {/*       <p><strong>Color:</strong> {viewProduct?.color}</p> */}
+        {/*       <p><strong>Description:</strong> {viewProduct?.description}</p> */}
+        {/*     </div> */}
+        {/*   )} */}
+        {/* </Modal> */}
 
         <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}>
           {viewProduct && (

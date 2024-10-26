@@ -26,7 +26,6 @@ export const client = axios.create({
 
 client.interceptors.response.use(
   (response) => {
-    console.log(response.status)
     if (response.status === 401) {
       localStorage.clear();
     }

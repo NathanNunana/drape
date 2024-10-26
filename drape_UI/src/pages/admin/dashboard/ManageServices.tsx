@@ -54,7 +54,8 @@ const ManageServices: React.FC = () => {
     const servicePayload = { ...currentService } as Service;
 
     if (isEditing && "id" in currentService) {
-      dispatch(updateService(servicePayload))
+      const { image: _, ...servicePayloadWithoutImage } = currentService;
+      dispatch(updateService((typeof currentService.image === "string") ? servicePayloadWithoutImage : currentService))
         .unwrap()
         .then(() => {
           toast.success("Service updated successfully!");
