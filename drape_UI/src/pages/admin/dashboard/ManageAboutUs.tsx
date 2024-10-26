@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../drape/store"; // Adjust the import path as needed
+import { AppDispatch, RootState } from "../../../drape/store";
 import {
   fetchAboutUs,
   createAboutUs,
   updateAboutUs,
-} from "../../slice/aboutUsSlice"; // Adjust the import path as needed
+} from "../../slice/aboutUsSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageAboutUs: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +33,7 @@ const ManageAboutUs: React.FC = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setImage(e.target.files[0]);
-      setImagePreview(URL.createObjectURL(e.target.files[0])); // Update image preview
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
     }
   };
 
@@ -42,7 +42,7 @@ const ManageAboutUs: React.FC = () => {
     e.preventDefault();
 
     const aboutUsData = {
-      id: aboutUs.id || 0,  // Assuming 0 is used as a placeholder for new entries
+      id: aboutUs.id || 0,
       motto: motto,
       company_description: companyDescription,
       image: image || undefined,
@@ -50,10 +50,10 @@ const ManageAboutUs: React.FC = () => {
 
     try {
       if (aboutUs.id) {
-        await dispatch(updateAboutUs(aboutUsData));  // Pass the object with correct types
+        await dispatch(updateAboutUs(aboutUsData));
         toast.success("About Us updated successfully!");
       } else {
-        await dispatch(createAboutUs(aboutUsData));  // Pass the object with correct types
+        await dispatch(createAboutUs(aboutUsData));
         toast.success("About Us created successfully!");
       }
     } catch (error) {
@@ -65,14 +65,14 @@ const ManageAboutUs: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="About Us Management" />
+      {/* <DashboardHeader title="About Us Management" /> */}
       <div className="container mx-auto p-6">
         <ToastContainer />
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="container grid grid-cols-1 lg:grid-cols-1 gap-6">
             {/* Motto Field */}
             <div>
-              <label htmlFor="motto" className="block text-gray-700 text-lg font-semibold">
+              <label htmlFor="motto" className="block text-sm font-medium text-gray-700">
                 Motto
               </label>
               <input
@@ -86,7 +86,7 @@ const ManageAboutUs: React.FC = () => {
 
             {/* Company Description Field */}
             <div>
-              <label htmlFor="companyDescription" className="block text-gray-700 text-lg font-semibold">
+              <label htmlFor="companyDescription" className="block text-sm font-medium text-gray-700">
                 Company Description
               </label>
               <textarea
@@ -101,7 +101,7 @@ const ManageAboutUs: React.FC = () => {
 
           {/* Image Upload Field */}
           <div>
-            <label htmlFor="image" className="block text-gray-700 text-lg font-semibold">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
               Image (Optional)
             </label>
             <input
@@ -124,7 +124,7 @@ const ManageAboutUs: React.FC = () => {
 
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-3 w-full lg:w-1/2 rounded-md mt-6 hover:bg-blue-700 transition duration-300"
+            className="bg-primary text-white px-6 py-3 w-full rounded-md mt-6 hover:bg-secondary transition duration-300"
           >
             Save
           </button>

@@ -12,7 +12,7 @@ import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductsTable from "../../../components/ProductTable";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageProducts: React.FC = () => {
   const initialProductState = {
@@ -21,6 +21,7 @@ const ManageProducts: React.FC = () => {
     image: "",
     base_type: "",
     color: "",
+    category: "",
     description: "",
     product_type: null,
     warranty_duration: null,
@@ -113,7 +114,7 @@ const ManageProducts: React.FC = () => {
             ...currentSpecifications,
             [section]: {
               ...currentSection,
-              [name]: value, // update the property directly in the specified section
+              [name]: value,
             },
           },
         };
@@ -141,7 +142,8 @@ const ManageProducts: React.FC = () => {
     e.preventDefault();
     try {
       if (isEditing && "id" in currentProduct) {
-        await dispatch(updateProduct(currentProduct)).unwrap();
+        const { image: _, ...currentProductWithoutImage } = currentProduct
+        await dispatch(updateProduct((typeof currentProduct.image === "string") ? currentProductWithoutImage : currentProduct)).unwrap();
         toast.success("Product updated successfully");
       } else {
         await dispatch(createProduct(currentProduct)).unwrap();
@@ -407,7 +409,7 @@ const ManageProducts: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="Products Management" />
+      {/* <DashboardHeader title="Products Management" /> */}
       <div className="p-4">
         <ToastContainer />
         <button
@@ -415,7 +417,7 @@ const ManageProducts: React.FC = () => {
             resetForm();
             setIsModalOpen(true);
           }}
-          className="mb-4 p-2 bg-blue-600 text-white rounded-md"
+          className="mb-4 p-2 bg-primary text-sm text-white rounded-md hover:bg-secondary"
         >
           Add Product
         </button>
@@ -426,7 +428,7 @@ const ManageProducts: React.FC = () => {
           onView={handleView}
         />
         <Modal isOpen={isModalOpen} onClose={resetForm}>
-          <h2 className="text-lg font-bold mb-4">{isEditing ? "Edit Product" : "Add Product"}</h2>
+          <h2 className="text-sm font-bold mb-4">{isEditing ? "Edit Product" : "Add Product"}</h2>
           <form onSubmit={handleSubmit}>
             {stages[currentStage].content}
             <div className="flex w-full gap-2 justify-between mt-4">
@@ -436,36 +438,36 @@ const ManageProducts: React.FC = () => {
                 </button>
               )}
               {currentStage < stages.length - 1 ? (
-                <button type="button" onClick={nextStage} className="w-full p-2 bg-blue-600 text-white rounded-md">
+                <button type="button" onClick={nextStage} className="w-full text-sm p-2 bg-primary text-white rounded-md">
                   Next
                 </button>
               ) : (
-                <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded-md">
-                  Save
+                <button type="submit" className="w-full text-sm p-2 bg-secondary text-white rounded-md">
+                  {isEditing ? "Save Changes" : "Save"}
                 </button>
               )}
             </div>
           </form>
         </Modal>
-
-        <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}>
-          {viewProduct && (
-            <div>
-              <h2 className="text-lg font-bold mb-4">{viewProduct.name}</h2>
-              <div className="mb-4">
-                <img
-                  src={viewProduct.image ? viewProduct.image.toString() : ""}
-                  alt={`${viewProduct.name} Image`}
-                  className="w-full h-48 object-cover mb-2 rounded-md"
-                />
-              </div>
-              <p><strong>Model Number:</strong> {viewProduct.specifications?.basic_generator_parameters.model_number}</p>
-              <p><strong>Base Type:</strong> {viewProduct?.base_type}</p>
-              <p><strong>Color:</strong> {viewProduct?.color}</p>
-              <p><strong>Description:</strong> {viewProduct?.description}</p>
-            </div>
-          )}
-        </Modal>
+        {/**/}
+        {/* <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}> */}
+        {/*   {viewProduct && ( */}
+        {/*     <div> */}
+        {/*       <h2 className="text-sm font-bold mb-4">{viewProduct.name}</h2> */}
+        {/*       <div className="mb-4"> */}
+        {/*         <img */}
+        {/*           src={viewProduct.image ? viewProduct.image.toString() : ""} */}
+        {/*           alt={`${viewProduct.name} Image`} */}
+        {/*           className="w-full h-48 object-cover mb-2 rounded-md" */}
+        {/*         /> */}
+        {/*       </div> */}
+        {/*       <p><strong>Model Number:</strong> {viewProduct.specifications?.basic_generator_parameters.model_number}</p> */}
+        {/*       <p><strong>Base Type:</strong> {viewProduct?.base_type}</p> */}
+        {/*       <p><strong>Color:</strong> {viewProduct?.color}</p> */}
+        {/*       <p><strong>Description:</strong> {viewProduct?.description}</p> */}
+        {/*     </div> */}
+        {/*   )} */}
+        {/* </Modal> */}
 
         <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}>
           {viewProduct && (

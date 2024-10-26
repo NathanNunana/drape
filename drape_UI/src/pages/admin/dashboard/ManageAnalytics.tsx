@@ -10,7 +10,7 @@ import {
 import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageAnalytics: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -90,7 +90,7 @@ const ManageAnalytics: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="Analytics Management" />
+      {/* <DashboardHeader title="Analytics Management" /> */}
       <div className="container mx-auto p-4">
         {status === "loading" && <p>Loading...</p>}
         <button
@@ -99,7 +99,7 @@ const ManageAnalytics: React.FC = () => {
             setCurrentAnalytic({ name: "", value: "" });
             setIsModalOpen(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+          className="bg-primary text-sm text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition mb-4"
         >
           Add Analytic
         </button>
@@ -131,13 +131,13 @@ const ManageAnalytics: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleEditAnalytic(analytic)}
-                        className="bg-yellow-500 text-white px-4 py-2 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                        className="bg-yellow-500 text-sm text-white px-4 py-2 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleRemoveAnalytic(analytic.id)}
-                        className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:bg-red-600 transition"
+                        className="bg-red-500 text-sm text-white px-4 py-2 rounded shadow-md hover:bg-red-600 transition"
                       >
                         Remove
                       </button>
@@ -186,10 +186,10 @@ const ManageAnalytics: React.FC = () => {
               type="submit"
               className={`${editingAnalytic
                 ? "bg-yellow-500 hover:bg-yellow-600"
-                : "bg-blue-500 hover:bg-blue-600"
-                } text-white px-4 py-2 rounded-md shadow-md transition`}
+                : "bg-primary hover:bg-secondary"
+                } text-white text-sm px-4 py-2 w-full rounded-md shadow-md transition`}
             >
-              {editingAnalytic ? "Save Edit" : "Upload Analytic"}
+              {editingAnalytic ? "Save Changes" : "Add"}
             </button>
           </form>
         </Modal>

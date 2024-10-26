@@ -21,22 +21,46 @@ const Services: React.FC = () => {
   }, [status, error]);
 
   return (
-    <div className="container mx-auto p-4">
-      <motion.h1
-        className="text-3xl font-bold mb-6 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        OUR SERVICES
-      </motion.h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {services.map((service) => (
-          <ServiceCard service={service} />
-        ))}
+    <div>
+      <div className="bg-gray-50">
+        <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
+          <p className="text-sm">
+            <span className="text-primary">Home</span> / Our Services
+          </p>
+        </div>
       </div>
-    </div>
-  );
+      <div className="container mx-auto px-8 lg:px-48">
+        {/* Service Heading */}
+        <motion.h2
+          className="text-3xl mb-6 text-left font-semibold text-primary"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="text-gray-700">Our</span> Services
+        </motion.h2>
+        <p className="text-gray-600 mb-8">
+          Whether it's routine preventive maintenance or urgent corrective service, Drape is fully equipped with modern tools and technology to ensure your generator stays in optimal condition. Our skilled technicians bring years of experience to the table, adhering to industry best practices to deliver top-notch generator maintenance services. We perform thorough inspections, including oil and filter changes, cooling system checks, and battery testing, ensuring your generator remains reliable and efficient. Trust Drape to keep your power supply running smoothly, minimizing downtime and extending the lifespan of your equipment.
+        </p>
+        <div className="container mx-auto py-4">
+          {/* Service Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-rows-1 lg:grid-rows-1 gap-6">
+            {services && services.length > 0 ?
+              services.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              )) : (
+                <div className="flex items-center justify-center w-full h-full">
+                  <div className="flex flex-col items-center">
+                    <img src="assets/images/notfound.png" alt="No Item" className="mb-4" />
+                    <p className="text-gray-700 font-semibold text-center">No services available.</p>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </div>);
 };
 
 export default Services;

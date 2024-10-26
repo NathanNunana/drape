@@ -16,7 +16,7 @@ import {
 import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageOpeningHours: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -131,7 +131,7 @@ const ManageOpeningHours: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="Opening Hours Management" />
+      {/* <DashboardHeader title="Opening Hours Management" /> */}
       <div className="p-4">
         <ToastContainer />
         <button
@@ -140,7 +140,7 @@ const ManageOpeningHours: React.FC = () => {
             setIsEditingOpeningHour(false);
             setIsOpenHourModalOpen(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+          className="bg-primary text-sm text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition mb-2"
         >
           Add Opening Hour
         </button>
@@ -173,13 +173,13 @@ const ManageOpeningHours: React.FC = () => {
                   </td>
                   <td className="py-4 px-4">
                     <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      className="bg-yellow-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                       onClick={() => handleEditOpeningHour(openingHour)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      className="bg-red-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
                       onClick={() => handleDeleteOpeningHour(openingHour.id)}
                     >
                       Delete
@@ -191,14 +191,14 @@ const ManageOpeningHours: React.FC = () => {
           </table>
         </div>
 
-        <h2 className="text-2xl font-bold mb-4">Manage Types</h2>
+        <h2 className="text-xl font-semibold mb-4">Manage Types</h2>
         <button
           onClick={() => {
             setCurrentType({ id: 0, name: "" });
             setIsEditingType(false);
             setIsTypeModalOpen(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition mb-4"
+          className="bg-primary text-sm text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition mb-4"
         >
           Add Type
         </button>
@@ -223,13 +223,13 @@ const ManageOpeningHours: React.FC = () => {
                   <td className="py-4 px-4 text-gray-800">{type.name}</td>
                   <td className="py-4 px-4">
                     <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      className="bg-yellow-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                       onClick={() => handleEditType(type)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      className="bg-red-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
                       onClick={() => handleDeleteType(type.id)}
                     >
                       Delete
@@ -278,17 +278,17 @@ const ManageOpeningHours: React.FC = () => {
                 ))}
               </select>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end w-full">
               <button
                 type="button"
                 onClick={closeOpeningHourModal}
-                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+                className="bg-gray-500 text-sm w-full text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+                className="bg-primary text-sm w-full text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition"
               >
                 {isEditingOpeningHour ? "Update" : "Add"}
               </button>
@@ -320,13 +320,13 @@ const ManageOpeningHours: React.FC = () => {
               <button
                 type="button"
                 onClick={closeTypeModal}
-                className="bg-gray-500 text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
+                className="bg-gray-500 text-sm w-full text-white px-4 py-2 rounded shadow-md hover:bg-gray-600 transition mr-2"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+                className="bg-primary text-sm w-full text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
               >
                 {isEditingType ? "Update" : "Add"}
               </button>
