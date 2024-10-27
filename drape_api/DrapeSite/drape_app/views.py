@@ -3,12 +3,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService)
+                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter)
 from drape_app.permissions import IsSuperAdminOrReadOnly
 from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, 
                         ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
                         AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer,
-                        BookForServiceSerializer)
+                        BookForServiceSerializer, NewsletterSerializer, 
+                        AdminPostNewsLetterSerializer,
+                        )
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -94,3 +96,12 @@ class BookForServiceViewSet(viewsets.ModelViewSet):
 
         return response
 
+# news letter view
+class NewsletterViewSet(viewsets.ModelViewSet):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsletterSerializer
+
+# post news letter to all subscribers
+class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
+    queryset = AdminPostNewsLetter.objects.all()
+    serializer_class = AdminPostNewsLetterSerializer

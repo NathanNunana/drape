@@ -179,6 +179,7 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=255, blank=True)
     email = models.EmailField()
     message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.your_name} - {self.subject}'
@@ -189,6 +190,31 @@ class Newsletter(models.Model):
 
     def __str__(self):
         return self.email
+
+class Attachment(models.Model):
+    """
+    Model to store individual file attachments for newsletter posts.
+    """
+    file = models.ImageField(upload_to='attachments/')
+
+    def __str__(self):
+        return self.file.name
+
+
+class AdminPostNewsLetter(models.Model):
+    """
+    Model to represent a newsletter post created by the admin.
+    Allows multiple attachments per post.
+    """
+    subject = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    news_content = models.TextField()
+    attachments = models.ManyToManyField(Attachment, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject
+
 
 class Schedule(models.Model):
     SERVICE_CHOICES = [
@@ -205,6 +231,7 @@ class Schedule(models.Model):
     start_date = models.DateTimeField()
     due_date = models.DateTimeField()
     message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Schedule for {self.user.email} - {self.product.name}"
@@ -223,7 +250,9 @@ class BookForService(models.Model):
     service_date = models.DateTimeField()
     special_request = models.TextField(blank=True)  # Allow blank requests
     is_confirmed = models.BooleanField(default=False)  # To track admin confirmation
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
     def __str__(self):
         return f"Book for Service - {self.your_name} - {self.service_date}"
 

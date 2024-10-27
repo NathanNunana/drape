@@ -4,7 +4,7 @@ from drape_app.views import (AddressViewSet, OpeningHoursTypeViewSet, OpeningHou
                             ServiceTypeViewSet, ServiceViewSet, AboutUsViewSet, 
                             ProductViewSet, PriceViewSet, ProductTypeViewSet, 
                             AnalyticsViewSet, ContactUsViewSet, ScheduleViewSet,
-                            BookForServiceViewSet)
+                            BookForServiceViewSet, NewsletterViewSet, AdminPostNewsLetterViewSet)
 
 router = DefaultRouter()
 router.register(r'addresses', AddressViewSet)
@@ -20,6 +20,8 @@ router.register(r'analytics', AnalyticsViewSet)
 router.register(r'contact-us', ContactUsViewSet)
 router.register(r'schedules', ScheduleViewSet, basename='schedule')
 router.register(r'book-for-service', BookForServiceViewSet)
+router.register(r'news-letter', NewsletterViewSet)
+router.register(r'admin-post-news-letter', AdminPostNewsLetterViewSet)
 
 
 urlpatterns = [

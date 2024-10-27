@@ -3,10 +3,15 @@ from django.core.exceptions import ValidationError
 import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService, Newsletter, 
+                            ContactUs, Schedule, BookForService, Newsletter, Attachment, AdminPostNewsLetter,
                             TechnicalTeamMember)
-from drape_app.utils import send_email
+from drape_app.utils import send_email, send_newsletter_email
 from django.template.loader import render_to_string
+from django.core.validators import validate_email
+import logging
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 
 
@@ -295,4 +300,74 @@ class BookForServiceSerializer(serializers.ModelSerializer):
         send_email(subject, text_content, html_content, [instance.email_address])
 
         return instance
+    
+    
+# news letter serializers
+class NewsletterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for creating and managing newsletter subscriptions.
+    Sends a confirmation email upon successful subscription if the email address is valid.
+    """
+    
+    class Meta:
+        model = Newsletter
+        fields = ['email']
 
+    def create(self, validated_data):
+        """
+        Create a new Newsletter subscription instance and send a confirmation email
+        only if the email address is valid.
+        """
+        email = validated_data.get('email')
+        
+        # Validate the email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            logger.warning(f"Invalid email format for subscription: {email}")
+            return Newsletter.objects.create(email=email)
+
+        # Save the subscription instance
+        subscription = Newsletter.objects.create(email=email)
+
+        # Prepare the email content
+        subject = "Welcome to the Drapes Newsletter!"
+        text_content = (
+            "Thank you for subscribing to Drapes' newsletter! "
+            "You'll receive updates on new products, exclusive promotions, and special offers."
+        )
+        
+        # Render the HTML content from a template
+        html_content = render_to_string('emails/newsletter_subscription.html', {'email': subscription.email})
+
+        # Send the confirmation email
+        send_email(subject, text_content, html_content, [subscription.email])
+
+        # Return the newly created subscription instance
+        return subscription
+
+
+class AdminPostNewsLetterSerializer(serializers.ModelSerializer):
+    attachments = serializers.ListField(
+        child=serializers.ImageField(allow_empty_file=True, use_url=True), write_only=True, required=False
+    )
+
+    class Meta:
+        model = AdminPostNewsLetter
+        fields = ['subject', 'title', 'news_content', 'attachments']
+
+    def create(self, validated_data):
+        # Retrieve attachment data
+        attachments_data = validated_data.pop('attachments', [])
+
+        # Create the AdminPostNewsLetter instance
+        post = AdminPostNewsLetter.objects.create(**validated_data)
+
+        # Save each attachment
+        for attachment in attachments_data:
+            attached_file = Attachment.objects.create(file=attachment)
+            post.attachments.add(attached_file)
+        
+        # Send email notifications to all subscribers
+        send_newsletter_email(post)
+        return post
