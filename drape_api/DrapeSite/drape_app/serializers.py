@@ -96,7 +96,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     specifications = serializers.SerializerMethodField()
-    # product_type = ProductTypeSerializer()
     class Meta:
         model = Product
         fields = [
@@ -348,26 +347,13 @@ class NewsletterSerializer(serializers.ModelSerializer):
 
 
 class AdminPostNewsLetterSerializer(serializers.ModelSerializer):
-    attachments = serializers.ListField(
-        child=serializers.ImageField(allow_empty_file=True, use_url=True), write_only=True, required=False
-    )
-
     class Meta:
         model = AdminPostNewsLetter
         fields = ['subject', 'title', 'news_content', 'attachments']
 
-    def create(self, validated_data):
-        # Retrieve attachment data
-        attachments_data = validated_data.pop('attachments', [])
 
-        # Create the AdminPostNewsLetter instance
-        post = AdminPostNewsLetter.objects.create(**validated_data)
-
-        # Save each attachment
-        for attachment in attachments_data:
-            attached_file = Attachment.objects.create(file=attachment)
-            post.attachments.add(attached_file)
-        
-        # Send email notifications to all subscribers
-        send_newsletter_email(post)
-        return post
+# Team members serializers
+class TechnicalTeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalTeamMember
+        fields = '__all__'

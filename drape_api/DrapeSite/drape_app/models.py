@@ -87,8 +87,8 @@ class Price(models.Model):
         return f"{self.product.name} - {self.price} as of {self.effective_date}"
 
 class ProductType(models.Model):
-    RENTAL = 'rental'
-    SALE = 'sale'
+    RENTAL = 'Rental'
+    SALE = 'Sale'
     
     PRODUCT_TYPE_CHOICES = [
         (RENTAL, 'Rental'),
@@ -195,7 +195,7 @@ class Attachment(models.Model):
     """
     Model to store individual file attachments for newsletter posts.
     """
-    file = models.ImageField(upload_to='attachments/')
+    file = models.ImageField(upload_to='attachments/', blank=True, null=True)
 
     def __str__(self):
         return self.file.name

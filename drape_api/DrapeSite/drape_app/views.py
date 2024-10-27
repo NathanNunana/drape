@@ -3,13 +3,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter)
+                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter,
+                            TechnicalTeamMember)
 from drape_app.permissions import IsSuperAdminOrReadOnly
 from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, 
                         ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
                         AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer,
                         BookForServiceSerializer, NewsletterSerializer, 
-                        AdminPostNewsLetterSerializer,
+                        AdminPostNewsLetterSerializer, TechnicalTeamMemberSerializer,
                         )
 
 class AddressViewSet(viewsets.ModelViewSet):
@@ -101,7 +102,13 @@ class NewsletterViewSet(viewsets.ModelViewSet):
     queryset = Newsletter.objects.all()
     serializer_class = NewsletterSerializer
 
-# post news letter to all subscribers
+# ViewSet to send newsletter to subscribers
 class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
     queryset = AdminPostNewsLetter.objects.all()
     serializer_class = AdminPostNewsLetterSerializer
+    
+# Technical Team members viewset
+class TechnicalTeamMemberViewSet(viewsets.ModelViewSet):
+    queryset = TechnicalTeamMember.objects.all()
+    serializer_class = TechnicalTeamMemberSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
