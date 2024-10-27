@@ -6,6 +6,7 @@ import {
   FaFacebookF,
   FaInstagram,
   FaLinkedinIn,
+  FaMailchimp,
 } from "react-icons/fa";
 
 const Footer: React.FC = () => {
@@ -32,7 +33,7 @@ const Footer: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
             {/* TPSL Section */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">TPSL</h4>
+              <h4 className="text-lg font-semibold mb-4">Drape</h4>
               <p>P. O. Box YK 534 Bono - Sunyani Ghana</p>
               <p className="flex items-center mt-2">
                 <FaPhoneAlt className="mr-2" />
@@ -41,6 +42,10 @@ const Footer: React.FC = () => {
               <p className="flex items-center mt-2">
                 <FaEnvelope className="mr-2" />
                 admin@drape.com
+              </p>
+              <p className="flex items-center mt-2 hover:text-primary">
+                <FaMailchimp className="mr-2" />
+                <a href="https://gator4416.hostgator.com:2096/" target="_blank">hostgator</a>
               </p>
             </div>
 
@@ -173,7 +178,9 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="text-center text-gray-500 mt-10">
             <hr className="mb-4" />
-            <p>&copy; Drape, All Rights Reserved. <br /> Developed by <a href="https://www.linkedin.com/in/nathan-kulewoshie-9084b2192/" className="text-primary underline">Nathan Kulewoshie</a> & <a className="text-primary underline" href="https://www.linkedin.com/in/yeng-sebastian-26a9b520b/">Sebastian Yeng</a></p>
+            <p>&copy; Drape, All Rights Reserved. <br /> Developed by {" "}
+              <a href="https://www.linkedin.com/in/nathan-kulewoshie-9084b2192/" target="_blank" className="text-primary underline">Nathan Kulewoshie</a> & {" "}
+              <a className="text-primary underline" href="https://www.linkedin.com/in/yeng-sebastian-26a9b520b/" target="_blank">Sebastian Yeng</a></p>
           </div>
         </div>
       </div>
