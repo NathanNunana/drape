@@ -81,9 +81,9 @@ const ContactUs: React.FC = () => {
           {/* Contact Form and Map */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Google Map Embed */}
-            <div className="bg-white p-6 shadow-sm border border-gray-50">
+            <div className="bg-white p-4 lg:p-5 shadow-sm border border-gray-50">
               <h2 className="text-xl font-semibold mb-4">Our Location</h2>
-              <div className="w-full h-4/5 overflow-hidden rounded-lg shadow-md">
+              <div className="w-full h-5/6 overflow-hidden rounded-lg shadow-md">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.565002883352!2d-122.4064172846819!3d37.78593487975747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808de80bb8d1%3A0x5d2f3e26cf60a923!2sSalesforce%20Tower!5e0!3m2!1sen!2sus!4v1597661152777!5m2!1sen!2sus"
                   width="100%"
@@ -97,7 +97,7 @@ const ContactUs: React.FC = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="bg-white p-6 shadow-sm border border-gray-50">
+            <div className="bg-white p-4 lg:p-5 shadow-sm border border-gray-50">
               <h2 className="text-xl font-semibold mb-4">Send us a message</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
