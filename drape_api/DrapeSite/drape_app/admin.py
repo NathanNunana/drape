@@ -7,8 +7,8 @@ from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceTy
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('street_name', 'digital_address', 'city', 'country', 'email')
-    search_fields = ('street_name', 'digital_address', 'city', 'country', 'email')
+    list_display = ('street_name', 'digital_address', 'city', 'country', 'email', 'mobile')
+    search_fields = ('street_name', 'digital_address', 'city', 'country', 'email', 'mobile')
 
 @admin.register(OpeningHoursType)
 class OpeningHoursTypeAdmin(admin.ModelAdmin):

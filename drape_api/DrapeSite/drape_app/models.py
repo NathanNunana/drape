@@ -11,6 +11,10 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     email = models.EmailField()
+    mobile = models.CharField(max_length=20)
+    telephone = models.CharField(max_length=20)
+    location = models.CharField(max_length=255)
+    
 
     def __str__(self):
         return f'{self.street_name}, {self.city}, {self.country}'
@@ -63,11 +67,23 @@ class AboutUs(models.Model):
     image = models.ImageField(upload_to='about_us_images/', blank=True, null=True)
     motto = models.CharField(max_length=255)
     company_description = models.TextField()
+    about_us = models.CharField(max_length=255)
+    our_vision = models.CharField(max_length=255) 
+    our_mission = models.CharField(max_length=255) 
+    our_commitment = models.CharField(max_length=255)
 
     def __str__(self):
         return self.motto
 
+# Our technical team members
+class TechnicalTeamMember(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='technical_team_images/', blank=True, null=True)
+    position = models.CharField(max_length=255)
+    bio = models.TextField()
 
+    def __str__(self):
+        return self.name
 
 # Price model
 class Price(models.Model):
@@ -160,6 +176,7 @@ class Product(models.Model):
 class Analytics(models.Model):
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -173,6 +190,13 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return f'{self.your_name} - {self.subject}'
+
+# News letter
+class Newsletter(models.Model):
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.email
 
 class Schedule(models.Model):
     SERVICE_CHOICES = [
