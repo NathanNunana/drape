@@ -66,11 +66,11 @@ class Service(models.Model):
 class AboutUs(models.Model):
     image = models.ImageField(upload_to='about_us_images/', blank=True, null=True)
     motto = models.CharField(max_length=255)
-    company_description = models.TextField()
-    about_us = models.CharField(max_length=255)
-    our_vision = models.CharField(max_length=255) 
-    our_mission = models.CharField(max_length=255) 
-    our_commitment = models.CharField(max_length=255)
+    company_description = models.TextField(blank=True, null=True)
+    about_us = models.TextField(blank=True, null=True)
+    our_vision = models.TextField(blank=True, null=True) 
+    our_mission = models.TextField(blank=True, null=True) 
+    our_commitment = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.motto
@@ -80,7 +80,7 @@ class TechnicalTeamMember(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='technical_team_images/', blank=True, null=True)
     position = models.CharField(max_length=255)
-    bio = models.TextField()
+    bio = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name

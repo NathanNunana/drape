@@ -3,7 +3,8 @@ from django.core.exceptions import ValidationError
 import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService)
+                            ContactUs, Schedule, BookForService, Newsletter, 
+                            TechnicalTeamMember)
 from drape_app.utils import send_email
 from django.template.loader import render_to_string
 
@@ -88,15 +89,18 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
         return value
 
-
+class ProductTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductType
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     specifications = serializers.SerializerMethodField()
-
+    # product_type = ProductTypeSerializer()
     class Meta:
         model = Product
         fields = [
-            'name', 'image', 'base_type', 'color', 'description', 
+            'id', 'name', 'image', 'base_type', 'color', 'description', 
             'product_type', 'warranty_duration', 
             # basic_generator_parameters
             'model_number', 'diesel_oil_type', 'output_power',
@@ -222,10 +226,6 @@ class PriceSerializer(serializers.ModelSerializer):
         model = Price
         fields = '__all__'
 
-class ProductTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductType
-        fields = '__all__'
 
 class AnalyticsSerializer(serializers.ModelSerializer):
     class Meta:
