@@ -1,32 +1,39 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Topbar, Navbar, Footer } from "../../components";
+import { TopLoader } from "../../components/Loaders";
 
 // lazy loading components
-const Home = lazy(() => import("../website/Home"));
-const Services = lazy(() => import("../website/Services"));
-const Products = lazy(() => import("../website/Products"));
-const ProductDetails = lazy(() => import("../website/ProductDetails"));
-const About = lazy(() => import("../website/About"));
-const ContactUs = lazy(() => import("../website/Contact"));
+const Home = lazy(() => import("./Home"));
+const Services = lazy(() => import("./Services"));
+const Products = lazy(() => import("./Products"));
+const ProductDetails = lazy(() => import("./ProductDetails"));
+const About = lazy(() => import("./About"));
+const ContactUs = lazy(() => import("./Contact"));
+const Team = lazy(() => import("./Team"));
+const ServicePackages = lazy(() => import("./ServicePackages"))
 
 function Main() {
   return (
-    <div className="bg-gray-100 flex flex-col min-h-screen">
+    <div className="bg-white flex flex-col min-h-screen">
       <Topbar />
       <Navbar />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-        </Routes>
-      </Suspense>
+      <main>
+        <Suspense fallback={TopLoader()}>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/our-services" element={<Services />} />
+            <Route path="/our-team" element={<Team />} />
+            <Route path="/service-packages" element={<ServicePackages />} />
+            <Route path="/about-us" element={<About />} />
+            <Route path="/contact" element={<ContactUs />} />
+          </Routes>
+        </Suspense >
+      </main>
       <Footer />
-    </div>
+    </div >
   );
 }
 

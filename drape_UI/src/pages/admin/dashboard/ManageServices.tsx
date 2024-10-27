@@ -12,7 +12,7 @@ import { fetchServiceTypes } from "../../slice/servicesTypesSlice";
 import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageServices: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +54,8 @@ const ManageServices: React.FC = () => {
     const servicePayload = { ...currentService } as Service;
 
     if (isEditing && "id" in currentService) {
-      dispatch(updateService(servicePayload))
+      const { image: _, ...servicePayloadWithoutImage } = currentService;
+      dispatch(updateService((typeof currentService.image === "string") ? servicePayloadWithoutImage : currentService))
         .unwrap()
         .then(() => {
           toast.success("Service updated successfully!");
@@ -100,14 +101,14 @@ const ManageServices: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="Services Management" />
+      {/* <DashboardHeader title="Services Management" /> */}
       <div className="p-4">
         <button
           onClick={() => {
             setIsEditing(false);
             setIsModalOpen(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+          className="bg-primary text-sm text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition"
         >
           Add Service
         </button>
@@ -159,13 +160,13 @@ const ManageServices: React.FC = () => {
                   </td>
                   <td className="py-4 px-4">
                     <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      className="bg-yellow-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                       onClick={() => handleEdit(service)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      className="bg-red-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
                       onClick={() => handleDelete(service.id)}
                     >
                       Delete
@@ -175,7 +176,8 @@ const ManageServices: React.FC = () => {
               ))}
             </tbody>
           </table>
-        </div>      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        </div>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <h2 className="text-xl font-bold mb-4">
             {isEditing ? "Edit Service" : "Add Service"}
           </h2>
@@ -240,14 +242,14 @@ const ManageServices: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
+              className={`bg-primary text-sm text-white px-4 py-2 rounded-md shadow-md hover:bg-secondary w-full transition ${isEditing ? "bg-yellow-500 hover:bg-yellow-600" : ""}`}
             >
-              {isEditing ? "Update Service" : "Add Service"}
+              {isEditing ? "Save Changes" : "Add Service"}
             </button>
           </form>
         </Modal>
         <ToastContainer />
-      </div>
+      </div >
     </>
   );
 };

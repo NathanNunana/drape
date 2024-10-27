@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaAngleLeft, FaAngleRight, FaArrowRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const Carousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -7,41 +7,32 @@ const Carousel: React.FC = () => {
   const slides = [
     {
       image: "/assets/images/carousel-bg1.jpeg",
-      imageIcon: "/assets/images/generator-1.png",
-      heading: "Quality Generators",
-      text: "Generators",
-      buttonLabel: "Learn More",
+      heading: "Generator Diagnostic Tools",
+      text: "Best Tools for Every Generator",
+      buttonLabel: "Explore",
       buttonLink: "#",
-      imgAlt: "Image 1",
     },
     {
       image: "/assets/images/carousel-bg2.jpeg",
-      heading: "Qualified Generator Service Center",
-      imageIcon: "/assets/images/generator-2.png",
-      text: "Generators",
-      buttonLabel: "Learn More",
+      heading: "High-Quality Generator Parts",
+      text: "We Supply Premium Parts",
+      buttonLabel: "Shop Now",
       buttonLink: "#",
-      imgAlt: "Image 2",
     },
     {
       image: "/assets/images/carousel-bg3.jpeg",
-      heading: "Qualified Generator Service Center",
-      imageIcon: "/assets/images/generator-1.png",
-      text: "Generators",
-      buttonLabel: "Learn More",
+      heading: "High-Quality Generators",
+      text: "We Supply High Quality Generators",
+      buttonLabel: "Shop Now",
       buttonLink: "#",
-      imgAlt: "Image 2",
     },
     {
       image: "/assets/images/carousel-bg4.jpeg",
-      heading: "Qualified Generator Service Center",
-      imageIcon: "/assets/images/generator-2.png",
-      text: "Generators",
-      buttonLabel: "Learn More",
+      heading: "High-Quality Generators",
+      text: "We Supply High Quality Generators",
+      buttonLabel: "Shop Now",
       buttonLink: "#",
-      imgAlt: "Image 2",
     },
-
   ];
 
   const goToNextSlide = () => {
@@ -50,7 +41,7 @@ const Carousel: React.FC = () => {
 
   const goToPrevSlide = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + slides.length) % slides.length,
+      (prevIndex) => (prevIndex - 1 + slides.length) % slides.length
     );
   };
 
@@ -71,35 +62,15 @@ const Carousel: React.FC = () => {
             <img
               className="w-full h-full object-cover"
               src={slide.image}
-              alt={slide.imgAlt}
+              alt={slide.heading}
             />
-            <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
               <div className="container mx-auto px-4">
-                <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between space-y-6 lg:space-y-0">
-                  {/* Text Content */}
-                  <div className="lg:w-1/2 text-center lg:text-left px-4">
-                    {/* Reduce text size for smaller screens */}
-                    <h6 className="text-white text-sm sm:text-base uppercase mb-1 lg:mb-2">
-                      {slide.text}
-                    </h6>
-                    <h1 className="text-white py-2 mb-3 text-2xl sm:text-3xl lg:text-5xl font-extrabold">
-                      {slide.heading}
-                    </h1>
-                    <button className="bg-blue-500 text-white font-semibold items-center mx-auto lg:mx-0 py-2 px-4 flex text-sm sm:text-base lg:text-lg hover:bg-blue-600">
-                      {slide.buttonLabel}{" "}
-                      <i className="ml-2">
-                        <FaArrowRight />
-                      </i>
-                    </button>
-                  </div>
-                  {/* Image Icon */}
-                  <div className="w-1/2 sm:w-1/3 lg:w-1/3">
-                    <img
-                      src={slide.imageIcon}
-                      alt="Icon Image"
-                      className="mx-auto lg:mx-0"
-                    />
-                  </div>
+                <div className="flex flex-col items-center text-center space-y-6">
+                  <h1 className="text-white text-4xl lg:text-6xl font-extrabold mb-2">
+                    {slide.heading}
+                  </h1>
+                  <p className="text-white text-lg font-medium">{slide.text}</p>
                 </div>
               </div>
             </div>

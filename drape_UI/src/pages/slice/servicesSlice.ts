@@ -6,6 +6,7 @@ export interface Service {
   id: number;
   title: string;
   description: string;
+  category?: string;
   operations: string;
   image?: File | string | null;
   service_type: number;

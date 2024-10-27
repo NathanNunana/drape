@@ -22,11 +22,11 @@ const ProductsTable: React.FC<TableProp> = ({ products, onEdit, onDelete, onView
 
   return (
     <table className="min-w-full bg-white border border-gray-300">
-      <thead>
+      <thead className='bg-gray-100 border-b border-gray-200'>
         <tr>
-          <th className="border border-gray-300 px-4 py-2">Name</th>
-          <th className="border border-gray-300 px-4 py-2">Model Number</th>
-          <th className="border border-gray-300 px-4 py-2">Actions</th>
+          <th className="py-3 px-4 text-left text-gray-600 font-semibold">Name</th>
+          <th className="py-3 px-4 text-left text-gray-600 font-semibold">Model Number</th>
+          <th className="py-3 px-4 text-left text-gray-600 font-semibold">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -39,19 +39,19 @@ const ProductsTable: React.FC<TableProp> = ({ products, onEdit, onDelete, onView
                 <td className="border border-gray-300 px-4 py-2">
                   <button
                     onClick={() => onView(product)}
-                    className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2"
+                    className="bg-primary text-sm text-white px-2 py-1 rounded-md mr-2"
                   >
                     View
                   </button>
                   <button
                     onClick={() => onEdit(product)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded-md mr-2"
+                    className="bg-yellow-500 text-sm text-white px-2 py-1 rounded-md mr-2"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => confirmDelete(product.id!)}
-                    className="bg-red-500 text-white px-2 py-1 rounded-md"
+                    className="bg-red-500 text-sm text-white px-2 py-1 rounded-md"
                     disabled={loading}
                   >
                     {loading ? 'Deleting...' : 'Delete'}
