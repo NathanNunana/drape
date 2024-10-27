@@ -29,11 +29,11 @@ const ProductsTable: React.FC<TableProp> = ({ products, onEdit, onDelete, onView
           <th className="py-3 px-4 text-left text-gray-600 font-semibold">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody key={1}>
         {products.length > 0 ? (
           products.map((product) => (
             <React.Fragment key={product.id}>
-              <tr>
+              <tr key={product.id}>
                 <td className="border border-gray-300 px-4 py-2">{product.name}</td>
                 <td className="border border-gray-300 px-4 py-2">{product.specifications?.basic_generator_parameters.model_number}</td>
                 <td className="border border-gray-300 px-4 py-2">
@@ -68,7 +68,7 @@ const ProductsTable: React.FC<TableProp> = ({ products, onEdit, onDelete, onView
           </tr>
         )}
       </tbody>
-    </table>
+    </table >
   );
 };
 

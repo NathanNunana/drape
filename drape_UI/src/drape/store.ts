@@ -9,6 +9,7 @@ import {
   openingHoursReducer,
   serviceTypesReducer,
   contactUsReducer,
+  productTypeReducer,
 } from "../pages/slice";
 
 const store = configureStore({
@@ -22,6 +23,7 @@ const store = configureStore({
     openingHours: openingHoursReducer,
     serviceTypes: serviceTypesReducer,
     contactUs: contactUsReducer,
+    productTypes: productTypeReducer,
   },
 });
 

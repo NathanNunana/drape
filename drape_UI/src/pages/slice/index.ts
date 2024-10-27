@@ -6,6 +6,7 @@ import productsReducer from "./productsSlice";
 import openingHoursReducer from "./openingHoursSlice";
 import serviceTypesReducer from "./servicesTypesSlice";
 import contactUsReducer from "./contactUsSlice";
+import productTypeReducer from "./productsTypesSlice"
 
 export {
   aboutUsReducer,
@@ -16,4 +17,5 @@ export {
   openingHoursReducer,
   serviceTypesReducer,
   contactUsReducer,
+  productTypeReducer,
 };

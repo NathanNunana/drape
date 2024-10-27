@@ -12,13 +12,12 @@ import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductsTable from "../../../components/ProductTable";
-// import DashboardHeader from "../../../components/DashboardHeader";
+import { fetchProductTypes } from "../../slice/productsTypesSlice";
+
 
 const ManageProducts: React.FC = () => {
-  const initialProductState = {
-    id: undefined,
+  const initialProductState: Product = {
     name: "",
-    image: "",
     base_type: "",
     color: "",
     category: "",
@@ -74,19 +73,22 @@ const ManageProducts: React.FC = () => {
         output_factor: null,
       },
     },
-  }
+  };
 
   const dispatch = useDispatch<AppDispatch>();
   const { products, status, error } = useSelector((state: RootState) => state.products);
+  const { productTypes } = useSelector((state: RootState) => state.productTypes);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentStage, setCurrentStage] = useState(0);
   const [currentProduct, setCurrentProduct] = useState<Product | Omit<Product, "id">>(initialProductState);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [viewProduct, setViewProduct] = useState<Product | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchProductTypes())
   }, [dispatch]);
 
   useEffect(() => {
@@ -94,7 +96,6 @@ const ManageProducts: React.FC = () => {
       toast.error(error);
     }
   }, [status, error]);
-
 
 
   const handleChange = (
@@ -127,7 +128,6 @@ const ManageProducts: React.FC = () => {
     }
   };
 
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files?.[0];
     setCurrentProduct({ ...currentProduct, image });
@@ -140,18 +140,24 @@ const ManageProducts: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSubmitting) return;
     try {
+      const { image: _, ...rest } = currentProduct;
+      const payload = isEditing && typeof currentProduct.image === "string" ? rest : currentProduct;
+
       if (isEditing && "id" in currentProduct) {
-        const { image: _, ...currentProductWithoutImage } = currentProduct
-        await dispatch(updateProduct((typeof currentProduct.image === "string") ? currentProductWithoutImage : currentProduct)).unwrap();
+        await dispatch(updateProduct(payload)).unwrap();
         toast.success("Product updated successfully");
       } else {
-        await dispatch(createProduct(currentProduct)).unwrap();
+        await dispatch(createProduct(payload)).unwrap();
         toast.success("Product created successfully");
       }
       resetForm();
     } catch (err) {
       toast.error("Failed to save product");
+    } finally {
+      setIsSubmitting(false)
+      dispatch(fetchProducts())
     }
   };
 
@@ -176,7 +182,7 @@ const ManageProducts: React.FC = () => {
   };
 
   const handleCloseModal = () => {
-    setViewProduct(null); // Close the modal
+    setViewProduct(null);
   };
 
   const resetForm = () => {
@@ -188,7 +194,15 @@ const ManageProducts: React.FC = () => {
     setViewProduct(null);
   };
 
-  const nextStage = () => setCurrentStage((prev) => Math.min(prev + 1, stages.length - 1));
+  const nextStage = () => {
+    setCurrentStage((prev) => {
+      if (prev < stages.length - 1) {
+        return prev + 1;
+      }
+      return prev; // Keep at the last stage if already there
+    });
+  };
+  // const nextStage = () => setCurrentStage((prev) => Math.min(prev + 1, stages.length - 1));
   const prevStage = () => setCurrentStage((prev) => Math.max(prev - 1, 0));
 
   const stages = [
@@ -201,7 +215,7 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="name"
-              value={currentProduct.name ?? ""}
+              value={currentProduct.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
@@ -228,11 +242,69 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="base_type"
-              value={currentProduct.base_type ?? ""}
+              value={currentProduct.base_type}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Color</label>
+            <input
+              type="text"
+              name="color"
+              value={currentProduct.color}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Category</label>
+            <input
+              type="text"
+              name="category"
+              value={currentProduct.category}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Description</label>
+            <textarea
+              name="description"
+              value={currentProduct.description}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Warranty Duration</label>
+            <input
+              type="text"
+              name="warranty_duration"
+              value={currentProduct.warranty_duration ?? 0}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Product Type</label>
+            <select
+              name="product_type"
+              value={currentProduct.product_type ?? 0}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            >
+              <option value={0}>Select Product Type</option>
+              {productTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.type_name}
+                </option>
+              ))}
+            </select>
           </div>
         </>
       ),
@@ -246,10 +318,20 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="model_number"
-              value={currentProduct.specifications?.basic_generator_parameters.model_number ?? ""}
+              value={currentProduct.specifications.basic_generator_parameters.model_number ?? ""}
               onChange={(e) => handleChange(e, "basic_generator_parameters")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Diesel Oil Type</label>
+            <input
+              type="text"
+              name="diesel_oil_type"
+              value={currentProduct.specifications.basic_generator_parameters.diesel_oil_type ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
@@ -257,39 +339,137 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="output_power"
-              value={currentProduct.specifications?.basic_generator_parameters.output_power ?? ""}
+              value={currentProduct.specifications.basic_generator_parameters.output_power ?? ""}
               onChange={(e) => handleChange(e, "basic_generator_parameters")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Noise LP7m</label>
+            <label className="block text-gray-700">Output Voltage</label>
+            <input
+              type="text"
+              name="output_voltage"
+              value={currentProduct.specifications.basic_generator_parameters.output_voltage ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Output Current</label>
+            <input
+              type="text"
+              name="output_current"
+              value={currentProduct.specifications.basic_generator_parameters.output_current ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Normal Frequency</label>
+            <input
+              type="text"
+              name="normal_frequency"
+              value={currentProduct.specifications.basic_generator_parameters.normal_frequency ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Rated Speed</label>
+            <input
+              type="text"
+              name="rated_speed"
+              value={currentProduct.specifications.basic_generator_parameters.rated_speed ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Fuel Consumption MCR</label>
+            <input
+              type="text"
+              name="fuel_consumption_mcr"
+              value={currentProduct.specifications.basic_generator_parameters.fuel_consumption_mcr ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Noise (LP 7m)</label>
             <input
               type="text"
               name="noise_lp7m"
-              value={currentProduct.specifications?.basic_generator_parameters.noise_lp7m ?? ""}
+              value={currentProduct.specifications.basic_generator_parameters.noise_lp7m ?? ""}
               onChange={(e) => handleChange(e, "basic_generator_parameters")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
         </>
       ),
     },
     {
-      title: "Engine Specification",
+      title: "Engine Specifications",
       content: (
         <>
+          <div className="mb-4">
+            <label className="block text-gray-700">Diesel Engine Brand Provenance</label>
+            <input
+              type="text"
+              name="diesel_engine_brand_provenance"
+              value={currentProduct.specifications.engine_specification.diesel_engine_brand_provenance ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700">Diesel Engine Model Number</label>
             <input
               type="text"
               name="diesel_engine_model_number"
-              value={currentProduct.specifications?.engine_specification.diesel_engine_model_number ?? ""}
+              value={currentProduct.specifications.engine_specification.diesel_engine_model_number ?? ""}
               onChange={(e) => handleChange(e, "engine_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Stand By Power</label>
+            <input
+              type="text"
+              name="stand_by_power"
+              value={currentProduct.specifications.engine_specification.stand_by_power ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Cylinder Model Type</label>
+            <input
+              type="text"
+              name="cylinder_model_type"
+              value={currentProduct.specifications.engine_specification.cylinder_model_type ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Bore Stroke</label>
+            <input
+              type="text"
+              name="bore_stroke"
+              value={currentProduct.specifications.engine_specification.bore_stroke ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Compression Ratio</label>
+            <input
+              type="text"
+              name="compression_ratio"
+              value={currentProduct.specifications.engine_specification.compression_ratio ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
@@ -297,10 +477,9 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="starting_system"
-              value={currentProduct.specifications?.engine_specification.starting_system ?? ""}
+              value={currentProduct.specifications.engine_specification.starting_system ?? ""}
               onChange={(e) => handleChange(e, "engine_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
           <div className="mb-4">
@@ -308,28 +487,97 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="cooling_system"
-              value={currentProduct.specifications?.engine_specification.cooling_system ?? ""}
+              value={currentProduct.specifications.engine_specification.cooling_system ?? ""}
               onChange={(e) => handleChange(e, "engine_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Fuel System</label>
+            <input
+              type="text"
+              name="fuel_system"
+              value={currentProduct.specifications.engine_specification.fuel_system ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Speed Regulating System</label>
+            <input
+              type="text"
+              name="speed_regulating_system"
+              value={currentProduct.specifications.engine_specification.speed_regulating_system ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+
         </>
       ),
     },
     {
-      title: "Alternator Specification",
+      title: "More Specifications",
       content: (
         <>
+          <div className="mb-4">
+            <label className="block text-gray-700">Air Intake Method</label>
+            <input
+              type="text"
+              name="air_intake_method"
+              value={currentProduct.specifications.engine_specification.air_intake_method ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Displacement</label>
+            <input
+              type="text"
+              name="displacement"
+              value={currentProduct.specifications.engine_specification.displacement ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Engine Oil Capacity</label>
+            <input
+              type="text"
+              name="engine_oil_capacity"
+              value={currentProduct.specifications.engine_specification.engine_oil_capacity ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Rotation Rate</label>
+            <input
+              type="text"
+              name="rotation_rate"
+              value={currentProduct.specifications.engine_specification.rotation_rate ?? ""}
+              onChange={(e) => handleChange(e, "engine_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Alternator Brand Place of Origin</label>
+            <input
+              type="text"
+              name="alternator_brand_place_of_origin"
+              value={currentProduct.specifications.alternator_specification.alternator_brand_place_of_origin ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700">Motor Type</label>
             <input
               type="text"
               name="motor_type"
-              value={currentProduct.specifications?.alternator_specification.motor_type ?? ""}
+              value={currentProduct.specifications.alternator_specification.motor_type ?? ""}
               onChange={(e) => handleChange(e, "alternator_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
           <div className="mb-4">
@@ -337,10 +585,9 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="rated_power"
-              value={currentProduct.specifications?.alternator_specification.rated_power ?? ""}
+              value={currentProduct.specifications.alternator_specification.rated_power ?? ""}
               onChange={(e) => handleChange(e, "alternator_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
           <div className="mb-4">
@@ -348,68 +595,166 @@ const ManageProducts: React.FC = () => {
             <input
               type="text"
               name="rated_voltage"
-              value={currentProduct.specifications?.alternator_specification.rated_voltage ?? ""}
+              value={currentProduct.specifications.alternator_specification.rated_voltage ?? ""}
               onChange={(e) => handleChange(e, "alternator_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Insulation Grade</label>
+            <input
+              type="text"
+              name="insulation_grade"
+              value={currentProduct.specifications.alternator_specification.insulation_grade ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
         </>
       ),
     },
     {
-      title: "Additional Details",
+      title: "Final Specifications",
       content: (
         <>
           <div className="mb-4">
-            <label className="block text-gray-700">Color</label>
+            <label className="block text-gray-700">Protection Degree</label>
             <input
               type="text"
-              name="color"
-              value={currentProduct.color ?? ""}
-              onChange={handleChange}
+              name="protection_degree"
+              value={currentProduct.specifications.alternator_specification.protection_degree ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Description</label>
-            <textarea
-              name="description"
-              value={currentProduct.description ?? ""}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Product Type</label>
+            <label className="block text-gray-700">Connection Mode</label>
             <input
-              type="number"
-              name="product_type"
-              value={currentProduct.product_type ?? 0}
-              onChange={handleChange}
+              type="text"
+              name="connection_mode"
+              value={currentProduct.specifications.alternator_specification.connection_mode ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Warranty Duration (Months)</label>
+            <label className="block text-gray-700">Adjustment Mode</label>
             <input
-              type="number"
-              name="warranty_duration"
-              value={currentProduct.warranty_duration ?? ""}
-              onChange={handleChange}
+              type="text"
+              name="adjustment_mode"
+              value={currentProduct.specifications.alternator_specification.adjustment_mode ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Output Frequency</label>
+            <input
+              type="text"
+              name="output_frequency"
+              value={currentProduct.specifications.alternator_specification.output_frequency ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Output Factor</label>
+            <input
+              type="text"
+              name="output_factor"
+              value={currentProduct.specifications.alternator_specification.output_factor ?? ""}
+              onChange={(e) => handleChange(e, "alternator_specification")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Steady State Voltage Regulation Rate</label>
+            <input
+              type="text"
+              name="steady_state_voltage_regulation_rate"
+              value={currentProduct.specifications.basic_generator_parameters.steady_state_voltage_regulation_rate ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Voltage Fluctuation Rate</label>
+            <input
+              type="text"
+              name="voltage_fluctuation_rate"
+              value={currentProduct.specifications.basic_generator_parameters.voltage_fluctuation_rate ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Transient Voltage Regulation</label>
+            <input
+              type="text"
+              name="transient_voltage_regulation"
+              value={currentProduct.specifications.basic_generator_parameters.transient_voltage_regulation ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Voltage Settling Time</label>
+            <input
+              type="text"
+              name="voltage_settling_time"
+              value={currentProduct.specifications.basic_generator_parameters.voltage_settling_time ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Steady State Frequency Control</label>
+            <input
+              type="text"
+              name="steady_state_frequency_control"
+              value={currentProduct.specifications.basic_generator_parameters.steady_state_frequency_control ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Frequency Jitter</label>
+            <input
+              type="text"
+              name="frequency_jitter"
+              value={currentProduct.specifications.basic_generator_parameters.frequency_jitter ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Transient Frequency Fluctuation</label>
+            <input
+              type="text"
+              name="transient_frequency_fluctuation"
+              value={currentProduct.specifications.basic_generator_parameters.transient_frequency_fluctuation ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Frequency Stabilization Time</label>
+            <input
+              type="text"
+              name="frequency_stabilization_time"
+              value={currentProduct.specifications.basic_generator_parameters.frequency_stabilization_time ?? ""}
+              onChange={(e) => handleChange(e, "basic_generator_parameters")}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
             />
           </div>
         </>
       ),
-    }
+    },
   ];
+
 
   return (
     <>
-      {/* <DashboardHeader title="Products Management" /> */}
       <div className="p-4">
         <ToastContainer />
         <button
@@ -428,8 +773,12 @@ const ManageProducts: React.FC = () => {
           onView={handleView}
         />
         <Modal isOpen={isModalOpen} onClose={resetForm}>
-          <h2 className="text-sm font-bold mb-4">{isEditing ? "Edit Product" : "Add Product"}</h2>
           <form onSubmit={handleSubmit}>
+            <div className="flex gap-2">
+              <h2 className="text-md font-bold mb-4 uppercase">{isEditing ? "Edit Product" : "Add Product"}</h2>
+              <h2 className="text-primary font-semibold mb-4">{stages[currentStage].title}</h2>
+            </div>
+            <hr className="mb-4" />
             {stages[currentStage].content}
             <div className="flex w-full gap-2 justify-between mt-4">
               {currentStage > 0 && (
@@ -442,32 +791,13 @@ const ManageProducts: React.FC = () => {
                   Next
                 </button>
               ) : (
-                <button type="submit" className="w-full text-sm p-2 bg-secondary text-white rounded-md">
+                <button type="submit" onClick={() => setIsSubmitting(true)} className="w-full text-sm p-2 bg-secondary text-white rounded-md">
                   {isEditing ? "Save Changes" : "Save"}
                 </button>
               )}
             </div>
           </form>
         </Modal>
-        {/**/}
-        {/* <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}> */}
-        {/*   {viewProduct && ( */}
-        {/*     <div> */}
-        {/*       <h2 className="text-sm font-bold mb-4">{viewProduct.name}</h2> */}
-        {/*       <div className="mb-4"> */}
-        {/*         <img */}
-        {/*           src={viewProduct.image ? viewProduct.image.toString() : ""} */}
-        {/*           alt={`${viewProduct.name} Image`} */}
-        {/*           className="w-full h-48 object-cover mb-2 rounded-md" */}
-        {/*         /> */}
-        {/*       </div> */}
-        {/*       <p><strong>Model Number:</strong> {viewProduct.specifications?.basic_generator_parameters.model_number}</p> */}
-        {/*       <p><strong>Base Type:</strong> {viewProduct?.base_type}</p> */}
-        {/*       <p><strong>Color:</strong> {viewProduct?.color}</p> */}
-        {/*       <p><strong>Description:</strong> {viewProduct?.description}</p> */}
-        {/*     </div> */}
-        {/*   )} */}
-        {/* </Modal> */}
 
         <Modal isOpen={!!viewProduct} onClose={() => handleCloseModal()}>
           {viewProduct && (

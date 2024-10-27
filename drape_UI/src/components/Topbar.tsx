@@ -3,7 +3,7 @@ import { FaTwitter, FaLinkedin, FaInstagram, FaPhoneAlt, FaEnvelope, FaFacebookF
 
 const Topbar: React.FC = () => {
   return (
-    <div className="bg-primary text-white py-3 overflow-hidden">
+    <div className="bg-primary text-white py-6 overflow-hidden">
       <div className="flex justify-between items-center container mx-auto px-8 lg:px-48">
         <div className="text-sm font-light flex">
           <div className='flex items-center gap-2'>

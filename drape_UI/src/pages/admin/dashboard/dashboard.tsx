@@ -15,6 +15,7 @@ import {
   FaCalendarAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
+import ManageProductTypes from "./ManageProductTypes";
 
 // Define type for expanded menu state
 type ExpandedMenus = {
@@ -47,7 +48,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Top Navigation */}
-      <header className="flex items-center justify-between px-6 py-4 bg-primary text-white shadow-md">
+      <header className="flex items-center justify-between px-6 py-4 bg-primary text-white shadow-md sticky">
         <div className="flex items-center space-x-4">
           <p>Drape Dashboard</p>
         </div>
@@ -149,6 +150,17 @@ const Dashboard: React.FC = () => {
                         Manage Products
                       </NavLink>
                     </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/products/types"
+                        className={({ isActive }) =>
+                          `block p-2 rounded-md hover:bg-primary_light ${isActive ? "bg-primary_light text-primary font-semibold" : "text-gray-600"
+                          }`
+                        }
+                      >
+                        Product Types
+                      </NavLink>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -207,6 +219,7 @@ const Dashboard: React.FC = () => {
             <Route path="/products" element={<ManageProducts />} />
             <Route path="/services" element={<ManageServices />} />
             <Route path="/services/types" element={<ManageServiceTypes />} />
+            <Route path="/products/types" element={<ManageProductTypes />} />
           </Routes>
         </main>
       </div>

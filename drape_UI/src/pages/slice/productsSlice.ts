@@ -94,13 +94,16 @@ export const createProduct = createAsyncThunk<Product, Omit<Product, "id">>(
         ...productData.specifications.engine_specification,
         ...productData.specifications.alternator_specification,
       };
+      console.log(payload)
 
       const formData = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
         if (key === "image" && value instanceof File) {
-          formData.append(key, value); // Append File objects as files
+          formData.append(key, value);
         } else {
-          formData.append(key, value as string);
+          if (key !== "specifications") {
+            formData.append(key, value as string);
+          }
         }
       });
 
@@ -127,12 +130,15 @@ export const updateProduct = createAsyncThunk<Product, Product>(
         ...productData.specifications.alternator_specification,
       };
 
+      console.log(payload)
       const formData = new FormData();
       Object.entries(payload).forEach(([key, value]) => {
         if (key === "image" && value instanceof File) {
-          formData.append(key, value); // Append File objects as files
+          formData.append(key, value);
         } else {
-          formData.append(key, value as string);
+          if (key !== "specifications") {
+            formData.append(key, value as string);
+          }
         }
       });
 

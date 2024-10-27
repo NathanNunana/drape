@@ -8,7 +8,6 @@ import {
 } from "../../slice/aboutUsSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageAboutUs: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,8 +59,6 @@ const ManageAboutUs: React.FC = () => {
       toast.error("Failed to save About Us. Please try again.");
     }
   };
-
-
 
   return (
     <>

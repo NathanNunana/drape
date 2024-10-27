@@ -14,6 +14,7 @@ export const Endpoints = {
   openingHours: "/opening-hours/",
   openingHoursType: "/opening-hours-types/",
   contactUs: "/contact-us/",
+  productType: "/products-type/",
 };
 
 export const client = axios.create({
