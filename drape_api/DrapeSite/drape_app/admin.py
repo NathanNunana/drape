@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
+from .models import (Address, OpeningHoursType, OpeningHours, ServiceType, Service,
                     AboutUs, Price, Product, ProductType, Analytics, ContactUs, Schedule, 
                     BookForService, Newsletter, TechnicalTeamMember)
 

@@ -34,14 +34,6 @@ class OpeningHours(models.Model):
     def __str__(self):
         return f'{self.type.name}: {self.duration}'
 
-# Company
-class Company(models.Model):
-    name = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='company_logos/')
-
-    def __str__(self):
-        return self.name
-
 # Service Type
 class ServiceType(models.Model):
     name = models.CharField(max_length=100)

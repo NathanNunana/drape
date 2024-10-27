@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 import os
-from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
+from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
                             ContactUs, Schedule, BookForService, Newsletter, 
                             TechnicalTeamMember)
@@ -23,11 +23,6 @@ class OpeningHoursTypeSerializer(serializers.ModelSerializer):
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
-        fields = '__all__'
-
-class CompanySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Company
         fields = '__all__'
 
     def validate_logo(self, value):
@@ -300,3 +295,4 @@ class BookForServiceSerializer(serializers.ModelSerializer):
         send_email(subject, text_content, html_content, [instance.email_address])
 
         return instance
+
