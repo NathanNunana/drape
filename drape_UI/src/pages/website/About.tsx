@@ -1,118 +1,54 @@
 import React from "react";
-// import { FaUser, FaBriefcase, FaStar } from "react-icons/fa";
-import { Technician } from "../../components";
 
-const About: React.FC = () => {
+const AboutUs: React.FC = () => {
   return (
-    <div className="container mx-auto py-10 px-4">
-      {/* Hero Section */}
-      <section className="bg-gray-100 py-16 text-center">
-        <h1 className="text-5xl font-bold text-gray-800 mb-4">
-          About Us
-        </h1>
-        <p className="text-lg text-gray-600">
-          Discover who we are, what drives us, and how we’re committed to helping you.
-        </p>
-      </section>
-
-      {/* Company Story */}
-      <section className="my-12">
-        <div className="md:flex md:items-center">
-          <div className="md:w-1/2 p-4">
-            <img
-              src="/assets/images/about-us.jpg"
-              alt="Our Story"
-              className="w-full h-auto rounded-lg shadow-md"
-            />
-          </div>
-          <div className="md:w-1/2 p-4">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Our Story
-            </h2>
-            <p className="text-gray-700 mb-4">
-              Founded in [Year], our company has always been focused on bringing the best products and services to our customers. With years of experience, we have perfected our craft and built a brand that stands for quality, trust, and innovation.
-            </p>
-            <p className="text-gray-700 mb-4">
-              From humble beginnings, our journey started with a small team and a big dream. Today, we are proud to serve thousands of customers worldwide, delivering not only products but solutions that meet their needs and exceed their expectations.
-            </p>
-            <p className="text-gray-700">
-              We believe in continuous growth, adapting to new trends, and pushing the boundaries of what’s possible. Every step of our journey has been shaped by the commitment to provide value and build lasting relationships with our customers.
-            </p>
-          </div>
+    <div>
+      <div className="bg-gray-50">
+        <div className="container mx-auto text-left mb-5 text-gray-500 px-8 lg:px-48 py-5">
+          <p className="text-sm">
+            <span className="text-primary">Home</span> / About Us
+          </p>
         </div>
-      </section>
+      </div>
+      <div className="">
+        {/* Breadcrumb */}
 
-      {/* Mission and Vision */}
-      <section className="bg-primary py-16 text-center text-white">
-        <h2 className="text-3xl font-bold mb-8">Our Mission & Vision</h2>
-        <div className="md:flex md:justify-center">
-          <div className="md:w-1/3 p-4">
-            <h3 className="text-xl font-semibold">Our Mission</h3>
-            <p className="mt-4">
-              To provide innovative, reliable, and high-quality products and services that enhance the lives of our customers, while contributing positively to the community and environment.
+        <div className="mx-auto container px-8 lg:px-48">
+          {/* Header */}
+          <div className="text-left mb-8">
+            <h1 className="text-3xl font-semibold text-secondary mb-4"><span className="text-gray-700">About</span> Us</h1>
+            <p className="text-md font-light text-gray-700">
+              Drape, established in 2015, specializes in the sales and supply of generator parts, equipment, and maintenance services. We offer a wide range of products from top aftermarket brands, ensuring reliability and long-lasting performance. Our inventory includes key components for major generator brands, such as Cummins, Perkins, Caterpillar, FG Wilson, and Honda. Additionally, we provide high-quality oils and lubricants from renowned brands like Castrol and Denso, ensuring optimal efficiency for your generator. At Drape, we are committed to delivering top-notch products and expert service to keep your power systems operating smoothly.
             </p>
           </div>
-          <div className="md:w-1/3 p-4">
-            <h3 className="text-xl font-semibold">Our Vision</h3>
-            <p className="mt-4">
-              To be a globally recognized leader in our industry, known for pushing the boundaries of excellence and fostering long-term relationships with our customers and partners.
+
+          {/* Company Story */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-secondary mb-4"><span className="text-gray-700">Our</span> Vision</h2>
+            <p className="text-gray-700 font-light text-md mb-4">
+              Drape aims to be recognized as one of the leading providers of
+              excellent generator maintenance services in Ghana.
             </p>
-          </div>
+
+            <h2 className="text-xl font-semibold text-secondary mb-4"><span className="text-gray-700">Our</span> Mission</h2>
+            <p className="text-gray-700 font-light mb-4">
+              Drape was established with the goal of ensuring customer satisfaction by delivering products and services that meet international standards in the generator industry. To achieve this, we have equipped our workshop with state-of-the-art tools and technology to meet our clients' generator maintenance and repair needs, including engine diagnostics, system calibration, generator inspections, and comprehensive servicing.
+            </p>
+
+            <h2 className="text-xl font-semibold text-secondary mb-4"><span className="text-gray-700">Our</span> Commitment</h2>
+            <p className="text-gray-700 font-light mb-4">
+              Drape is dedicated to delivering top-quality services. We benchmark our processes against international standards such as ISO 9001 (Quality Management System) and IATF 16949 (Automotive Quality Management System). This ensures that every generator serviced or repaired by us is handled with professionalism and precision. Additionally, we provide a warranty on all parts purchased, alongside a customer satisfaction system to address any post-service concerns.
+            </p>
+
+            <p className="text-gray-700 font-light">
+              Moreover, Drape's management prioritizes Health, Safety, and Environmental (HSE) best practices, adhering to global standards like ISO 45001 (Occupational Health and Safety Management System) and ISO 14001 (Environmental Management System). This reflects our commitment not only to high-quality service but also to ensuring a safe and sustainable operational environment.
+            </p>
+          </section>
         </div>
-      </section>
-
-      {/* Core Values */}
-      <section className="my-12">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
-          Our Core Values
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 text-center border rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-primary mb-4">
-              Integrity
-            </h3>
-            <p className="text-gray-600">
-              We are committed to maintaining the highest ethical standards in all of our dealings, ensuring transparency and trustworthiness.
-            </p>
-          </div>
-          <div className="p-6 text-center border rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-primary mb-4">
-              Innovation
-            </h3>
-            <p className="text-gray-600">
-              We strive to stay ahead of the curve by embracing new ideas and technologies to deliver cutting-edge solutions to our customers.
-            </p>
-          </div>
-          <div className="p-6 text-center border rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-primary mb-4">
-              Customer Focus
-            </h3>
-            <p className="text-gray-600">
-              Our customers are at the heart of everything we do. We listen, respond, and deliver value in every interaction.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <Technician />
-
-
-      {/* Call to Action */}
-      <section className="py-16 text-center">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">
-          Ready to Partner with Us?
-        </h2>
-        <p className="text-lg text-gray-600 mb-6">
-          Let us help you achieve your goals. Reach out to us today and let's build something great together.
-        </p>
-        <button className="py-3 px-8 bg-primary text-white font-semibold rounded-lg">
-          Contact Us
-        </button>
-      </section>
-
+      </div>
     </div>
   );
 };
 
-export default About;
+export default AboutUs;
+

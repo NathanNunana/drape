@@ -13,6 +13,7 @@ export const Endpoints = {
   serviceTypes: "/service-types/",
   openingHours: "/opening-hours/",
   openingHoursType: "/opening-hours-types/",
+  contactUs: "/contact-us/",
 };
 
 export const client = axios.create({
@@ -22,6 +23,18 @@ export const client = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+client.interceptors.response.use(
+  (response) => {
+    if (response.status === 401) {
+      localStorage.clear();
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 client.interceptors.request.use(
   (config) => {
@@ -37,3 +50,4 @@ client.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+

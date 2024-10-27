@@ -10,7 +10,7 @@ import {
 import Modal from "../../../components/Modal";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from "../../../components/DashboardHeader";
+// import DashboardHeader from "../../../components/DashboardHeader";
 
 const ManageServiceTypes: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -80,7 +80,7 @@ const ManageServiceTypes: React.FC = () => {
 
   return (
     <>
-      <DashboardHeader title="Service Types Management" />
+      {/* <DashboardHeader title="Service Types Management" /> */}
       <div className="p-4">
         <button
           onClick={() => {
@@ -88,7 +88,7 @@ const ManageServiceTypes: React.FC = () => {
             setIsEditing(false);
             setIsModalOpen(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition"
+          className="bg-primary text-sm text-white px-4 py-2 rounded shadow-md hover:bg-secondary transition"
         >
           Add Service Type
         </button>
@@ -117,13 +117,13 @@ const ManageServiceTypes: React.FC = () => {
                   <td className="py-4 px-4 text-gray-600">{type.description}</td>
                   <td className="py-4 px-4">
                     <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
+                      className="bg-yellow-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-yellow-600 transition mr-2"
                       onClick={() => handleEdit(type)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
+                      className="bg-red-500 text-sm text-white px-3 py-1 rounded shadow-md hover:bg-red-600 transition"
                       onClick={() => handleDelete(type.id)}
                     >
                       Delete
@@ -135,7 +135,7 @@ const ManageServiceTypes: React.FC = () => {
           </table>
         </div>
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="text-lg font-bold mb-4">
             {isEditing ? "Edit Service Type" : "Add Service Type"}
           </h2>
           <form onSubmit={handleSubmit}>
@@ -162,7 +162,7 @@ const ManageServiceTypes: React.FC = () => {
             </div>
             <button
               type="submit"
-              className={`bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition ${isEditing ? "bg-yellow-500 hover:bg-yellow-600" : ""
+              className={`bg-primary w-full text-sm text-white px-4 py-2 rounded-md shadow-md hover:bg-secondary transition ${isEditing ? "bg-yellow-500 hover:bg-yellow-600" : ""
                 }`}
             >
               {isEditing ? "Save Changes" : "Add Service Type"}

@@ -12,7 +12,7 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
     <>
       <motion.div
         key={product.id}
-        className="p-4 bg-white shadow-sm rounded-lg"
+        className="p-4 bg-white shadow-sm rounded-md border border-gray-100"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
         <Link
           to={`/product/${product.name}`}
           state={{ product }}
-          className="inline-flex items-center py-2 px-4 bg-primary text-white rounded-lg w-full justify-center"
+          className="inline-flex items-center py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg w-full justify-center"
         >
           View Details
         </Link>
