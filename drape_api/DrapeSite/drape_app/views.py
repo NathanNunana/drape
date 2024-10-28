@@ -109,7 +109,7 @@ class NewsletterViewSet(viewsets.ModelViewSet):
 class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
     queryset = AdminPostNewsLetter.objects.all()
     serializer_class = AdminPostNewsLetterSerializer
-
+    permission_classes = [IsSuperAdminOrReadOnly]
 
     
 # Technical Team members viewset
