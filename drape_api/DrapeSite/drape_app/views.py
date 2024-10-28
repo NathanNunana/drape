@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
@@ -102,10 +104,13 @@ class NewsletterViewSet(viewsets.ModelViewSet):
     queryset = Newsletter.objects.all()
     serializer_class = NewsletterSerializer
 
+
 # ViewSet to send newsletter to subscribers
 class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
     queryset = AdminPostNewsLetter.objects.all()
     serializer_class = AdminPostNewsLetterSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
     
 # Technical Team members viewset
 class TechnicalTeamMemberViewSet(viewsets.ModelViewSet):
