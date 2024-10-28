@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 import os
-from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
+from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService)
-from drape_app.utils import send_email
+                            ContactUs, Schedule, BookForService, Newsletter, Attachment, AdminPostNewsLetter,
+                            TechnicalTeamMember)
+from drape_app.utils import send_email, send_newsletter_email
 from django.template.loader import render_to_string
+from django.core.validators import validate_email
+import logging
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 
 
@@ -22,11 +28,6 @@ class OpeningHoursTypeSerializer(serializers.ModelSerializer):
 class OpeningHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHours
-        fields = '__all__'
-
-class CompanySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Company
         fields = '__all__'
 
     def validate_logo(self, value):
@@ -88,15 +89,17 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
         return value
 
-
+class ProductTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductType
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     specifications = serializers.SerializerMethodField()
-
     class Meta:
         model = Product
         fields = [
-            'name', 'image', 'base_type', 'color', 'description', 
+            'id', 'name', 'image', 'base_type', 'color', 'description', 
             'product_type', 'warranty_duration', 
             # basic_generator_parameters
             'model_number', 'diesel_oil_type', 'output_power',
@@ -222,10 +225,6 @@ class PriceSerializer(serializers.ModelSerializer):
         model = Price
         fields = '__all__'
 
-class ProductTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductType
-        fields = '__all__'
 
 class AnalyticsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -300,3 +299,61 @@ class BookForServiceSerializer(serializers.ModelSerializer):
         send_email(subject, text_content, html_content, [instance.email_address])
 
         return instance
+    
+    
+# news letter serializers
+class NewsletterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for creating and managing newsletter subscriptions.
+    Sends a confirmation email upon successful subscription if the email address is valid.
+    """
+    
+    class Meta:
+        model = Newsletter
+        fields = ['email']
+
+    def create(self, validated_data):
+        """
+        Create a new Newsletter subscription instance and send a confirmation email
+        only if the email address is valid.
+        """
+        email = validated_data.get('email')
+        
+        # Validate the email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            logger.warning(f"Invalid email format for subscription: {email}")
+            return Newsletter.objects.create(email=email)
+
+        # Save the subscription instance
+        subscription = Newsletter.objects.create(email=email)
+
+        # Prepare the email content
+        subject = "Welcome to the Drapes Newsletter!"
+        text_content = (
+            "Thank you for subscribing to Drapes' newsletter! "
+            "You'll receive updates on new products, exclusive promotions, and special offers."
+        )
+        
+        # Render the HTML content from a template
+        html_content = render_to_string('emails/newsletter_subscription.html', {'email': subscription.email})
+
+        # Send the confirmation email
+        send_email(subject, text_content, html_content, [subscription.email])
+
+        # Return the newly created subscription instance
+        return subscription
+
+
+class AdminPostNewsLetterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdminPostNewsLetter
+        fields = ['subject', 'title', 'news_content', 'attachments']
+
+
+# Team members serializers
+class TechnicalTeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalTeamMember
+        fields = '__all__'

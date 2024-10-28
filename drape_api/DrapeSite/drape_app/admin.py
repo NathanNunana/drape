@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, Service,
+from .models import (Address, OpeningHoursType, OpeningHours, ServiceType, Service,
                     AboutUs, Price, Product, ProductType, Analytics, ContactUs, Schedule, 
-                    BookForService)
+                    BookForService, Newsletter, TechnicalTeamMember)
 
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('street_name', 'digital_address', 'city', 'country', 'email')
-    search_fields = ('street_name', 'digital_address', 'city', 'country', 'email')
+    list_display = ('street_name', 'digital_address', 'city', 'country', 'email', 'mobile')
+    search_fields = ('street_name', 'digital_address', 'city', 'country', 'email', 'mobile')
 
 @admin.register(OpeningHoursType)
 class OpeningHoursTypeAdmin(admin.ModelAdmin):
@@ -25,12 +25,6 @@ class OpeningHoursAdmin(admin.ModelAdmin):
 class OpeningHoursInline(admin.TabularInline):
     model = OpeningHours
     extra = 1  # Number of empty forms to display
-
-@admin.register(Company)
-class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'logo')
-    search_fields = ('name',)
-    readonly_fields = ('logo',)  # Optional: To make the logo field read-only
 
 @admin.register(ServiceType)
 class ServiceTypeAdmin(admin.ModelAdmin):
@@ -79,7 +73,7 @@ admin.site.register(ProductType)
 
 @admin.register(Analytics)
 class AnalyticsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'value', 'file_link')
+    list_display = ('name', 'value')
     search_fields = ('name', 'value')
 
     def file_link(self, obj):
@@ -107,3 +101,25 @@ admin.site.register(Schedule, ScheduleAdmin)
 class BookForServiceAdmin(admin.ModelAdmin):
     list_display = ('your_name', 'email_address', 'service_date')
     search_fields = ('your_name', 'email_address')
+    
+
+# News letter
+@admin.register(Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = ('email',)
+    search_fields = ('email',)
+
+# Technical team member
+@admin.register(TechnicalTeamMember)
+class TechnicalTeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'position', 'image')
+    search_fields = ('name', 'position')
+    
+    def image_link(self, obj):
+        if obj.image:
+            return format_html("<a href='{}'>{}</a>", obj.image.url, obj.image.name)
+        return "No file"
+
+    image_link.short_description = "File"
+
+# Optional: If you want to add a custom admin page for your models

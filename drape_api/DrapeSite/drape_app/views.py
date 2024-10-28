@@ -1,14 +1,17 @@
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from drape_app.models import (Address, OpeningHoursType, OpeningHours, Company, ServiceType, 
+from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService)
+                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter,
+                            TechnicalTeamMember)
 from drape_app.permissions import IsSuperAdminOrReadOnly
-from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, CompanySerializer, 
+from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, 
                         ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
                         AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer,
-                        BookForServiceSerializer)
+                        BookForServiceSerializer, NewsletterSerializer, 
+                        AdminPostNewsLetterSerializer, TechnicalTeamMemberSerializer,
+                        )
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -23,11 +26,6 @@ class OpeningHoursTypeViewSet(viewsets.ModelViewSet):
 class OpeningHoursViewSet(viewsets.ModelViewSet):
     queryset = OpeningHours.objects.all()
     serializer_class = OpeningHoursSerializer
-    permission_classes = [IsSuperAdminOrReadOnly]
-
-class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
     permission_classes = [IsSuperAdminOrReadOnly]
 
 class ServiceTypeViewSet(viewsets.ModelViewSet):
@@ -99,3 +97,18 @@ class BookForServiceViewSet(viewsets.ModelViewSet):
 
         return response
 
+# news letter view
+class NewsletterViewSet(viewsets.ModelViewSet):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsletterSerializer
+
+# ViewSet to send newsletter to subscribers
+class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
+    queryset = AdminPostNewsLetter.objects.all()
+    serializer_class = AdminPostNewsLetterSerializer
+    
+# Technical Team members viewset
+class TechnicalTeamMemberViewSet(viewsets.ModelViewSet):
+    queryset = TechnicalTeamMember.objects.all()
+    serializer_class = TechnicalTeamMemberSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]

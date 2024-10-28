@@ -11,6 +11,10 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     email = models.EmailField()
+    mobile = models.CharField(max_length=20)
+    telephone = models.CharField(max_length=20)
+    location = models.CharField(max_length=255)
+    
 
     def __str__(self):
         return f'{self.street_name}, {self.city}, {self.country}'
@@ -29,14 +33,6 @@ class OpeningHours(models.Model):
 
     def __str__(self):
         return f'{self.type.name}: {self.duration}'
-
-# Company
-class Company(models.Model):
-    name = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='company_logos/')
-
-    def __str__(self):
-        return self.name
 
 # Service Type
 class ServiceType(models.Model):
@@ -62,12 +58,24 @@ class Service(models.Model):
 class AboutUs(models.Model):
     image = models.ImageField(upload_to='about_us_images/', blank=True, null=True)
     motto = models.CharField(max_length=255)
-    company_description = models.TextField()
+    company_description = models.TextField(blank=True, null=True)
+    about_us = models.TextField(blank=True, null=True)
+    our_vision = models.TextField(blank=True, null=True) 
+    our_mission = models.TextField(blank=True, null=True) 
+    our_commitment = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.motto
 
+# Our technical team members
+class TechnicalTeamMember(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='technical_team_images/', blank=True, null=True)
+    position = models.CharField(max_length=255)
+    bio = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return self.name
 
 # Price model
 class Price(models.Model):
@@ -79,8 +87,8 @@ class Price(models.Model):
         return f"{self.product.name} - {self.price} as of {self.effective_date}"
 
 class ProductType(models.Model):
-    RENTAL = 'rental'
-    SALE = 'sale'
+    RENTAL = 'Rental'
+    SALE = 'Sale'
     
     PRODUCT_TYPE_CHOICES = [
         (RENTAL, 'Rental'),
@@ -160,6 +168,7 @@ class Product(models.Model):
 class Analytics(models.Model):
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -170,9 +179,42 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=255, blank=True)
     email = models.EmailField()
     message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.your_name} - {self.subject}'
+
+# News letter
+class Newsletter(models.Model):
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.email
+
+class Attachment(models.Model):
+    """
+    Model to store individual file attachments for newsletter posts.
+    """
+    file = models.ImageField(upload_to='attachments/', blank=True, null=True)
+
+    def __str__(self):
+        return self.file.name
+
+
+class AdminPostNewsLetter(models.Model):
+    """
+    Model to represent a newsletter post created by the admin.
+    Allows multiple attachments per post.
+    """
+    subject = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    news_content = models.TextField()
+    attachments = models.ManyToManyField(Attachment, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject
+
 
 class Schedule(models.Model):
     SERVICE_CHOICES = [
@@ -189,6 +231,7 @@ class Schedule(models.Model):
     start_date = models.DateTimeField()
     due_date = models.DateTimeField()
     message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Schedule for {self.user.email} - {self.product.name}"
@@ -207,7 +250,9 @@ class BookForService(models.Model):
     service_date = models.DateTimeField()
     special_request = models.TextField(blank=True)  # Allow blank requests
     is_confirmed = models.BooleanField(default=False)  # To track admin confirmation
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
     def __str__(self):
         return f"Book for Service - {self.your_name} - {self.service_date}"
 
