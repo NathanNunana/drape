@@ -59,19 +59,6 @@
         <div class="content">
             <p>Dear Subscriber,</p>
             <p>{{ content }}</p>
-            
-            {% if attachments %}
-                <div class="attachments">
-                    <p>Attached Files:</p>
-                    {% for attachment in attachments %}
-                        {% if attachment.file %}
-                            <div class="attachment">
-                                <img src="{{ attachment.file.url }}" alt="Attachment Image">
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
         </div>
         
         <p>Thank you for staying updated with Drapes!</p>

@@ -191,15 +191,6 @@ class Newsletter(models.Model):
     def __str__(self):
         return self.email
 
-class Attachment(models.Model):
-    """
-    Model to store individual file attachments for newsletter posts.
-    """
-    file = models.ImageField(upload_to='attachments/', blank=True, null=True)
-
-    def __str__(self):
-        return self.file.name
-
 
 class AdminPostNewsLetter(models.Model):
     """
@@ -209,7 +200,6 @@ class AdminPostNewsLetter(models.Model):
     subject = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     news_content = models.TextField()
-    attachments = models.ManyToManyField(Attachment, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

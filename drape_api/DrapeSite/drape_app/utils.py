@@ -41,7 +41,6 @@ def send_newsletter_email(post):
     html_content = render_to_string('emails/newsletter_post.html', {
         'title': post.title,
         'content': post.news_content,
-        'attachments': post.attachments.all(),
     })
 
     # Initialize email with plain text and HTML versions
@@ -52,11 +51,6 @@ def send_newsletter_email(post):
         to=recipient_list
     )
     email.attach_alternative(html_content, "text/html")
-
-    # Attach files if there are any
-    for attachment in post.attachments.all():
-        if attachment.file:
-            email.attach_file(attachment.file.path)
 
     # Try sending email and log any errors
     try:
