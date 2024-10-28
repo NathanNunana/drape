@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 import os
 from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
                             Service, AboutUs, Product, Price, ProductType, Analytics, 
-                            ContactUs, Schedule, BookForService, Newsletter, Attachment, AdminPostNewsLetter,
+                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter,
                             TechnicalTeamMember)
 from drape_app.utils import send_email, send_newsletter_email
 from django.template.loader import render_to_string
@@ -208,7 +208,7 @@ class ProductSerializer(serializers.ModelSerializer):
         if request_method == 'GET':
             # For GET requests, keep only specific fields
             fields_to_keep = [
-                'name', 'image', 'base_type', 'color', 'description', 
+                'id', 'name', 'image', 'base_type', 'color', 'description', 
                 'product_type', 'warranty_duration', 'specifications'
             ]
             return {field: representation[field] for field in fields_to_keep if field in representation}
@@ -349,8 +349,20 @@ class NewsletterSerializer(serializers.ModelSerializer):
 class AdminPostNewsLetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminPostNewsLetter
-        fields = ['subject', 'title', 'news_content', 'attachments']
+        fields = ['subject', 'title', 'news_content']
 
+    def create(self, validated_data):
+        # Create the main newsletter post instance
+        post = AdminPostNewsLetter.objects.create(**validated_data)
+
+        # Retrieve all subscriber emails from the Newsletter model
+        recipient_list = list(Newsletter.objects.values_list('email', flat=True))
+
+        # Send the email notification to all subscribers if there are any
+        if recipient_list:
+            send_newsletter_email(post)
+
+        return post
 
 # Team members serializers
 class TechnicalTeamMemberSerializer(serializers.ModelSerializer):
