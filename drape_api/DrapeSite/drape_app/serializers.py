@@ -208,7 +208,7 @@ class ProductSerializer(serializers.ModelSerializer):
         if request_method == 'GET':
             # For GET requests, keep only specific fields
             fields_to_keep = [
-                'name', 'image', 'base_type', 'color', 'description', 
+                'id', 'name', 'image', 'base_type', 'color', 'description', 
                 'product_type', 'warranty_duration', 'specifications'
             ]
             return {field: representation[field] for field in fields_to_keep if field in representation}
@@ -345,11 +345,41 @@ class NewsletterSerializer(serializers.ModelSerializer):
         # Return the newly created subscription instance
         return subscription
 
+class AttachmentSerializer(serializers.ModelSerializer):
+    """Serializer for individual attachment files."""
+    class Meta:
+        model = Attachment
+        fields = ['file']
+
 
 class AdminPostNewsLetterSerializer(serializers.ModelSerializer):
+    attachments = AttachmentSerializer(many=True, required=False)
+
     class Meta:
         model = AdminPostNewsLetter
         fields = ['subject', 'title', 'news_content', 'attachments']
+
+    def create(self, validated_data):
+        # Extract attachment data from the request if present
+        attachments_data = validated_data.pop('attachments', [])
+
+        # Create the main newsletter post instance
+        post = AdminPostNewsLetter.objects.create(**validated_data)
+
+        # Add each attachment if provided
+        if attachments_data:
+            for attachment_data in attachments_data:
+                attachment = Attachment.objects.create(**attachment_data)
+                post.attachments.add(attachment)
+
+        # Retrieve all subscriber emails from the Newsletter model
+        recipient_list = list(Newsletter.objects.values_list('email', flat=True))
+        print("recipient_list", recipient_list)
+        # Send the email notification to all subscribers if there are any
+        if recipient_list:
+            send_newsletter_email(post)
+
+        return post
 
 
 # Team members serializers

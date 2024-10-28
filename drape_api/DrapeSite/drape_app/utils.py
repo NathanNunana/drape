@@ -24,17 +24,16 @@ def send_email(subject, text_content, html_content, recipient_list):
 
 def send_newsletter_email(post):
     """
-    Retrieve all subscribed emails and send them the newsletter content.
+    Send a newsletter email to all subscribers with the content of a given post.
     """
-    # Import Newsletter model here to avoid circular import
+    # Import Newsletter within the function to avoid circular import
     from .models import Newsletter
-
-    # Retrieve all subscribed emails
-    recipient_list = list(Newsletter.objects.values_list('email', flat=True))
     
+    # Get subscriber emails from Newsletter model
+    recipient_list = list(Newsletter.objects.values_list('email', flat=True))
     if not recipient_list:
-        logger.warning("No subscribers found for the newsletter.")
-        return  # Exit if there are no subscribers
+        logger.warning("No subscribers found to send the newsletter to.")
+        return
 
     # Prepare email content
     subject = post.subject
@@ -45,7 +44,7 @@ def send_newsletter_email(post):
         'attachments': post.attachments.all(),
     })
 
-    # Initialize email with attachments
+    # Initialize email with plain text and HTML versions
     email = EmailMultiAlternatives(
         subject=subject,
         body=text_content,
@@ -54,14 +53,16 @@ def send_newsletter_email(post):
     )
     email.attach_alternative(html_content, "text/html")
 
-    # Attach files to the email
+    # Attach files if there are any
     for attachment in post.attachments.all():
         if attachment.file:
             email.attach_file(attachment.file.path)
 
-    # Send email and handle errors
+    # Try sending email and log any errors
     try:
         email.send()
-        logger.info(f'Newsletter sent successfully to {len(recipient_list)} subscribers.')
+        logger.info(f"Newsletter '{subject}' sent to {len(recipient_list)} subscribers.")
+        print(f"Newsletter '{subject}' sent to: {recipient_list}")  # Debugging print
     except Exception as e:
-        logger.error(f'Failed to send newsletter: {e}')
+        logger.error(f"Failed to send newsletter '{subject}': {e}")
+        print(f"Error sending email: {e}")  # Debugging print
