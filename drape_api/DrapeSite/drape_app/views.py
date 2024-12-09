@@ -1,0 +1,119 @@
+from rest_framework import viewsets
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from drape_app.models import (Address, OpeningHoursType, OpeningHours, ServiceType, 
+                            Service, AboutUs, Product, Price, ProductType, Analytics, 
+                            ContactUs, Schedule, BookForService, Newsletter, AdminPostNewsLetter,
+                            TechnicalTeamMember)
+from drape_app.permissions import IsSuperAdminOrReadOnly
+from drape_app.serializers import (AddressSerializer, OpeningHoursTypeSerializer, OpeningHoursSerializer, 
+                        ServiceTypeSerializer, ServiceSerializer, AboutUsSerializer, ProductSerializer, PriceSerializer, ProductTypeSerializer,
+                        AnalyticsSerializer, ContactUsSerializer, ScheduleSerializer,
+                        BookForServiceSerializer, NewsletterSerializer, 
+                        AdminPostNewsLetterSerializer, TechnicalTeamMemberSerializer,
+                        )
+
+class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class OpeningHoursTypeViewSet(viewsets.ModelViewSet):
+    queryset = OpeningHoursType.objects.all()
+    serializer_class = OpeningHoursTypeSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class OpeningHoursViewSet(viewsets.ModelViewSet):
+    queryset = OpeningHours.objects.all()
+    serializer_class = OpeningHoursSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class ServiceTypeViewSet(viewsets.ModelViewSet):
+    queryset = ServiceType.objects.all()
+    serializer_class = ServiceTypeSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class ServiceViewSet(viewsets.ModelViewSet):
+    queryset = Service.objects.all()
+    serializer_class = ServiceSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+    
+class AboutUsViewSet(viewsets.ModelViewSet):
+    queryset = AboutUs.objects.all()
+    serializer_class = AboutUsSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
+
+class PriceViewSet(viewsets.ModelViewSet):
+    queryset = Price.objects.all()
+    serializer_class = PriceSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class ProductTypeViewSet(viewsets.ModelViewSet):
+    queryset = ProductType.objects.all()
+    serializer_class = ProductTypeSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class AnalyticsViewSet(viewsets.ModelViewSet):
+    queryset = Analytics.objects.all()
+    serializer_class = AnalyticsSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+class ContactUsViewSet(viewsets.ModelViewSet):
+    queryset = ContactUs.objects.all()
+    serializer_class = ContactUsSerializer
+
+
+class ScheduleViewSet(viewsets.ModelViewSet):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
+class BookForServiceViewSet(viewsets.ModelViewSet):
+    queryset = BookForService.objects.all()
+    serializer_class = BookForServiceSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        previous_status = instance.is_confirmed  # Capture the previous status
+        response = super().update(request, *args, **kwargs)
+
+        # Check if the booking has been confirmed by the admin
+        if not previous_status and instance.is_confirmed:
+            instance.send_confirmation_email()  # Send confirmation email
+            print(f"Confirmation email triggered for: {instance.email_address}")  # Debugging log
+
+        return response
+
+# news letter view
+class NewsletterViewSet(viewsets.ModelViewSet):
+    queryset = Newsletter.objects.all()
+    serializer_class = NewsletterSerializer
+
+
+# ViewSet to send newsletter to subscribers
+class AdminPostNewsLetterViewSet(viewsets.ModelViewSet):
+    queryset = AdminPostNewsLetter.objects.all()
+    serializer_class = AdminPostNewsLetterSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]
+
+    
+# Technical Team members viewset
+class TechnicalTeamMemberViewSet(viewsets.ModelViewSet):
+    queryset = TechnicalTeamMember.objects.all()
+    serializer_class = TechnicalTeamMemberSerializer
+    permission_classes = [IsSuperAdminOrReadOnly]

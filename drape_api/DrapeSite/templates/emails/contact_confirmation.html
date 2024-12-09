@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Thank you for contacting Drapes Engineering</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        .email-header {
+            background-color: #0096d6; /* Sea blue color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Content */
+        .email-body {
+            padding: 20px;
+        }
+        .email-body p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .email-body ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .email-body ul li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        .email-body ul li strong {
+            color: #0096d6; /* Sea blue color */
+        }
+
+        /* Footer */
+        .email-footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .email-footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>Thank You for Contacting Drapes Engineering</h1>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <p>Dear <strong>{{ name }}</strong>,</p>
+            <p>Thank you for reaching out to <strong>Drapes Engineering.</strong> We have received your message with the following details:</p>
+
+            <ul>
+                <li><strong>Subject:</strong> {{ subject }}</li>
+                <li><strong>Your Message:</strong> {{ message }}</li>
+            </ul>
+
+            <p>We will get back to you as soon as possible. In the meantime, if you have any further questions, feel free to reply to this email.</p>
+
+            <p>Best regards,</p>
+            <p><strong>The Drapes Team</strong></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <p>&copy; 2024 Drape. All rights reserved.</p>
+            <p>Feel free to contact us at <a href="mailto:support@drape.com">support@drapes.com</a></p>
+        </div>
+    </div>
+</body>
+</html>
