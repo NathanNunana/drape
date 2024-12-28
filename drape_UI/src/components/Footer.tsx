@@ -12,7 +12,6 @@ import {
 const Footer: React.FC = () => {
   return (
     <footer className="">
-
       {/* Newsletter Section */}
       <div className="text-center py-28 px-8 lg:px-0 bg-blue-50">
         <h3 className="text-2xl font-semibold mb-4">Join Our Newsletter</h3>
@@ -45,7 +44,9 @@ const Footer: React.FC = () => {
               </p>
               <p className="flex items-center mt-2 hover:text-primary">
                 <FaMailchimp className="mr-2" />
-                <a href="https://gator4416.hostgator.com:2096/" target="_blank">hostgator</a>
+                <a href="https://gator4416.hostgator.com:2096/" target="_blank">
+                  hostgator
+                </a>
               </p>
             </div>
 
@@ -94,8 +95,11 @@ const Footer: React.FC = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-secondary
-                    ">
+                  <a
+                    href="#"
+                    className="hover:text-secondary
+                    "
+                  >
                     Products
                   </a>
                 </li>
@@ -144,7 +148,9 @@ const Footer: React.FC = () => {
 
             {/* Social Networks Section */}
             <div>
-              <h4 className="text-lg font-semibold mb-4">Our Social Networks</h4>
+              <h4 className="text-lg font-semibold mb-4">
+                Our Social Networks
+              </h4>
               <p>Find us on our social media Platforms</p>
               <div className="flex space-x-4 mt-4">
                 <a
@@ -178,9 +184,12 @@ const Footer: React.FC = () => {
           {/* Footer Bottom Section */}
           <div className="text-center text-gray-500 mt-10">
             <hr className="mb-4" />
-            <p>&copy; Drape, All Rights Reserved. <br /> Developed by {" "}
-              <a href="https://www.linkedin.com/in/nathan-kulewoshie-9084b2192/" target="_blank" className="text-primary underline">Nathan Kulewoshie</a> & {" "}
-              <a className="text-primary underline" href="https://www.linkedin.com/in/yeng-sebastian-26a9b520b/" target="_blank">Sebastian Yeng</a></p>
+            <p>
+              &copy; Drape, All Rights Reserved. <br />
+              {/* Developed by{" "} */}
+              {/* <a href="https://www.linkedin.com/in/nathan-kulewoshie-9084b2192/" target="_blank" className="text-primary underline">Nathan Kulewoshie</a> & {" "}
+              <a className="text-primary underline" href="https://www.linkedin.com/in/yeng-sebastian-26a9b520b/" target="_blank">Sebastian Yeng</a></p> */}
+            </p>
           </div>
         </div>
       </div>
@@ -189,4 +198,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-
